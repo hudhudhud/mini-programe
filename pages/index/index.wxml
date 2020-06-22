@@ -1,0 +1,39 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="search">
+    <view class="just-show" bindtap="goSearch" wx:if='{{!searchStatus}}'>
+      <i class="fa fa-search" aria-hidden="true"></i><span>搜索</span>
+    </view>
+    <view class="search-bar" wx:else>
+      <view class="search-input">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <input class="search-input"  placeholder="搜索" focus="true"/>
+      </view>
+      <p class='cancel-btn' bindtap="cancelSearch"> 取消 </p>
+    </view>
+  </view>
+  <view class="folder-module my-file">
+    <text class="title">个人</text>
+    <view class="folder-line">
+      <view class="left">
+        <i class="fa fa-folder" aria-hidden="true"></i> <text class="folder-name">我的文件</text>
+      </view>
+    </view>
+  </view>
+  <view class="folder-module share-file">
+    <text class="title">共享</text>
+    <view wx:for='{{shareFileList}}' class="folder-line">
+      <view class="left">
+        <i class="fa fa-folder" aria-hidden="true"></i>
+        <text class="folder-name">{{item.name}}</text>
+      </view>
+      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+    </view>
+    <view  class="folder-line">
+      <view class="left">
+        <view class="add-folder-btn"><i class="fa fa-plus" aria-hidden="true"></i></view>
+        <text class="folder-name">创建空间</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,67 @@
+.container{
+  box-sizing: border-box;
+  padding:0 20rpx;
+  background-color:#fff;
+}
+.search{
+  padding:20rpx 0;
+}
+.search .just-show{
+  height:80rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  background-color:#F5F5F5;
+  line-height: 80rpx;
+  color:#8E8E90;
+}
+
+.search .just-show i{
+  padding-right:10rpx;
+}
+
+.search .search-bar{
+  display:flex;
+}
+.search .search-bar .cancel-btn{
+  width:15%;
+  text-align: center;
+  line-height: 80rpx;
+}
+.search .search-bar .search-input{
+  width:85%;
+  position:relative;
+  background-color:#F5F5F5;
+  color:#8E8E90;
+  border-radius: 8rpx;
+}
+.search .search-bar .search-input i{
+  position:absolute;
+  padding-left:10rpx;
+  color:#8E8E90;
+  width:40rpx;
+  height:80rpx;
+  line-height: 80rpx;
+  box-sizing: border-box;
+}
+.search .search-bar .search-input input{
+  position:absolute;
+  width:calc(100% - 40rpx);
+  height:80rpx;
+  left:40rpx;
+  padding-left:8px;
+  box-sizing: border-box;
+}
+
+.add-folder-btn{
+  width:60rpx;
+  height:60rpx;
+  text-align: center;
+  line-height: 60rpx;
+  background-color:#EEE;
+  display:inline-block;
+  margin-right: 10rpx;
+}
+.add-folder-btn i{
+ font-size:20rpx;
+ color:#7C7C7C;
+}
