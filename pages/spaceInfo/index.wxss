@@ -1,0 +1,99 @@
+/* pages/spaceInfo/index.wxss *//* pages/addFloder/index.wxss */
+.container{
+  background-color:#F2F2F2 ;
+  width:100%;
+  /* min-height: 100%; */
+  padding-top:10rpx;
+  box-sizing: border-box;
+  height: 100%;
+  padding-bottom:80rpx;
+  overflow-y:scroll;
+}
+.module{
+  margin-bottom:10rpx;
+  box-sizing: border-box;
+  width:100%;
+  background-color: #fff;
+}
+.flex-line{
+  display: flex;
+  justify-content: space-between;
+  height:100rpx;
+  width:100%;
+  box-sizing: border-box;
+  align-items: center;
+  padding:0 30rpx;
+}
+.flex-line .title{
+  font-size:30rpx;
+}
+.flex-line .right{
+  color:#A9A9A9;
+}
+.flex-line .right .fa-angle-right{
+  padding-left:10rpx;
+}
+.flex-line .right .space-name{
+  font-size:30rpx;
+  color:#BFBFBF;
+  width:400rpx;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.module .add-user-wrapper{
+  background-color:#fff;
+  width:100%;
+}
+.module .add-user-wrapper .users{
+  width:100%;
+  box-sizing: border-box;
+  padding:0 30rpx;
+  display:flex;
+}
+.module .add-user-wrapper .user .name{
+  display: inline-block;
+  width:80rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size:30rpx;
+  color:#959595;
+  text-align: center;
+}
+.module .add-user-wrapper .user .user-img{
+ width:80rpx;
+ height:80rpx;
+ border:2rpx solid;
+ box-sizing: border-box;
+ margin-right:10rpx;
+ border-radius: 2rpx;
+ text-align: center;
+ line-height: 80rpx;
+}
+
+.module .add-user-wrapper .add-user-btn{
+ height:100rpx;
+ line-height: 100rpx;
+ padding:0 30rpx;
+ width:100%;
+ box-sizing: border-box;
+ border-bottom:2rpx solid #E7E7E7;
+}
+.module .add-user-wrapper .add-user-btn i{
+ color:#3476D1;
+ padding:10rpx;
+}
+.module .add-user-wrapper .add-user-btn text{
+ color:#000;
+ font-size:30rpx;
+}
+.del-btn{
+  text-align: center;
+  color:#E85966;
+  height:100rpx;
+  line-height: 100rpx;
+  font-size:32rpx;
+}

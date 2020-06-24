@@ -1,0 +1,38 @@
+<!--pages/addFloder/index.wxml-->
+<view class="container">
+  <view class="module flex-line" bindtap='goEditName'>
+      <text class="title left">空间名称</text>
+      <view  class="right">
+        <text class="space-name"> {{"test33333333333eeeeeeeeeeeeeeeee"}}</text>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </view>
+  </view>
+  <view class="module">
+    <view class="flex-line">
+      <text class="title left">空间成员及权限</text>
+      <view  class="right">
+        <text> {{3}}</text>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </view>
+    </view>
+    <view class="add-user-wrapper">
+      <view class="users">
+        <view class="user" wx:for="{{usersList}}" wx:key="index">
+            <view class="user-img">
+              <i class="fa fa-user" aria-hidden="true"></i> 
+            </view>
+            <text class="name">{{item.name}}</text>
+        </view>
+      </view>
+      <view class="add-user-btn">
+          <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
+      </view>
+    </view>
+  </view>
+  <view class="module flex-line">
+   <text>设为快速访问</text><switch checked="{{switch1Checked}}" bindchange="switch1Change"/>
+  </view>
+  <view class="module del-btn">
+   <text>解散空间</text>
+  </view>
+</view>

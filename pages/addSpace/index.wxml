@@ -1,0 +1,34 @@
+<!--pages/addFloder/index.wxml-->
+<view class="container">
+  <view class="module">
+      <text class="title">空间名称</text>
+      <input class="input"  placeholder="请输入空间名称" focus="true" model:value="{{inputName}}"/>
+  </view>
+  <view class="module">
+    <text class="title">成员及权限</text>
+    <view class="add-user-wrapper">
+      <view class="add-user-btn">
+          <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
+      </view>
+      <view class="users">
+        <view class="user" wx:for="{{usersList}}" wx:key="index">
+          <view class="left">
+              <view class="user-img">
+                <i class="fa fa-user" aria-hidden="true"></i> 
+              </view>
+              <text class="name">{{item.name}}</text>
+          </view>
+          <view class="right" wx:if="{{item.role==='manager'}}">
+            <text class="name" class="role">{{item.roleTxt}}</text>
+          </view>
+          <view class="right operate" wx:else bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}">
+            <text class="name" class="role">{{item.roleTxt}}</text> <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </view> 
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="confirm-btn" bindtap="confirmTap">
+      <text>完成</text>
+  </view>
+</view>

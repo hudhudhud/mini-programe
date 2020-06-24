@@ -7,33 +7,57 @@
     <view class="search-bar" wx:else>
       <view class="search-input">
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input class="search-input"  placeholder="搜索" focus="true"/>
+        <input class="search-input"  placeholder="搜索" focus="true" model:value="{{searchStr}}" bindinput="search_bindKeyInput"/>
       </view>
       <p class='cancel-btn' bindtap="cancelSearch"> 取消 </p>
     </view>
   </view>
-  <view class="folder-module my-file">
-    <text class="title">个人</text>
-    <view class="folder-line">
-      <view class="left">
-        <i class="fa fa-folder" aria-hidden="true"></i> <text class="folder-name">我的文件</text>
+  <view wx:if="{{!searchStatus|| (searchStatus&&!searchStr)}}">
+    <view class="folder-module my-file">
+      <text class="title">个人</text>
+      <view class="folder-line">
+        <view class="left">
+          <i class="fa fa-folder" aria-hidden="true"></i> <text class="folder-name">我的文件</text>
+        </view>
+      </view>
+    </view>
+    <view class="folder-module share-file">
+      <text class="title">共享</text>
+      <view wx:for='{{shareFileList}}' class="folder-line" wx:key='index'>
+        <view class="left">
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <text class="folder-name">{{item.name}}</text>
+        </view>
+        <view bindtap="goInfo" class="info-btn right" data-item="{{item}}">
+           <i class="fa fa-exclamation-circle" aria-hidden="true" ></i>
+        </view>
+      </view>
+      <view  class="folder-line">
+        <view class="left" bindtap="goAddFloder">
+          <view class="add-folder-btn"><i class="fa fa-plus" aria-hidden="true"></i></view>
+          <text class="folder-name">创建空间</text>
+        </view>
       </view>
     </view>
   </view>
-  <view class="folder-module share-file">
-    <text class="title">共享</text>
-    <view wx:for='{{shareFileList}}' class="folder-line">
-      <view class="left">
-        <i class="fa fa-folder" aria-hidden="true"></i>
-        <text class="folder-name">{{item.name}}</text>
+
+  <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>
+  <view class="search-res" wx:if="{{searchStatus&&searchStr}}">
+    <view wx:for="{{searchResList}}" class="folder-module" wx:key='index'>
+      <text class="title">{{item.title}}</text>
+      <view wx:for='{{item.files}}' class="folder-line" wx:for-item="file" wx:key='index'>
+        <view class="left">
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <text class="folder-name">{{file.name}}</text>
+        </view>
+        <view bindtap="goInfo" class="info-btn right" data-item="{{item}}">
+           <i class="fa fa-exclamation-circle" aria-hidden="true" ></i>
+        </view>
       </view>
-      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
     </view>
-    <view  class="folder-line">
-      <view class="left">
-        <view class="add-folder-btn"><i class="fa fa-plus" aria-hidden="true"></i></view>
-        <text class="folder-name">创建空间</text>
-      </view>
+    <view wx:if="{{searchResList.length==0&&!loading}}" class="no-data">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <text>无搜索结果</text>
     </view>
   </view>
 </view>

@@ -52,6 +52,7 @@
   box-sizing: border-box;
 }
 
+
 .add-folder-btn{
   width:60rpx;
   height:60rpx;
@@ -64,4 +65,24 @@
 .add-folder-btn i{
  font-size:20rpx;
  color:#7C7C7C;
+}
+
+.pop-fix{
+  position:fixed;
+  top:120rpx;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color:rgba(0,0,0,0.2);
+}
+.no-data{
+  padding-top:100rpx;
+  text-align: center;
+  font-size:30rpx;
+  color:#D8D9DE;
+}
+.no-data i{
+  font-size:100rpx;
+  display:block;
+  padding:20rpx 0;
 }
