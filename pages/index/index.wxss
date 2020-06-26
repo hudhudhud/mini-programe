@@ -3,7 +3,21 @@
   padding:0 20rpx;
   background-color:#fff;
 }
-.search{
+.add-folder-btn{
+  width:60rpx;
+  height:60rpx;
+  text-align: center;
+  line-height: 60rpx;
+  background-color:#EEE;
+  display:inline-block;
+  margin-right: 10rpx;
+}
+.add-folder-btn i{
+ font-size:20rpx;
+ color:#7C7C7C;
+}
+
+/* .search{
   padding:20rpx 0;
 }
 .search .just-show{
@@ -52,21 +66,6 @@
   box-sizing: border-box;
 }
 
-
-.add-folder-btn{
-  width:60rpx;
-  height:60rpx;
-  text-align: center;
-  line-height: 60rpx;
-  background-color:#EEE;
-  display:inline-block;
-  margin-right: 10rpx;
-}
-.add-folder-btn i{
- font-size:20rpx;
- color:#7C7C7C;
-}
-
 .pop-fix{
   position:fixed;
   top:120rpx;
@@ -85,4 +84,4 @@
   font-size:100rpx;
   display:block;
   padding:20rpx 0;
-}
+} */

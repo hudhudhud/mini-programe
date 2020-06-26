@@ -1,0 +1,16 @@
+<view class="container">
+  <search-input sort-visible="{{true}}">
+    <view class="folder-module share-file">
+      <text class="title">文件</text>
+      <view wx:for='{{fileList}}' class="folder-line" wx:key='index'>
+        <view class="left">
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <text class="folder-name">{{item.name}}</text>
+        </view>
+        <view bindtap="goInfo" class="info-btn right" data-item="{{item}}">
+           <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
+        </view>
+      </view>
+    </view>
+  </search-input>
+</view>

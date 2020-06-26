@@ -59,6 +59,6 @@ page{
   text-align: center;
   line-height: 60rpx;
 }
-.fa-exclamation-circle{
+.gray{
   color:#BABABA;
 }

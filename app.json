@@ -4,6 +4,7 @@
     "pages/spaceInfo/index",
     "pages/addSpace/index",
     "pages/spaceName/index",
+    "pages/spaceDetail/index",
     "pages/logs/logs"
   ],
   "window":{
