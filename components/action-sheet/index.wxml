@@ -1,0 +1,10 @@
+<view class="actionSheet {{show?'show':''}}" wx:if="{{show}}" bindtap="cancel">
+  <view class="content pop-up">
+    <view class="options">
+      <slot />
+    </view>
+    <view catchtap="cancel" class="cancel">
+      取消
+    </view>
+  </view>
+</view>

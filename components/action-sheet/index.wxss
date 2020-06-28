@@ -1,0 +1,43 @@
+.actionSheet{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color:rgba(0,0,0,0.1);
+  opacity: 0;
+  transition: opacity .2s ease-out;
+  /* opacity: .2; */
+}
+.actionSheet.show{
+  opacity: 1;
+}
+.content{
+  background-color: #E6E8EC;
+  top:auto;
+  right:auto;
+  bottom:0;
+  width: 100%;
+  height:2rpx;
+  transition: all .2s ease-out;
+}
+.actionSheet.show .content{
+  height:auto;
+}
+.pop-up{
+  position:fixed;
+  transition: all 1s ease-out;
+}
+.content .options{
+  background-color: #fff;
+  margin-bottom:10rpx;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+}
+.content .cancel{
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  background-color: #fff;
+}

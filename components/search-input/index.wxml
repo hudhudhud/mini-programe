@@ -16,7 +16,7 @@
     </view>
   </view>
   <view wx:if="{{!searchStatus|| (searchStatus&&!searchStr)}}">
-    <slot></slot>
+    <slot />
   </view>
 
   <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>

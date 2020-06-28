@@ -2,7 +2,7 @@
   <search-input sort-visible="{{true}}">
     <view class="folder-module share-file">
       <text class="title">文件</text>
-      <view wx:for='{{fileList}}' class="folder-line" wx:key='index'>
+      <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
         <view class="left">
           <i class="fa fa-folder" aria-hidden="true"></i>
           <text class="folder-name">{{item.name}}</text>

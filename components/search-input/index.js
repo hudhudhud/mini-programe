@@ -46,6 +46,7 @@ Component({
         this.setData({loading:false})
         wx.hideLoading()
       }, 500);
+     // this.triggerEvent('search',this.searchStr)
   },
    // 防抖
    debounce(fn, wait) {    

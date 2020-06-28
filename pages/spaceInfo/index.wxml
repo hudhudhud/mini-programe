@@ -32,7 +32,15 @@
   <view class="module flex-line">
    <text>设为快速访问</text><switch checked="{{switch1Checked}}" bindchange="switch1Change"/>
   </view>
-  <view class="module del-btn">
+  <view class="module del-btn" bindtap="showDelActionSheet">
    <text>解散空间</text>
   </view>
+  <action-sheet show="{{delActionSheetVisible}}"> 
+    <view class="tip">
+      将同时删除空间所有文件，该操作不可恢复
+    </view>
+    <view class="del-btn" catchtap="delSpace">
+        确定删除
+    </view>
+  </action-sheet>
 </view>

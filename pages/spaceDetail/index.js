@@ -20,7 +20,12 @@ Page({
       title:options.name
     })
   },
-
+  goDetail(event){
+    let item = event.currentTarget.dataset.item
+    wx.navigateTo({
+      url: '../spaceDetail/index?id='+item.id+'&name='+item.name
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

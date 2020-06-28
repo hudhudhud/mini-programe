@@ -97,3 +97,15 @@
   line-height: 100rpx;
   font-size:32rpx;
 }
+.tip,.del-btn{
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: center;
+}
+.tip{
+  font-size:30rpx;
+}
+.del-btn{
+  color:red;
+  font-size:40rpx;
+}

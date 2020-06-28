@@ -10,7 +10,7 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "新华山网盘",
+    "navigationBarTitleText": "新华三网盘",
     "navigationBarTextStyle":"black"
   },
   "networkTimeout":{
