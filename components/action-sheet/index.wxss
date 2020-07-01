@@ -7,7 +7,7 @@
   z-index: 1000;
   background-color:rgba(0,0,0,0.1);
   opacity: 0;
-  transition: opacity .2s ease-out;
+  transition: opacity .5s ease-out;
   /* opacity: .2; */
 }
 .actionSheet.show{
@@ -28,14 +28,16 @@
 .pop-up{
   position:fixed;
   transition: all 1s ease-out;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
 }
-.content .options{
+.options{
   background-color: #fff;
   margin-bottom:10rpx;
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
 }
-.content .cancel{
+.cancel{
   height:100rpx;
   line-height: 100rpx;
   text-align: center;

@@ -20,7 +20,7 @@ Page({
       // {name:'xiaowang',role:'user',roleTxt:"仅浏览"},
       {name:'123',role:'user',roleTxt:"仅浏览"},
     ],
-    delActionSheetVisible:false,
+    actionSheetVisible:false,
   },
 
   setOperateRole(event){
@@ -57,11 +57,11 @@ Page({
     })
   },
   showDelActionSheet(){
-    this.setData({delActionSheetVisible:true})
+    this.setData({actionSheetVisible:true})
   },
   delSpace(){
     console.log('删除空间！')
-    this.setData({'delActionSheetVisible':false})
+    this.setData({actionSheetVisible:false})
   },
   /**
    * 生命周期函数--监听页面加载

@@ -35,7 +35,7 @@
   <view class="module del-btn" bindtap="showDelActionSheet">
    <text>解散空间</text>
   </view>
-  <action-sheet show="{{delActionSheetVisible}}"> 
+  <action-sheet actionShow="{{actionSheetVisible}}"> 
     <view class="tip">
       将同时删除空间所有文件，该操作不可恢复
     </view>

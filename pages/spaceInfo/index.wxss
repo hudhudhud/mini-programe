@@ -101,6 +101,8 @@
   height:100rpx;
   line-height: 100rpx;
   text-align: center;
+  width:100%;
+  background-color:#fff;
 }
 .tip{
   font-size:30rpx;

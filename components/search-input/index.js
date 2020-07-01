@@ -1,4 +1,7 @@
 Component({
+  options: {
+    virtualHost: true,
+  },
   properties: {
     sortVisible: {
       type: Boolean,
