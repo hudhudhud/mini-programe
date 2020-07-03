@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container">
+<view class="search-input-component">
   <view class="search {{sortVisible?'sort':''}}" >
     <view class="search-bar" wx:if='{{!searchStatus}}' >
       <view class="just-show" bindtap="goSearch">
@@ -8,7 +8,7 @@
       <view class="sort-btn" bindtap='showSortAction'><i class="fa fa-sort-amount-desc gray" aria-hidden="true" wx:if='{{sortVisible}}'></i></view>
     </view>
     <view class="search-bar" wx:else>
-      <view class="search-input">
+      <view class="search-input-bar">
         <i class="fa fa-search" aria-hidden="true"></i>
         <input class="search-input"  placeholder="搜索" focus="true" model:value="{{searchStr}}" bindinput="search_bindKeyInput"/>
       </view>

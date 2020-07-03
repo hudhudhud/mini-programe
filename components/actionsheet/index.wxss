@@ -21,8 +21,6 @@
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
 }
-.wx-actionsheet_main button,
-.wx-actionsheet_main navigator,
 .wx-actionsheet_close {
   /* text-align: center;
   background: #FFF;
@@ -38,10 +36,7 @@
   width:100%;
   font-size: 32rpx;
 }
-.wx-actionsheet_main button::after{
-  border: none;
-  border-radius: 0;
-}
+
 .wx-actionsheet_close{
   border-bottom: none;
   border-top: 4px solid #ECECEC;

@@ -1,11 +1,12 @@
-@import '/font-awesome/fontawesome.wxss'
-.container{
+@import '/font-awesome/fontawesome.wxss';
+.search-input-component{
   box-sizing: border-box;
-  padding:0 20rpx;
+  /* padding:0 20rpx;*/
   background-color:#fff;
 }
 .search{
   padding:20rpx 0;
+  font-size:32rpx;
 }
 .search .just-show{
   height:80rpx;
@@ -17,16 +18,16 @@
   width:100%;
 }
 
-.search .just-show i{
+.search .just-show .fa-search{
   padding-right:10rpx;
 }
 
 .search.sort .just-show{
-  width:85%;
+  width:90%;
  }
  .search.sort .sort-btn{
-  width:15%;
-  text-align: center;
+  width:10%;
+  text-align: right;
   cursor: pointer;
   font-size:40rpx;
  }
@@ -34,23 +35,24 @@
   display:flex;
   align-items: center;
   height: 80rpx;
+  padding:0 20rpx;
 }
 .search .search-bar .cancel-btn{
-  width:15%;
-  text-align: center;
+  width:10%;
+  text-align: right;
   cursor: pointer;
   color:#8DA2C1;
   cursor: pointer;
 }
-.search .search-bar .search-input{
-  width:85%;
+.search .search-bar .search-input-bar{
+  width:90%;
   position:relative;
   background-color:#F5F5F5;
   color:#8E8E90;
   border-radius: 8rpx;
   height:100%;
 }
-.search .search-bar .search-input i{
+.search .search-bar .search-input-bar .fa{
   position:absolute;
   padding-left:10rpx;
   color:#8E8E90;
@@ -59,28 +61,13 @@
   line-height: 80rpx;
   box-sizing: border-box;
 }
-.search .search-bar .search-input input{
+.search .search-bar .search-input-bar .search-input{
   position:absolute;
   width:calc(100% - 40rpx);
   height:80rpx;
   left:40rpx;
   padding-left:8px;
   box-sizing: border-box;
-}
-
-
-.add-folder-btn{
-  width:60rpx;
-  height:60rpx;
-  text-align: center;
-  line-height: 60rpx;
-  background-color:#EEE;
-  display:inline-block;
-  margin-right: 10rpx;
-}
-.add-folder-btn i{
- font-size:20rpx;
- color:#7C7C7C;
 }
 
 .pop-fix{
@@ -97,7 +84,7 @@
   font-size:30rpx;
   color:#D8D9DE;
 }
-.no-data i{
+.no-data .fa-search{
   font-size:100rpx;
   display:block;
   padding:20rpx 0;
@@ -127,7 +114,7 @@
   display:flex;
   align-items: center;
 }
-.folder-module .left .i{
+.folder-module .left .fa{
   width:10%;
 }
 .folder-module .left .folder-name{

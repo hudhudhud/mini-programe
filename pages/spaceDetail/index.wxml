@@ -1,16 +1,85 @@
 <view class="container">
   <search-input sort-visible="{{true}}">
+    <view class="top-bar"> 
+      <view class="paths">
+        <text class="path-item">网盘</text>
+        <view wx:for="{{pathList}}" wx:key='index' class="path-item {{index==pathList.length-1?'current':''}}">
+          <i class="fa fa-angle-right" aria-hidden="true" ></i>
+          <text>{{item}}</text>
+        </view>
+      </view>
+      <view class="add-btn" bindtap='showAddAction'> 
+        <i class="fa fa-file-text" aria-hidden="true"></i>
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </view>
+    </view>
     <view class="folder-module share-file">
       <text class="title">文件</text>
       <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
-        <view class="left">
+        <view class="left" wx:if='{{item.type=="folder"}}'>
           <i class="fa fa-folder" aria-hidden="true"></i>
-          <text class="folder-name">{{item.name}}</text>
+          <text class="folder-name" >{{item.name}}</text>
         </view>
-        <view bindtap="goInfo" class="info-btn right" data-item="{{item}}">
+        <view class="left" wx:else>
+          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+          <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+        </view>
+        <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
            <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
         </view>
       </view>
     </view>
   </search-input>
+<action-sheet actionShow="{{addActionSheetVisible}}"> 
+    <view class="add-action-btns">
+      <view class="add-action-btn" bindtap='showAddFolderModal'>
+        <i class="fa fa-folder" aria-hidden="true"></i>
+        <text>新建文件夹</text>
+      </view>
+      <view class="add-action-btn" bindtap='addImg'>
+        <i class="fa fa-picture-o" aria-hidden="true"></i>
+        <text>上传照片</text>
+      </view>
+      <!-- <view class="add-action-btn" bindtap='addFile'>
+        <i class="fa fa-upload" aria-hidden="true"></i>
+        <text>上传文件</text>
+      </view> -->
+    </view>
+</action-sheet>
+<action-sheet actionShow="{{operationActionSheetVisible}}"> 
+    <view class="action-item-txt">
+      <text wx:if='{{currentItem.type=="folder"}}'>{{currentItem.name}}</text>
+      <text wx:else>{{currentItem.name+'.'+currentItem.ext}}</text>
+    </view>
+    <view class="operation-btns shares">
+     <view class="action-btn">
+        <button class="share-btn"  data-type="modalShare" data-item='{{currentItem}}' open-type="share"  send-message-path=''>
+          <i class="fa fa-share" aria-hidden="true"></i>
+        </button>
+        <text class="title">转发</text>
+      </view>
+    </view>
+    <view class="operation-btns">
+      <view class="action-btn" bindtap='showRenameModal'>
+        <view class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></view>
+        <text class="title">重命名</text>
+      </view>
+      <view class="action-btn" bindtap='showDelToast'>
+        <view class="icon"><i class="fa fa-trash-o" aria-hidden="true"></i></view>
+        <text class="title">删除</text>
+      </view>
+       <view class="action-btn" bindtap='addImg'>
+        <view class="icon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></view>
+        <text class="title">选中</text>
+      </view>
+  </view>
+</action-sheet>
+<mymodal 
+showStatus='{{showModal}}'
+ confirmText='确定' 
+ bind:complete="modalComplete" 
+ title='{{modalTitle}}' >
+ <text class="modal-tip">{{modalTip}}</text>
+ <input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  model:value="{{modalInputTxt}}" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
+ </mymodal>
 </view>

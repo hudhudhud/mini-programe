@@ -1,0 +1,14 @@
+<view class="wx-modal_mask" hidden="{{!showStatus}}">
+  <view class="wx-modal_dialog"> 
+  <view wx:if='{{title}}' class="wx-modal_title">{{title}}</view>
+  <view  class="wx-modal_content">
+    <slot />
+  </view>
+  <view class="wx-modal_diaBtn">
+      <block wx:if="{{showCancel}}">
+        <button class="wx-modal_btn wx-modal_celbtn" hover-class="wx-modal_btnHover" bindtap="cancelFunc">{{cancelText}}</button>
+      </block>
+      <button class="wx-modal_btn wx-modal_cfirbtn" hover-class="wx-modal_btnHover" bindtap="confirmFunc">{{confirmText}}</button>
+    </view>
+  </view>
+</view>

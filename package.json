@@ -1,0 +1,10 @@
+{
+  "name": "filemanage-mini",
+  "version": "1.0.0",
+  "description": "",
+  "miniprogram": "dist",
+  "devDependencies": {},
+  "dependencies": {
+    "crypto-js": "^4.0.0"
+  }
+}

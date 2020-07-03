@@ -1,1 +1,129 @@
 /* pages/spaceDetail/index.wxss */
+.container{
+  /* padding:0 20rpx; */
+ 
+  width:100%;
+}
+.top-bar{
+  box-sizing: border-box;
+  width:100%;
+  padding:10rpx 20rpx;
+  display:flex;
+  justify-content: space-between;
+  margin-bottom:10rpx;
+  border-bottom:10rpx solid #F5F5F5;
+}
+
+.paths{
+  display:flex;
+  width:85%;
+  overflow-x: scroll;
+  flex-wrap: nowrap;
+}
+.path-item{
+  color:#BABABA;
+  font-size:30rpx;
+}
+.path-item i{
+  padding:0 10rpx;
+}
+.path-item.current text{
+  color:#000;
+}
+.add-btn{
+  width:10%;
+  text-align: right;
+  color:#BABABA;
+  font-size:32rpx;
+}
+.add-btn .fa-file-text{
+  margin-right:5rpx;
+}
+.add-action-btns{
+  background-color:#fff;
+  display:flex;
+  width:100%;
+  padding:30rpx 0;
+}
+.add-action-btn{
+  width:50%;
+  height:130rpx;
+  display:flex;
+  flex-direction: column;
+  text-align: center;
+  padding-top:20rpx;
+  box-sizing: border-box;
+  font-size:50rpx;
+}
+.add-action-btn text{
+  font-size:26rpx;
+  color:#575757;
+}
+.fa-picture-o{
+  color:#FBC545
+}
+.modal-file-folder-input{
+  width:100%;
+  height:80rpx;
+  border:2rpx solid #BABABA;
+  text-align:left;
+  padding:0 10rpx;
+  box-sizing: border-box;
+}
+.modal-tip{
+  line-height:3;
+  font-size:30rpx
+}
+.operation-btns{
+  display:flex;
+  background-color:#F0F0F0;
+  width:100%;
+  padding:20rpx 0;
+}
+.operation-btns .action-btn{
+  width:150rpx;
+  height:150rpx;
+  display:inline-block;
+  text-align: center;
+  border-radius: 30rpx;
+}
+.operation-btns .action-btn i{
+  font-size:50rpx;
+  font-weight: 500;
+}
+.operation-btns .action-btn .icon{
+  margin:auto;
+  width:100rpx;
+  height:100rpx;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-color:#fff;
+}
+.operation-btns .action-btn .title{
+ font-size:26rpx;
+ color:#8E8E8E;
+}
+.operation-btns .share-btn{
+  width:100rpx;
+  height:100rpx;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+ }
+ .operation-btns .share-btn .fa-share{
+   color:#398CFE;
+ }
+ .action-item-txt{
+   background-color:#F0F0F0;
+   width:100%;
+   padding:30rpx 0;
+   text-align: center;
+ }
+ .action-item-txt text{
+  display: inline-block;
+  width:80%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+ }

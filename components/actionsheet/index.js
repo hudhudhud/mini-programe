@@ -1,6 +1,6 @@
 
 var animation = wx.createAnimation({
-  duration: 150,
+  duration: 100,
   timingFunction: 'linear',
   delay: 0
 })
@@ -31,11 +31,6 @@ Component({
             mask: 'transparent',
             actionShow: false
           })
-          // setTimeout(function () {
-          //   that.setData({
-          //     actionShow: false
-          //   })
-          // }, 600)
         }
       }
     },
@@ -56,7 +51,8 @@ Component({
    */
   data: {
     mask: '',
-    animation: 'showAction'
+    animation: 'showAction',
+    timerId:''
   },
 
   /**
@@ -75,10 +71,10 @@ Component({
         that.setData({
           actionShow: false
         })
-      }, 600)
+      }, 510)
       var myEventDetail = {}
       var myEventOption = {}
       this.triggerEvent('actionHide', myEventDetail, myEventOption)
-    }
+    },
   }
 })
