@@ -68,10 +68,10 @@
         <view class="icon"><i class="fa fa-trash-o" aria-hidden="true"></i></view>
         <text class="title">删除</text>
       </view>
-       <view class="action-btn" bindtap='addImg'>
+       <!-- <view class="action-btn" bindtap='chooseMutiple'>
         <view class="icon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></view>
         <text class="title">选中</text>
-      </view>
+      </view> -->
   </view>
 </action-sheet>
 <mymodal 

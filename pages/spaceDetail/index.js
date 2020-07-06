@@ -11,8 +11,8 @@ Page({
       {id:3,name:'1',ext:'txt',type:'file'}
     ],
     pathList:[
-      "我的",
-      "测试"
+      // "我的",
+      // "测试"
     ],
     addActionSheetVisible:false,
     showModal:false,
@@ -35,6 +35,15 @@ Page({
       wx.setNavigationBarTitle({
         title:options.name
       })
+      let pathList = wx.getStorageSync('pathList')
+      if(Array.isArray(pathList)){
+          pathList.push(options.name)
+      }
+      else{
+        pathList=[options.name]
+      }
+      wx.setStorageSync('pathList',pathList)
+      this.setData({pathList:pathList})
     }
   },
   goDetail(event){
@@ -121,7 +130,7 @@ Page({
     })
     let list = this.data.fileList
     if(this.data.currentAction=="addFoler"){
-      list.push({name:this.data.modalInputTxt})
+      list.push({name:this.data.modalInputTxt,type:'folder',id:Math.random()})
       this.setData({fileList:list})
       wx.showToast({
         title: '添加成功',

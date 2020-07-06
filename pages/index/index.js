@@ -84,4 +84,8 @@ Page({
   onLoad: function(option){
     console.log('....loading',option.query)
   },
+  onShow(){
+    console.log(333333,'onshow')
+    wx.setStorageSync('pathList',[])
+  }
 })

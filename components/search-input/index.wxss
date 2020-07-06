@@ -1,4 +1,3 @@
-@import '/font-awesome/fontawesome.wxss';
 .search-input-component{
   box-sizing: border-box;
   /* padding:0 20rpx;*/
@@ -134,3 +133,6 @@
 .gray{
   color:#BABABA;
 }
+
+
+@import '/font-awesome/fontawesome.wxss';
