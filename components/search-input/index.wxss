@@ -1,11 +1,24 @@
+@import '/font-awesome/fontawesome.wxss';
+
 .search-input-component{
   box-sizing: border-box;
-  /* padding:0 20rpx;*/
+  /* padding:0 30rpx; */
   background-color:#fff;
+}
+.search-input-component.hasSearchBar{
+  padding-top:120rpx;
 }
 .search{
   padding:20rpx 0;
   font-size:32rpx;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:120rpx;
+  box-sizing: border-box;
+  background-color: #fff;
+  z-index: 9;
 }
 .search .just-show{
   height:80rpx;
@@ -26,7 +39,7 @@
  }
  .search.sort .sort-btn{
   width:10%;
-  text-align: right;
+  text-align: center;
   cursor: pointer;
   font-size:40rpx;
  }
@@ -34,7 +47,12 @@
   display:flex;
   align-items: center;
   height: 80rpx;
-  padding:0 20rpx;
+  padding:0 30rpx;
+}
+.search-res{
+  padding:0 30rpx;
+  box-sizing: border-box;
+  width:100%;
 }
 .search .search-bar .cancel-btn{
   width:10%;
@@ -133,6 +151,3 @@
 .gray{
   color:#BABABA;
 }
-
-
-@import '/font-awesome/fontawesome.wxss';

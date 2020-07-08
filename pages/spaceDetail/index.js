@@ -5,15 +5,13 @@ Page({
    * 页面的初始数据
    */
   data: {
+    parentFolderId:'',
     fileList:[
-      {id:1,name:'2',type:'folder'},
-      {id:2,name:'1',type:'folder'},
-      {id:3,name:'1',ext:'txt',type:'file'}
+      {id:"100",name:'资料',type:'folder'},
+      {id:'101',name:'整理',type:'folder'},
+      {id:'102',name:'测试',ext:'txt',type:'file'}
     ],
-    pathList:[
-      // "我的",
-      // "测试"
-    ],
+    pathList:[],
     addActionSheetVisible:false,
     showModal:false,
     modalInputTxt:'',
@@ -25,6 +23,7 @@ Page({
     autoFocus:false,
     modalTip:'',
     timerId:'',
+    pageFrom:'',//区分文件页面来源：空或搜索页面search
   },
 
   /**
@@ -32,26 +31,30 @@ Page({
    */
   onLoad: function (options) {
     if(options&&options.name){
+      this.setData({parentFolderId:options.id})
       wx.setNavigationBarTitle({
         title:options.name
       })
-      let pathList = wx.getStorageSync('pathList')
-      if(Array.isArray(pathList)){
-          pathList.push(options.name)
+      this.setData({pathList:JSON.parse(options.pathList)})
+      if(options.from){
+        this.setData({pageFrom:options.from})
       }
       else{
-        pathList=[options.name]
+        this.setData({pageFrom:''})
       }
-      wx.setStorageSync('pathList',pathList)
-      this.setData({pathList:pathList})
+
+      // const query = wx.createSelectorQuery()
     }
   },
   goDetail(event){
-    let item = event.currentTarget.dataset.item
+    let item = event.detail.item
+    let currPathList =  JSON.parse(JSON.stringify(this.data.pathList))
+    currPathList.push(item.name)
     wx.navigateTo({
-      url: '../spaceDetail/index?id='+item.id+'&name='+item.name
+      url: '../spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify(currPathList)}&from=${this.data.pageFrom}`
     })
   },
+
   //新增操作
   showAddAction(){
     this.debounce(()=>{
@@ -103,25 +106,36 @@ Page({
       }
     })
   },
-  //文件操作
-  showOperationActionSheet(event){
-    this.debounce(()=>{
-      this.setData({
-        currentItem:event.currentTarget.dataset.item,
-        operationActionSheetVisible:true 
-      })
-    },200)
-  },
-  showRenameModal(){
-    this.setData({
-      modalInputTxt:this.data.currentItem.name,
-      currentAction:'rename',
-      modalTitle:'重命名',
-      madalPlaceholder:this.data.currentItem.type=="folder"?'文件夹名':'文件名',
-      modalTip:this.data.currentItem.type=="folder"?'请输入文件夹名':'请输入文件名',
-      showModal:true,
-      autoFocus:true,
+
+  goIndexPage(){
+    wx.navigateBack({
+      delta:1000
     })
+  },
+  goSomePage(event){
+    //当前路径点击无效
+    if(event.currentTarget.dataset.index+1 == this.data.pathList.length){
+      return 
+    }
+    let delta = this.data.pathList.length - event.currentTarget.dataset.index-1
+    wx.navigateBack({
+      delta:delta
+    })
+  },
+  //返回到搜索页面
+  goSearchPage(){
+    let delta = this.data.pathList.length
+    wx.navigateBack({
+      delta:delta
+    })
+  },
+  // 防抖
+  debounce(fn, wait) {    
+    let self=this 
+    return (function() {        
+      if(self.data.timerId !== null) clearTimeout(self.data.timerId);   
+      self.setData({'timerId':setTimeout(fn, wait)})   
+    })()
   },
   modalComplete(e){
     console.log('modal sure...',this.data.modalInputTxt,e)
@@ -137,65 +151,9 @@ Page({
         duration: 2000
       })
     }
-    else if(this.data.currentAction=='rename'){
-      let item = list.find(it=>it.id==this.data.currentItem.id)
-      item.name=this.data.modalInputTxt
-      this.setData({fileList:list})
-      wx.showToast({
-        title: '重命名成功',
-        duration: 2000
-      })
-    }
   },
-  showDelToast(e){
-    let self = this
-    let currentItem = self.data.currentItem
-    let content = self.data.currentItem.type=='folder'?'删除文件夹':'删除文件'
-    wx.showModal({
-      content:content+'"'+currentItem.name+'"',
-      confirmColor:"#C95E57",
-      confirmText:'删除',
-      cancelColor:'#4F79B4',
-      success(res){
-        if (res.confirm) {
-          let list = self.data.fileList
-          let item = list.find(it=>it.id==currentItem.id)
-          list.splice(list.indexOf(item),1)
-          self.setData({fileList:list})
-          console.log('用户点击确定')
-        } else if (res.cancel) {
-          console.log('用户点击取消')
-        }
-      },
-      fail(){
-
-      },
-      complete(){
-
-      }
-    })
-  },
-  // 防抖
-  debounce(fn, wait) {    
-    let self=this 
-    return (function() {        
-      if(self.data.timerId !== null) clearTimeout(self.data.timerId);   
-      self.setData({'timerId':setTimeout(fn, wait)})   
-    })()
-  },
-    /**
-   * 用户点击右上角分享或button 分享
-    */
-  // from	String	转发事件来源。
-  // target	Object	如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined	1.2.4
-  // webViewUrl	String	页面中包含web-view组件时，返回当前web-view的url
-  onShareAppMessage: function (e) {
-    if(e.from=='button'){
-      return {
-        title: this.data.currentItem.name,
-        path: `/pages/spaceDetail/index?id=${this.data.currentItem.id}&name=${this.data.currentItem.name}`
-      }
-    }
+  reSetList(e){
+    this.setData({fileList:e.detail.list})
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -217,6 +175,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    console.log('onUnload....')
   },
   /**
    * 页面相关事件处理函数--监听用户下拉动作

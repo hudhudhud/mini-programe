@@ -1,6 +1,6 @@
 .container{
   box-sizing: border-box;
-  padding:0 20rpx;
+  /* padding:0 30rpx; */
   background-color:#fff;
 }
 .add-folder-btn{

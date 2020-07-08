@@ -28,6 +28,7 @@
   background-color: #fff;
   border-top:2rpx solid #E7E7E7;
   border-bottom:2rpx solid #E7E7E7;
+  font-size:30rpx;
   /* color:#C3C3C3; */
 }
 .module .add-user-wrapper{
@@ -67,16 +68,26 @@
 .module .add-user-wrapper .user .left{
   display:flex;
   align-items: center;
+  font-size:30rpx;
 }
 .module .add-user-wrapper .user .user-img{
- width:80rpx;
- height:80rpx;
- border:2rpx solid;
+ width:70rpx;
+ height:70rpx;
  box-sizing: border-box;
  margin-right:10rpx;
- border-radius: 2rpx;
+ border-radius: 10rpx;
  text-align: center;
- line-height: 80rpx;
+ background-color:#E6F0FC;
+ display:flex;
+ align-items: center;
+ justify-content: center;
+}
+.module .add-user-wrapper .user .user-img cover-image{
+  border:none;
+  border-radius: 10rpx;
+}
+.module .add-user-wrapper .user .user-img .fa{
+  font-size:38rpx;
 }
 .module .add-user-wrapper .user .right{
   font-size:30rpx;

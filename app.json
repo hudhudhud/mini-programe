@@ -1,11 +1,11 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/spaceInfo/index",
     "pages/addSpace/index",
+    "pages/spaceInfo/index",
     "pages/spaceName/index",
     "pages/spaceDetail/index",
-    "pages/logs/logs"
+    "pages/error/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

@@ -1,10 +1,9 @@
-<view class="actionSheet {{show?'show':''}}" wx:if="{{show}}"  bindtap="cancel">
-  <view class="content pop-up">
-    <view class="options">
-      <slot />
-    </view>
-    <view catchtap="cancel" class="cancel">
-      取消
+
+<view hidden="{{!actionShow}}" class="wx-actionsheet_mask wx-actionsheet_{{mask}}" bindtap="actionHide">
+  <view class="wx-actionsheet_main wx-actionsheet_animated wx-actionsheet_{{animation}}">
+    <slot></slot>
+    <view catchtap="actionHide" class="wx-actionsheet_close">
+      {{closeText}}
     </view>
   </view>
 </view>

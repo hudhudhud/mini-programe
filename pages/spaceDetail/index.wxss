@@ -1,28 +1,39 @@
 /* pages/spaceDetail/index.wxss */
 .container{
-  /* padding:0 20rpx; */
- 
-  width:100%;
+  box-sizing: border-box;
+  /* padding:0 30rpx; */
 }
 .top-bar{
   box-sizing: border-box;
   width:100%;
-  padding:10rpx 20rpx;
+  padding:10rpx 30rpx;
   display:flex;
   justify-content: space-between;
   margin-bottom:10rpx;
   border-bottom:10rpx solid #F5F5F5;
 }
-
+.folder-module{
+  padding:0 30rpx;
+}
 .paths{
-  display:flex;
+  /* 1、scroll-view不支持flex，默认block；
+2、scroll-view设置scroll-x width: 100%; white-space: nowrap;
+3、子元素设置display: inline-block；*/
+  /* display:flex; */
   width:85%;
-  overflow-x: scroll;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
+  /* overflow-x: scroll; */
+  white-space: nowrap;
+  height:40rpx;
 }
 .path-item{
   color:#BABABA;
   font-size:30rpx;
+  max-width: 450rpx;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display:inline-block;
 }
 .path-item i{
   padding:0 10rpx;
@@ -59,9 +70,6 @@
   font-size:26rpx;
   color:#575757;
 }
-.fa-picture-o{
-  color:#FBC545
-}
 .modal-file-folder-input{
   width:100%;
   height:80rpx;
@@ -74,56 +82,23 @@
   line-height:3;
   font-size:30rpx
 }
-.operation-btns{
-  display:flex;
-  background-color:#F0F0F0;
+
+.fa-picture-o{
+  color:#FBC545
+}
+.empty-folder{
+  font-size:35rpx;
+  display: flex;
   width:100%;
-  padding:20rpx 0;
-}
-.operation-btns .action-btn{
-  width:150rpx;
-  height:150rpx;
-  display:inline-block;
-  text-align: center;
-  border-radius: 30rpx;
-}
-.operation-btns .action-btn i{
-  font-size:50rpx;
-  font-weight: 500;
-}
-.operation-btns .action-btn .icon{
-  margin:auto;
-  width:100rpx;
-  height:100rpx;
-  display:flex;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color:#fff;
+  color:#B1B1B1;
+  padding-top:100rpx;
 }
-.operation-btns .action-btn .title{
- font-size:26rpx;
- color:#8E8E8E;
+.empty-folder .fa-folder-open-o{
+  font-size:120rpx;
+  color:#E3F0FA;
+  margin-bottom:20rpx;
 }
-.operation-btns .share-btn{
-  width:100rpx;
-  height:100rpx;
-  display:flex;
-  justify-content: center;
-  align-items: center;
- }
- .operation-btns .share-btn .fa-share{
-   color:#398CFE;
- }
- .action-item-txt{
-   background-color:#F0F0F0;
-   width:100%;
-   padding:30rpx 0;
-   text-align: center;
- }
- .action-item-txt text{
-  display: inline-block;
-  width:80%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
- }

@@ -1,0 +1,66 @@
+/* 搜索结果文件操作 */
+.modal-file-folder-input{
+  width:100%;
+  height:80rpx;
+  border:2rpx solid #BABABA;
+  text-align:left;
+  padding:0 10rpx;
+  box-sizing: border-box;
+}
+.modal-tip{
+  line-height:3;
+  font-size:30rpx
+}
+.operation-btns{
+  display:flex;
+  background-color:#F0F0F0;
+  width:100%;
+  padding:20rpx 0;
+}
+.operation-btns .action-btn{
+  width:150rpx;
+  height:150rpx;
+  display:inline-block;
+  text-align: center;
+  border-radius: 30rpx;
+}
+.operation-btns .action-btn i{
+  font-size:50rpx;
+  font-weight: 500;
+}
+.operation-btns .action-btn .icon{
+  margin:auto;
+  width:100rpx;
+  height:100rpx;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-color:#fff;
+}
+.operation-btns .action-btn .title{
+ font-size:26rpx;
+ color:#8E8E8E;
+}
+.operation-btns .share-btn{
+  width:100rpx;
+  height:100rpx;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+ }
+ .operation-btns .share-btn .fa-share{
+   color:#398CFE;
+ }
+ .action-item-txt{
+   background-color:#F0F0F0;
+   width:100%;
+   padding:30rpx 0;
+   text-align: center;
+ }
+ .action-item-txt text{
+  display: inline-block;
+  width:80%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+ }

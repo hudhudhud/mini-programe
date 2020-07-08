@@ -1,6 +1,6 @@
 <!--index.wxml-->
-<view class="search-input-component">
-  <view class="search {{sortVisible?'sort':''}}" >
+<view class="search-input-component {{searchBarVisible?'hasSearchBar':''}}">
+  <view class="search {{sortVisible?'sort':''}}" wx:if='{{searchBarVisible}}'>
     <view class="search-bar" wx:if='{{!searchStatus}}' >
       <view class="just-show" bindtap="goSearch">
         <i class="fa fa-search" aria-hidden="true"></i><span>搜索</span>
@@ -15,23 +15,15 @@
       <view class='cancel-btn' bindtap="cancelSearch"> 取消 </view>
     </view>
   </view>
-  <view wx:if="{{!searchStatus|| (searchStatus&&!searchStr)}}">
+  <view wx:if="{{!searchStatus|| (searchStatus&&!searchStr)}}" scroll-y>
     <slot />
   </view>
 
   <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>
-  <view class="search-res" wx:if="{{searchStatus&&searchStr}}">
+  <view class="search-res" wx:if="{{searchStatus&&searchStr}}" scroll-y>
     <view wx:for="{{searchResList}}" class="folder-module" wx:key='index'>
       <text class="title">{{item.title}}</text>
-      <view wx:for='{{item.files}}' class="folder-line" wx:for-item="file" wx:key='index'>
-        <view class="left">
-          <i class="fa fa-folder" aria-hidden="true"></i>
-          <text class="folder-name">{{file.name}}</text>
-        </view>
-        <view bindtap="goInfo" class="info-btn right" data-item="{{item}}">
-           <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
-        </view>
-      </view>
+      <file-list dataList="{{item.files}}" bind:goDetail="goDetail"></file-list>
     </view>
     <view wx:if="{{searchResList.length==0&&!loading}}" class="no-data">
         <i class="fa fa-search" aria-hidden="true"></i>
@@ -39,3 +31,5 @@
     </view>
   </view>
 </view>
+
+

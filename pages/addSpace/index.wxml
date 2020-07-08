@@ -7,22 +7,35 @@
   <view class="module">
     <text class="title">成员及权限</text>
     <view class="add-user-wrapper">
-      <view class="add-user-btn">
+      <view class="add-user-btn" bindtap='addUser'>
           <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
       </view>
       <view class="users">
-        <view class="user" wx:for="{{usersList}}" wx:key="index">
+       <view class="user">
           <view class="left">
               <view class="user-img">
-                <i class="fa fa-user" aria-hidden="true"></i> 
+                <cover-image src='{{user.avatar}}' wx:if='{{user.avatar}}'></cover-image>
+                <i class="fa fa-user" aria-hidden="true" wx:else></i> 
+              </view>
+              <text class="name">{{user.name}}</text>
+          </view>
+          <view class="right">
+            <text class="name" class="role">管理员</text>
+          </view>
+        </view>
+        <view class="user" wx:for="{{permissionsList}}" wx:key="index">
+          <view class="left">
+              <view class="user-img" wx:if='{{item.accessType===0}}'>
+                <cover-image src='{{item.avatar}}' wx:if='{{item.avatar}}'></cover-image>
+                <i class="fa fa-user" aria-hidden="true" wx:else></i> 
+              </view>
+              <view class="user-img" wx:else>
+                <i class="fa fa-folder" aria-hidden="true"></i>
               </view>
               <text class="name">{{item.name}}</text>
           </view>
-          <view class="right" wx:if="{{item.role==='manager'}}">
-            <text class="name" class="role">{{item.roleTxt}}</text>
-          </view>
-          <view class="right operate" wx:else bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}">
-            <text class="name" class="role">{{item.roleTxt}}</text> <i class="fa fa-caret-down" aria-hidden="true"></i>
+          <view class="right operate" bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}">
+            <text class="name" class="role">{{item.permissionType==1?'可编辑':'仅浏览'}}</text> <i class="fa fa-caret-down" aria-hidden="true"></i>
           </view> 
         </view>
       </view>

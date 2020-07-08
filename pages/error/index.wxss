@@ -1,0 +1,7 @@
+/* pages/error/index.wxss */
+.error-info{
+  text-align: center;
+  font-weight: bold;
+  padding-top: 80rpx;
+  font-size:35rpx;
+}

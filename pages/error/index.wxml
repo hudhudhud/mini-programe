@@ -1,0 +1,4 @@
+<!--pages/error/index.wxml-->
+<view class="error-info">
+{{errorInfo}}
+</view>

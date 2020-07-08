@@ -1,37 +1,80 @@
+
+var animation = wx.createAnimation({
+  duration: 100,
+  timingFunction: 'linear',
+  delay: 0
+})
+
 Component({
-  options: {
-    virtualHost: true,
-    styleIsolation: 'isolated',//样式隔离，默认值，在自定义组件内外，使用 class 指定的样式将不会相互影响
-    externalClasses: ['my-class']
-  },
+  /**
+   * 组件的属性列表
+   */
   properties: {
-    show: {
+    // 组件的初始显隐
+    actionShow: {
       type: Boolean,
-      value:false,
+      value: false,
       observer: function (newVal, oldVal) {
+        this.animation = animation
+        animation.opacity(0).step()
         // 显示
-        console.log('observer...',newVal)
-        // if (newVal) {
-        //   this.setData({
-        //     show: true,
-        //   })
-        // } else {
-        //   this.setData({
-        //     show: false
-        //   })
-        // }
+        if (newVal) {
+          this.setData({
+            actionShow: true,
+            mask: '',
+            animation: 'showAction'
+          })
+        } else {
+          // var that = this
+          this.setData({
+            animation: 'hideAction',
+            mask: 'transparent',
+            actionShow: false
+          })
+        }
       }
     },
+    // 取消按钮的文字
+    closeText: {
+      type: String,
+      value: '取消',
+      observer: function (newVal, oldVal) {
+        this.setData({
+          closeText: newVal
+        })
+      }
+    }
   },
+
+  /**
+   * 组件的初始数据
+   */
   data: {
-
+    mask: '',
+    animation: 'showAction',
+    timerId:''
   },
-  methods: {
-    cancel(){
-      console.log('action-sheet','取消')
-      this.setData({show:false})
-      //this.triggerEvent('search',this.searchStr)
-    },
 
+  /**
+   * 组件的方法列表
+   */
+  methods: {
+    // 取消按钮响应事件
+    actionHide: function () {
+      console.log('取消...')
+      var that = this
+      this.setData({
+        animation: 'hideAction',
+        mask: 'transparent'
+      })
+      setTimeout(function () {
+        that.setData({
+          actionShow: false
+        })
+      }, 510)
+      var myEventDetail = {}
+      var myEventOption = {}
+      this.triggerEvent('actionHide', myEventDetail, myEventOption)
+    },
   }
 })

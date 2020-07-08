@@ -1,21 +1,24 @@
 <view class="container">
-  <search-input sort-visible="{{true}}">
+  <search-input sort-visible="{{true}}" parentId='{{parentFolderId}}' searchBarVisible='{{fileList.length>0}}'>
     <view class="top-bar"> 
-      <view class="paths">
-        <text class="path-item">网盘</text>
-        <view wx:for="{{pathList}}" wx:key='index' class="path-item {{index==pathList.length-1?'current':''}}">
+      <scroll-view class="paths" scroll-x scroll-into-view='{{"pathname"+(pathList.length-1)}}' scroll-with-animation="true">
+        <view class="path-item" bindtap='goIndexPage' wx:if='{{!pageFrom}}'>网盘</view>
+        <view class="path-item" bindtap='goSearchPage' wx:else>搜索结果</view>
+        <!-- 小程序节点 id 的设置目前要求是字母开头，且只能包含字母、数字、中划线、下划线、英文冒号和英文句点。 -->
+        <view wx:for="{{pathList}}" wx:key='index' class="path-item {{index==pathList.length-1?'current':''}}"
+        bindtap='goSomePage'  data-index="{{index}}" id='{{"pathname"+index}}'>
           <i class="fa fa-angle-right" aria-hidden="true" ></i>
           <text>{{item}}</text>
         </view>
-      </view>
+      </scroll-view>
       <view class="add-btn" bindtap='showAddAction'> 
         <i class="fa fa-file-text" aria-hidden="true"></i>
         <i class="fa fa-plus" aria-hidden="true"></i>
       </view>
     </view>
-    <view class="folder-module share-file">
+    <view class="folder-module share-file" wx:if='{{fileList.length>0}}'>
       <text class="title">文件</text>
-      <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
+      <!-- <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
         <view class="left" wx:if='{{item.type=="folder"}}'>
           <i class="fa fa-folder" aria-hidden="true"></i>
           <text class="folder-name" >{{item.name}}</text>
@@ -27,59 +30,36 @@
         <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
            <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
         </view>
-      </view>
+      </view> -->
+      <file-list dataList="{{fileList}}" bind:goDetail="goDetail" bind:reSetList="reSetList"></file-list>
+    </view>
+    <view wx:else class="empty-folder">
+      <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+      <text>此文件夹为空</text>
     </view>
   </search-input>
-<action-sheet actionShow="{{addActionSheetVisible}}"> 
-    <view class="add-action-btns">
-      <view class="add-action-btn" bindtap='showAddFolderModal'>
-        <i class="fa fa-folder" aria-hidden="true"></i>
-        <text>新建文件夹</text>
+  <action-sheet actionShow="{{addActionSheetVisible}}"> 
+      <view class="add-action-btns">
+        <view class="add-action-btn" bindtap='showAddFolderModal'>
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <text>新建文件夹</text>
+        </view>
+        <view class="add-action-btn" bindtap='addImg'>
+          <i class="fa fa-picture-o" aria-hidden="true"></i>
+          <text>上传照片</text>
+        </view>
+        <!-- <view class="add-action-btn" bindtap='addFile'>
+          <i class="fa fa-upload" aria-hidden="true"></i>
+          <text>上传文件</text>
+        </view> -->
       </view>
-      <view class="add-action-btn" bindtap='addImg'>
-        <i class="fa fa-picture-o" aria-hidden="true"></i>
-        <text>上传照片</text>
-      </view>
-      <!-- <view class="add-action-btn" bindtap='addFile'>
-        <i class="fa fa-upload" aria-hidden="true"></i>
-        <text>上传文件</text>
-      </view> -->
-    </view>
-</action-sheet>
-<action-sheet actionShow="{{operationActionSheetVisible}}"> 
-    <view class="action-item-txt">
-      <text wx:if='{{currentItem.type=="folder"}}'>{{currentItem.name}}</text>
-      <text wx:else>{{currentItem.name+'.'+currentItem.ext}}</text>
-    </view>
-    <view class="operation-btns shares">
-     <view class="action-btn">
-        <button class="share-btn"  data-type="modalShare" data-item='{{currentItem}}' open-type="share"  send-message-path=''>
-          <i class="fa fa-share" aria-hidden="true"></i>
-        </button>
-        <text class="title">转发</text>
-      </view>
-    </view>
-    <view class="operation-btns">
-      <view class="action-btn" bindtap='showRenameModal'>
-        <view class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></view>
-        <text class="title">重命名</text>
-      </view>
-      <view class="action-btn" bindtap='showDelToast'>
-        <view class="icon"><i class="fa fa-trash-o" aria-hidden="true"></i></view>
-        <text class="title">删除</text>
-      </view>
-       <!-- <view class="action-btn" bindtap='chooseMutiple'>
-        <view class="icon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></view>
-        <text class="title">选中</text>
-      </view> -->
-  </view>
-</action-sheet>
-<mymodal 
+  </action-sheet>
+  <mymodal 
 showStatus='{{showModal}}'
- confirmText='确定' 
- bind:complete="modalComplete" 
- title='{{modalTitle}}' >
- <text class="modal-tip">{{modalTip}}</text>
- <input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  model:value="{{modalInputTxt}}" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
- </mymodal>
+confirmText='确定' 
+bind:complete="modalComplete" 
+title='{{modalTitle}}' >
+<text class="modal-tip">{{modalTip}}</text>
+<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  model:value="{{modalInputTxt}}" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
+</mymodal>
 </view>

@@ -6,12 +6,23 @@ Page({
   data: {
     // searchStatus:false,
     shareFileList:[
-      {name:'123',},
-      {name:'管理规范管理规范管理规范管理规范管理规范管理规范',}
+      {name:'测试',id:'10'},
+      {name:'管理规范管理规范管理规范管理规范管理规范管理规范',id:'20'}
     ],
     //searchResList:[],
     //searchStr:"",
     //loading:false,
+
+    addActionSheetVisible:false,
+    showModal:false,
+    modalInputTxt:'',
+    operationActionSheetVisible:false,
+    currentAction:'',
+    modalTitle:'',
+    madalPlaceholder:'',
+    currentItem:null,
+    autoFocus:false,
+    modalTip:'',
   },
   // goSearch(){
   //   this.setData({searchStatus:true})
@@ -78,14 +89,15 @@ Page({
       item={id:0,name:'我的文件'}
     }
     wx.navigateTo({
-      url: '../spaceDetail/index?id='+item.id+'&name='+item.name
+      url: '../spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify([item.name])}`
     })
   },
   onLoad: function(option){
     console.log('....loading',option.query)
   },
   onShow(){
-    console.log(333333,'onshow')
+    //console.log(333333,'onshow')
     wx.setStorageSync('pathList',[])
-  }
+  },
+
 })

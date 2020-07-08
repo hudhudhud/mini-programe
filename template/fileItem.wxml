@@ -1,0 +1,13 @@
+  <view  class="folder-line">
+    <view class="left" wx:if='{{type=="folder"}}'>
+      <i class="fa fa-folder" aria-hidden="true"></i>
+      <text class="folder-name" >{{name}}</text>
+    </view>
+    <view class="left" wx:else>
+      <i class="fa fa-file-text-o" aria-hidden="true"></i>
+      <text class="folder-name" >{{name+'.'+ext}}</text>
+    </view>
+    <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{file}}">
+        <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
+    </view>
+</view>

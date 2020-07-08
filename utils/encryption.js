@@ -1,9 +1,9 @@
 const CryptoJS = require('crypto-js')
 const util = require('./util.js')
-function encriUser(){
+function encriUser(uid){
     let iv = "0000000000000000";
     // 加密内容
-    let word =wx.getStorageSync("userInfo").userId+'|'+util.formatTime(new Date())
+    let word =uid+'|'+util.formatTime(new Date())
     // 密钥，长度必须为16
     let secret_key = "1234567890123456";
 
@@ -18,8 +18,7 @@ function encriUser(){
         mode: CryptoJS.mode.CBC, 
         padding: CryptoJS.pad.Pkcs7
     });
-    wx.setStorageSync('uid-enc',ciphertext.toString())
-    console.log(999999999,ciphertext.toString())
+    return ciphertext.toString()
 }
 function encriId(id){
     let iv = "0000000000000000";

@@ -1,9 +1,21 @@
 //app.js
-import *  as encryption from 'utils/encryption';
+
 // const {LOGIN}  = require('./utils/api.js')
-import {getLoginKey} from './utils/request.js';
+import {login,getSessionKey} from './utils/request.js';
 App({
   onLaunch: function () {
+    // if(!wx.qy){
+    //   let errorInfo= '请用企业微信客户端打开'
+    //   wx.showToast({
+    //     title: errorInfo,
+    //     icon: 'none',
+    //     duration: 4000
+    //   })
+    //   wx.redirectTo({
+    //     url: '/pages/error/index?errorInfo='+errorInfo,
+    //   })
+    //   return
+    // }
     // wx.qy.login({
     //   success:(res)=>{
     //     console.log(22222,res)
@@ -12,36 +24,42 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // 登录
-    //getLoginKey()
-    // 获取用户信息
-    // wx.getSetting({
-    //   success: res => {
-    //     if (res.authSetting['scope.userInfo']) {
-    //       // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-    //       wx.getUserInfo({
-    //         success: res => {
-    //           // 可以将 res 发送给后台解码出 unionId
-    //           this.globalData.userInfo = res.userInfo
-    //           wx.setStorageSync('userInfo', res.userInfo)
-    //           encryption.encriUser()
-    //           // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-    //           // 所以此处加入 callback 以防止这种情况
-    //           if (this.userInfoReadyCallback) {
-    //             this.userInfoReadyCallback(res)
-    //           }
-    //         }
-    //       })
-    //     }
-    //   }
-    // })
+     // 登录
+   //login()
+   //getSessionKey()
+
+  //  wx.request({
+  //   url: "https://api.eos-ts.h3c.com/wxapp/v1.0/outside/service/item",
+  //   method: "POST",
+  //   header: {
+  //     "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+  //   },
+  //   data: {
+  //     uid:'hys3032',
+  //     source:'1',//1表示新华三 2表示方舟
+  //   },
+  //   success:function (res) {
+  //     wx.showToast({
+  //       title: '成功！',
+  //       icon: 'none',
+  //       duration: 4000
+  //     })
+  //   },
+  //   fail(e){
+  //     wx.showToast({
+  //       title: JSON.stringify(e),
+  //       icon: 'none',
+  //       duration: 4000
+  //     })
+  //   }})
+   
   },
   // 小程序发生脚本错误或 API 调用报错时触发。也可以使用 wx.onError 绑定监听
   onError(error){
     wx.showToast({
       title: '异常：'+error,
-      icon: 'fail',
-      duration: 5000
+      icon: 'none',
+      duration: 4000
     })
   },
   //小程序要打开的页面不存在时触发
@@ -52,6 +70,5 @@ App({
   },
   globalData: {
     userInfo: null,
-    uidEnc:''
   }
 })

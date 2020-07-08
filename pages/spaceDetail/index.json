@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "search-input":"../../components/search-input",
-    "action-sheet":"../../components/actionsheet/index",
-    "mymodal": "../../components/modal/index"
+    "action-sheet":"../../components/action-sheet/index",
+    "mymodal": "../../components/modal/index",
+    "file-list": "../../components/file-list/index"
   }
 }
