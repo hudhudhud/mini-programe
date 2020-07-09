@@ -28,30 +28,6 @@ App({
   // login()
   //  getSessionKey()
 
-  //  wx.request({
-  //   url: "https://api.eos-ts.h3c.com/wxapp/v1.0/outside/service/item",
-  //   method: "POST",
-  //   header: {
-  //     "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
-  //   },
-  //   data: {
-  //     uid:'hys3032',
-  //     source:'1',//1表示新华三 2表示方舟
-  //   },
-  //   success:function (res) {
-  //     wx.showToast({
-  //       title: '成功！',
-  //       icon: 'none',
-  //       duration: 4000
-  //     })
-  //   },
-  //   fail(e){
-  //     wx.showToast({
-  //       title: JSON.stringify(e),
-  //       icon: 'none',
-  //       duration: 4000
-  //     })
-  //   }})
    
   },
   // 小程序发生脚本错误或 API 调用报错时触发。也可以使用 wx.onError 绑定监听

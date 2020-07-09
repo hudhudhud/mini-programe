@@ -9,18 +9,22 @@ Page({
   data: {
     fileAdmin:'hys3032',
     inputName:'',
-    permissionsList:[
-      
-      // {name:'hudan',role:'manager',roleTxt:"管理员"},
-      // {name:'xiaowang',role:'user',roleTxt:"仅浏览"},
-      // {name:'123',role:'user',roleTxt:"仅浏览"},
+    // oldPermissionsList:[
+    //   {accessType: 0, 
+    //     accessorSid: "hys3032",
+    //     avatar: "https://wework.qpic.cn/bizmail/pcRHXOXiajsBgXicZkaNrQIdq2Yk3zFcKlYyogr5DUB4sJk1IeW8aTjg/0",
+    //     name: "胡丹",
+    //     permissionType: 1},
+    // ],
+    oldPermissionsList:[
       {accessType: 0, 
         accessorSid: "hys3032",
         avatar: "https://wework.qpic.cn/bizmail/pcRHXOXiajsBgXicZkaNrQIdq2Yk3zFcKlYyogr5DUB4sJk1IeW8aTjg/0",
         name: "胡丹",
         permissionType: 1},
-       //{accessorSid:1,name:'123',avatar:'',accessType:0,permissionType:1})//type:0域账号，1部门;permissionType:0只读，1编辑
+      //  {accessorSid:1,name:'123',avatar:'',accessType:0,permissionType:1})//type:0域账号，1部门;permissionType:0只读，1编辑
     ],
+    permissionsList:[],
     actionSheetVisible:false,
     fileId:'',
   },
@@ -118,22 +122,19 @@ Page({
       success: function(res) {
         console.log('selectEnterpriseContact...',res)
         var selectedDepartmentList = res.result.departmentList;// 已选的部门列表
-        let permissionsList = [
-          //后续去掉
-          {accessType: 0, 
-            accessorSid: "hys3032",
-            avatar: "https://wework.qpic.cn/bizmail/pcRHXOXiajsBgXicZkaNrQIdq2Yk3zFcKlYyogr5DUB4sJk1IeW8aTjg/0",
-            name: "胡丹",
-            permissionType: 1}
-        ]
+        let permissionsList =  self.data.oldPermissionsList //老数据需要一直在，不能被删除
         for (var i = 0; i < selectedDepartmentList.length; i++){
           var department = selectedDepartmentList[i];
-          permissionsList.push({accessorSid:department.id,name:department.name,accessType:1,permissionType:1})//accessType:0域账号，1部门；permissionType:0只读，1编辑
+          if(!permissionsList.find(it=>it.accessorSid==department.id)){
+            permissionsList.push({accessorSid:department.id,name:department.name,accessType:1,permissionType:1})//accessType:0域账号，1部门；permissionType:0只读，1编辑
+          }
         }
         var selectedUserList = res.result.userList; // 已选的成员列表
         for (var i = 0; i < selectedUserList.length; i++){
           var user = selectedUserList[i];
-          permissionsList.push({accessorSid:user.id,name:user.name,avatar:user.avatar,accessType:0,permissionType:1})//accessType:0域账号，1部门;permissionType:0只读，1编辑
+          if(!permissionsList.find(it=>it.accessorSid==user.id)){
+            permissionsList.push({accessorSid:user.id,name:user.name,avatar:user.avatar,accessType:0,permissionType:1})//accessType:0域账号，1部门;permissionType:0只读，1编辑
+          }
         }
         self.setData({permissionsList:permissionsList})
       }
@@ -155,7 +156,7 @@ Page({
   onLoad: function (options) {
     this.setData({user:wx.getStorageSync('userInfo')})
     if(options.id){
-      this.setData({fileId:options.id,inputName:options.name})
+      this.setData({fileId:options.id,inputName:options.name,permissionsList:this.data.oldPermissionsList})
       // request.post(FOLDER_DETAIL,{
       //   fileId:options.id
       // })

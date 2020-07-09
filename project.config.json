@@ -41,7 +41,7 @@
 	"isGameTourist": false,
 	"simulatorType": "qywx_simulator_plugin",
 	"simulatorPluginLibVersion": {
-		"qywx_simulator_plugin": "2.4.0"
+		"qywx_simulator_plugin": "2.10.1"
 	},
 	"condition": {
 		"search": {

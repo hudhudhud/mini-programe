@@ -21,10 +21,14 @@ Page({
   setOperateRole(event){
     let index = event.currentTarget.dataset.index
     let self = this
+    let users = self.data.permissionsList
+    let actionList = ['管理员（可管理空间及成员权限）','仅浏览（仅浏览和下载，不能上传）', '可编辑（可上传下载，编辑文件夹）', '移除']
+    if(users[index].accessorSid==self.data.fileAdmin){
+      actionList = ['管理员（可管理空间及成员权限）','仅浏览（仅浏览和下载，不能上传）', '可编辑（可上传下载，编辑文件夹）']
+    }
     wx.showActionSheet({
-      itemList: ['管理员（可管理空间及成员权限）','仅浏览（仅浏览和下载，不能上传）', '可编辑（可上传下载，编辑文件夹）', '移除'],
+      itemList: actionList,
       success (res) {
-        let users = self.data.permissionsList
         if(res.tapIndex==0){
           if(self.data.fileAdmin!==users[index].accessorSid){
             if(!self.data.fileAdmin){//本来没有管理员则不用弹框确认

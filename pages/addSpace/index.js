@@ -104,20 +104,24 @@ Page({
       //添加管理员权限数据
       {accessorSid:this.data.user.uid,name:this.data.user.name,avatar:this.data.user.avatar,accessType:0,permissionType:1}
     ]
-    console.log('submit...',resPerList,this.data.inputName)
-    request.post(FOLDER_CREATE,{
-      userName:this.data.user.name,
-      fileName:this.data.inputName.trim(),
-      // parentId:'',共享空间根目录为空
-      type:1,//0私有空间的文件夹； 1共享空间的文件夹
-      permissionList:resPerList
-    }).then(res=>{
-      if(res.errcode==0){
-        wx.navigateBack()
-      }
-    }).finally(()=>{
+    setTimeout(() => {
       this.setData({submiting:false})
-    })
+      wx.navigateBack()
+    }, 500);
+    console.log('submit...',resPerList,this.data.inputName)
+    // request.post(FOLDER_CREATE,{
+    //   userName:this.data.user.name,
+    //   fileName:this.data.inputName.trim(),
+    //   // parentId:'',共享空间根目录为空
+    //   type:1,//0私有空间的文件夹； 1共享空间的文件夹
+    //   permissionList:resPerList
+    // }).then(res=>{
+    //   if(res.errcode==0){
+    //     wx.navigateBack()
+    //   }
+    // }).finally(()=>{
+    //   this.setData({submiting:false})
+    // })
   },
   /**
    * 生命周期函数--监听页面加载
