@@ -99,12 +99,11 @@
 }
 .confirm-btn{
   position:fixed;
+  bottom:0;
   width:100%;
   height:80rpx;
   background-color:#3476D1;
   color:#fff;
-  line-height: 80rpx;
-  text-align: center;
-  bottom:0;
   font-size:40rpx;
+  border-radius: 0;
 }

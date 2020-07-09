@@ -30,6 +30,8 @@
 }
 .flex-line .right{
   color:#A9A9A9;
+  display: flex;
+  align-items: center;
 }
 .flex-line .right .fa-angle-right{
   padding-left:10rpx;
@@ -54,30 +56,57 @@
   padding:0 30rpx;
   display:flex;
 }
+.module .add-user-wrapper .user{
+  width:90rpx;
+  text-align: center;
+  margin-right:18rpx;
+}
+.module .add-user-wrapper .more{
+  font-size:30rpx;
+  color:#959595;
+  height:90rpx;
+  width:90rpx;
+  position:relative;
+}
+.module .add-user-wrapper .more .fa{
+  position:absolute;
+  left:16rpx;
+  bottom:-20rpx;
+}
 .module .add-user-wrapper .user .name{
   display: inline-block;
-  width:80rpx;
+  width:90rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size:30rpx;
+  font-size:26rpx;
   color:#959595;
   text-align: center;
+  line-height: 2;
 }
 .module .add-user-wrapper .user .user-img{
- width:80rpx;
- height:80rpx;
- border:2rpx solid;
- box-sizing: border-box;
- margin-right:10rpx;
- border-radius: 2rpx;
- text-align: center;
- line-height: 80rpx;
-}
+  margin:auto;
+  width:90rpx;
+  height:90rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  text-align: center;
+  background-color:#E6F0FC;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+ }
+ .module .add-user-wrapper .user .user-img cover-image{
+   border:none;
+   border-radius: 10rpx;
+ }
+ .module .add-user-wrapper .user .user-img .fa{
+   font-size:38rpx;
+ }
 
 .module .add-user-wrapper .add-user-btn{
- height:100rpx;
- line-height: 100rpx;
+ height:80rpx;
+ line-height: 80rpx;
  padding:0 30rpx;
  width:100%;
  box-sizing: border-box;
@@ -96,7 +125,14 @@
   color:#E85966;
   height:100rpx;
   line-height: 100rpx;
-  font-size:32rpx;
+  font-size:35rpx;
+}
+.exit-btn{
+  text-align: center;
+  color:#000;
+  height:100rpx;
+  line-height: 100rpx;
+  font-size:35rpx;
 }
 .tip,.del-btn{
   height:100rpx;
@@ -107,8 +143,4 @@
 }
 .tip{
   font-size:30rpx;
-}
-.del-btn{
-  color:red;
-  font-size:40rpx;
 }

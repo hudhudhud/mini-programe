@@ -1,10 +1,13 @@
 {
   "pages":[
+    
+    
     "pages/index/index",
     "pages/addSpace/index",
-    "pages/spaceInfo/index",
     "pages/spaceName/index",
     "pages/spaceDetail/index",
+    "pages/spaceInfo/index",
+    "pages/spaceUserList/index",
     "pages/error/index"
   ],
   "window":{

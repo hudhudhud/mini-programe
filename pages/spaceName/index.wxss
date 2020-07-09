@@ -11,16 +11,17 @@
   display: flex;
   align-items: center;
   background-color:#fff;
+  font-size: 30rpx;
 }
 input{
   padding:0 10rpx;
-  width:90%;
+  width:92%;
   height:100%;
   border:none;
   box-sizing: border-box;
 }
 .fa.fa-times-circle-o{
-  width:10%;
+  width:8%;
   color:#CECECE;
   text-align: center;
 }
@@ -30,8 +31,8 @@ input{
   height:80rpx;
   background-color:#3476D1;
   color:#fff;
-  line-height: 80rpx;
   text-align: center;
   bottom:0;
   font-size:40rpx;
+  border-radius: 0;
 }

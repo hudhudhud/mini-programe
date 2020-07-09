@@ -2,7 +2,7 @@
 <view class="container">
   <view class="module">
       <text class="title">空间名称</text>
-      <input class="input"  placeholder="请输入空间名称" focus="true" model:value="{{inputName}}"/>
+      <input class="input"  placeholder="请输入空间名称" focus="true" value="{{inputName}}" bindinput="bindKeyInput"/>
   </view>
   <view class="module">
     <text class="title">成员及权限</text>
@@ -34,6 +34,9 @@
               </view>
               <text class="name">{{item.name}}</text>
           </view>
+          <view class="right" wx:if='{{item.accessorSid==user.uid}}'>
+            <text class="name" class="role">管理员</text>
+          </view>
           <view class="right operate" bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}">
             <text class="name" class="role">{{item.permissionType==1?'可编辑':'仅浏览'}}</text> <i class="fa fa-caret-down" aria-hidden="true"></i>
           </view> 
@@ -41,7 +44,7 @@
       </view>
     </view>
   </view>
-  <view class="confirm-btn" bindtap="confirmTap">
+  <button class="confirm-btn" bindtap="confirmTap"  loading="{{submiting}}" disabled="{{!inputName}}" style='width:100%'>
       <text>完成</text>
-  </view>
+  </button>
 </view>

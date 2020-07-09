@@ -14,11 +14,21 @@ import { agentId, GET_TOCKEN,LOGIN,GET_USERINOF } from "./api";
  * @returns {Promise<*>}
  */
 export const post = async function(url, params, options = {}) {
+  let uid = wx.getStorageSync('uidEnc')
+  let userInfo = wx.getStorageSync('userInfo')
+  if(!uid||!userInfo){
+    wx.showToast({
+      title: "没有登录信息！",
+      icon: "none",
+      duration: 4000
+    });
+    return
+  }
   return new Promise((resolve, reject) => {
     options = { ...defaultOptions, ...options };
     wx.request({
         url: url,
-        data: Object.assign({},params,{uid:wx.getStorageSync('uidEnc')}),
+        data: Object.assign({},params,{uid,userName:userInfo.name}),
         method: "POST",
         header: options.header,
         success(res) {
@@ -82,7 +92,7 @@ export const  login = async function(){
   });
 };
 
-export const  getSessionKey = async function(code='EtSb_DN80bjhZ0hFvUQ_Tg5qp3LagZoVpwAtQXCH0j8'){
+export const  getSessionKey = async function(code='FIiOEDuWsL4J8ag-63zbvUCK0tDDMIeCclL5sBgJ3GY'){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{
@@ -126,7 +136,7 @@ export const  getSessionKey = async function(code='EtSb_DN80bjhZ0hFvUQ_Tg5qp3Lag
           let userInfo = await getUserInfo(token,data.userid)
           wx.setStorageSync('userInfo', {
             uid:data.userid,
-            name:userInfo.userame,
+            name:userInfo.username,
             avatar:userInfo.avatar,
             mobile:userInfo.mobile,
             gender:userInfo.gender})

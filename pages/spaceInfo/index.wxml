@@ -3,34 +3,44 @@
   <view class="module flex-line" bindtap='goEditName'>
       <text class="title left">空间名称</text>
       <view  class="right">
-        <text class="space-name"> {{"test33333333333eeeeeeeeeeeeeeeee"}}</text>
+        <text class="space-name"> {{inputName}}</text>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
       </view>
   </view>
   <view class="module">
     <view class="flex-line">
       <text class="title left">空间成员及权限</text>
-      <view  class="right">
-        <text> {{3}}</text>
+      <view  class="right" bindtap="goSetUserPage">
+        <text> {{permissionsList.length}}</text>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
       </view>
     </view>
     <view class="add-user-wrapper">
       <view class="users">
-        <view class="user" wx:for="{{usersList}}" wx:key="index">
-            <view class="user-img">
-              <i class="fa fa-user" aria-hidden="true"></i> 
+        <view class="user" wx:for="{{permissionsList}}" wx:key="index" wx:if='{{index<6}}'>
+            <view class="user-img" wx:if='{{item.accessType===0}}'>
+              <cover-image src='{{item.avatar}}' wx:if='{{item.avatar}}'></cover-image>
+              <i class="fa fa-user" aria-hidden="true" wx:else></i> 
+            </view>
+            <view class="user-img" wx:else>
+              <i class="fa fa-folder" aria-hidden="true"></i>
             </view>
             <text class="name">{{item.name}}</text>
         </view>
+        <view class="more" wx:if='{{permissionsList.length>6}}'>
+            <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
+        </view>
       </view>
-      <view class="add-user-btn">
-          <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
+      <view class="add-user-btn" bindtap='addUser'>
+        <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
       </view>
     </view>
   </view>
   <view class="module flex-line">
    <text>设为快速访问</text><switch checked="{{switch1Checked}}" bindchange="switch1Change"/>
+  </view> 
+  <view class="module exit-btn" bindtap="showExitActionSheet" wx:if='{{permissionsList.length>1}}'>
+   <text>退出空间</text>
   </view>
   <view class="module del-btn" bindtap="showDelActionSheet">
    <text>解散空间</text>

@@ -11,7 +11,7 @@ App({
     //     icon: 'none',
     //     duration: 4000
     //   })
-    //   wx.redirectTo({
+    //   wx.reLaunch({
     //     url: '/pages/error/index?errorInfo='+errorInfo,
     //   })
     //   return
@@ -25,8 +25,8 @@ App({
     //   }
     // })
      // 登录
-   //login()
-   //getSessionKey()
+  // login()
+  //  getSessionKey()
 
   //  wx.request({
   //   url: "https://api.eos-ts.h3c.com/wxapp/v1.0/outside/service/item",
@@ -56,6 +56,18 @@ App({
   },
   // 小程序发生脚本错误或 API 调用报错时触发。也可以使用 wx.onError 绑定监听
   onError(error){
+    if(!wx.qy){
+      let errorInfo= '请用企业微信客户端打开'
+      wx.showToast({
+        title: errorInfo,
+        icon: 'none',
+        duration: 4000
+      })
+      wx.reLaunch({
+        url: '/pages/error/index?errorInfo='+errorInfo,
+      })
+      return
+    }
     wx.showToast({
       title: '异常：'+error,
       icon: 'none',

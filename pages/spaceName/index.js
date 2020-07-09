@@ -1,24 +1,64 @@
-// pages/spaceName/index.js
+import * as request from '../../utils/request.js';
+import regeneratorRuntime from '../../runtime.js'
+import {FOLDER_RENAME} from '../../utils/api'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    inputStr:"1222222222"
+    inputName:"",
+    fileId:'',
+    oldFileName:'',
+    submiting:false,
   },
-
+  bindKeyInput(e){
+    this.setData({
+      inputName:e.detail.value
+    })
+  },
   clearInput(){
-    this.setData({inputStr:""})
+    this.setData({inputName:""})
   },
   confirmTap(){
-    wx.navigateBack()
+    if(!this.data.inputName.trim()){
+      wx.showToast({
+        title: "请输入空间名称！",
+        icon: "none",
+        duration: 4000
+      });
+      return
+    }
+    if(this.data.submiting){
+      return
+    }
+    setTimeout(() => {
+      wx.navigateBack()
+      this.setData({submiting:false})
+    }, 1000);
+
+    // request.post(FOLDER_RENAME,{
+    //   fileId:this.data.fileId,
+    //   fileName:this.data.oldFileName,
+    //   newFileName:inputName
+    // })
+    // .then(res=>{
+    //   if(res.errcode==0){
+    //     wx.navigateBack()
+    //   }
+    // })
+    // .finally(()=>{
+    //   this.setData({submiting:false})
+    // })
+   
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    if(options.id){
+      this.setData({fileId:options.id,inputName:options.name,oldFileName:options.name})
+    }
   },
 
   /**
