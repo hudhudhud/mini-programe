@@ -1,17 +1,14 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+import {login} from '../../utils/request.js';
 Page({
   data: {
-    // searchStatus:false,
-    shareFileList:[
-      {name:'测试',id:'10'},
-      {name:'管理规范管理规范管理规范管理规范管理规范管理规范',id:'20'}
-    ],
-    //searchResList:[],
-    //searchStr:"",
-    //loading:false,
+    shareFileList:[],
+    user:{},
+    loading:true,
+    errorInfo:'',
+    myfileName:''
   },
   //事件处理函数
   goAddFloder(){
@@ -28,14 +25,38 @@ Page({
   goDetail(event){
     let item = event.currentTarget.dataset.item
     if(!item){
-      item={id:0,name:'我的文件'}
+      item={id:0,name:this.data.myfileName}
     }
     wx.navigateTo({
       url: '../spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify([item.name])}`
     })
   },
   onLoad: function(option){
-    console.log('....loading',option.query)
+    if(!wx.qy){
+      this.setData({errorInfo:'请用企业微信客户端打开'})
+      return
+    }
+
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo) {
+      this.setData({user: userInfo,myfileName:userInfo.uid+" "+userInfo.name})
+      this.setData({loading:false,shareFileList:[
+        {name:'测试',id:'10'},
+        {name:'管理规范管理规范管理规范管理规范管理规范管理规范',id:'20'}]})
+    }
+    else{
+      // wx.showLoading()
+      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+      // 所以此处加入 callback 以防止这种情况
+      app.userInfoReadyCallback = res => {
+        // wx.hideLoading()
+        userInfo = wx.getStorageSync('userInfo')
+        this.setData({user:userInfo,myfileName:userInfo.uid+" "+userInfo.name})
+        this.setData({loading:false,shareFileList:[
+          {name:'测试',id:'10'},
+          {name:'管理规范管理规范管理规范管理规范管理规范管理规范',id:'20'}]})
+      }
+    }
   },
   onShow(){
   },

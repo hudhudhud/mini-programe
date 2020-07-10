@@ -1,4 +1,4 @@
-const prod = 0
+const prod = 1
 export const comonUrl = prod ? "https://api.eos.h3c.com/wxapi/v1.0":"https://api.eos-ts.h3c.com/wxapi/v1.0"
 export const baseUrl = prod ? "https://api.eos.h3c.com/microdisk/v1.0":"https://api.eos-ts.h3c.com/microdisk/v1.0"
 

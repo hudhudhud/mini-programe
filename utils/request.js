@@ -47,7 +47,7 @@ export const post = async function(url, params, options = {}) {
           wx.showToast({
             title: e.errMsg,
             icon: "none",
-            duration: 2000
+            duration: 4000
           });
           reject(e);
         },
@@ -60,39 +60,51 @@ export const post = async function(url, params, options = {}) {
 
 export const  login = async function(){
   wx.showLoading({
-    title: '登录中...',
+    title: '登录中',
   })
   return new Promise((resolve, reject) => {
     wx.qy.login({
       success: async res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (res.code) {
-          await getSessionKey(res.code)
+          console.log('qy code..',res)
+          try{
+            await getSessionKey(res.code)
+            resolve(res)
+          }
+          catch(e){
+            reject(e)
+          }
         } else {
-          wx.showToast({
-            title: '获取code失败：' + res.errMsg,
-            icon: "none",
-            duration: 4000
-          });
-          console.log('获取code失败：' + res.errMsg)
+          // wx.showToast({
+          //   title: '获取code失败：' + res.errMsg,
+          //   icon: "none",
+          //   duration: 4000
+          // });
+          let msg = '未获取到code：' + res.errMsg
+          reject({msg})
+          console.log(msg)
         }
+        wx.hideLoading()
       },
       fail:(e)=>{
-        wx.showToast({
-          title: JSON.stringify(e),
-          icon: "none",
-          duration: 4000
-        });
-        console.log('error:'+JSON.stringify(e))
+        wx.hideLoading()
+        // wx.showToast({
+        //   title: e.errMsg,
+        //   icon: "none",
+        //   duration: 4000
+        // });
+        let msg = '获取code失败：' +e.errMsg
+        reject({msg})
+        console.log(msg)
       },
       complete(){
-        wx.hideLoading()
       }
     })
   });
 };
 
-export const  getSessionKey = async function(code='FIiOEDuWsL4J8ag-63zbvUCK0tDDMIeCclL5sBgJ3GY'){
+export const  getSessionKey = async function(code='X78SNfnIWsuLdDbFmtEYji0toY6xcEyyMJTGshzmSBc'){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{
@@ -111,18 +123,21 @@ export const  getSessionKey = async function(code='FIiOEDuWsL4J8ag-63zbvUCK0tDDM
       },
       success: async function (res) {
         console.log('login.....',res)
-        resolve(res.data)
         if(res.data.errcode==0){
           let data = res.data.data
-          wx.showToast({
-            title: '登录成功'+data.userid,
-            icon: "none",
-            duration: 2000
-          });
           let uidEnc = encryption.encriUser(data.userid)
           wx.setStorageSync('uidEnc', uidEnc)
           wx.setStorageSync('sessionKey', data.session_key)
-          //获取姓名头像等用户信息
+          let userInfo = await getUserInfo(token,data.userid)
+          wx.setStorageSync('userInfo', {
+            uid:data.userid,
+            name:userInfo.username,
+            avatar:userInfo.avatar,
+            mobile:userInfo.mobile,
+            gender:userInfo.gender})
+          resolve()
+          
+          //获取姓名头像等用户信息,会弹出用户授权框，因此暂时不用，用接口获取姓名头像
           // wx.qy.getEnterpriseUserInfo({
           //   success(res){
           //     var name = res.userInfo.name
@@ -133,31 +148,26 @@ export const  getSessionKey = async function(code='FIiOEDuWsL4J8ag-63zbvUCK0tDDM
           //     })
           //   }
           // })
-          let userInfo = await getUserInfo(token,data.userid)
-          wx.setStorageSync('userInfo', {
-            uid:data.userid,
-            name:userInfo.username,
-            avatar:userInfo.avatar,
-            mobile:userInfo.mobile,
-            gender:userInfo.gender})
+         
         }
         else{
-          reject(res.data)
-          wx.showToast({
-            title: res.data.message,
-            icon: "none",
-            duration: 2000
-          });
+          reject({msg:res.data.message})
+          // wx.showToast({
+          //   title: res.data.message,
+          //   icon: "none",
+          //   duration: 2000
+          // });
         }
       },
       fail: function (e) {
-        reject(e)
-        console.log("error:" + JSON.stringify(e))
-        wx.showToast({
-          title: "登录异常:" + JSON.stringify(e),
-          icon: "none",
-          duration: 2000
-        });
+        let msg = '获取sessionKey失败：'+e.errMsg
+        reject({msg})
+        console.log(msg)
+        // wx.showToast({
+        //   title: "登录异常:" + JSON.stringify(e),
+        //   icon: "none",
+        //   duration: 2000
+        // });
       }
     })
   })
@@ -177,12 +187,14 @@ export const getToken=()=>{
         resolve(res.data.data)
       },
       fail:function(e){
-        console.log(JSON.stringify(e))
-        wx.showToast({
-          title: "获取tocken失败:"+JSON.stringify(e),
-          icon: "none",
-          duration: 5000
-        });
+        let msg = '获取token失败：'+e.errMsg
+        reject({msg})
+        console.log(msg)
+        // wx.showToast({
+        //   title: msg,
+        //   icon: "none",
+        //   duration: 5000
+        // });
       }
     })
   })
@@ -205,22 +217,25 @@ export const getUserInfo=(token,userid)=>{
           resolve(res.data.data)
         }
         else{
-          wx.showToast({
-            title: "获取用户信息失败:"+res.data.message,
-            icon: "none",
-            duration: 4000
-          });
-          reject(res.data)
+          let msg = "获取用户信息失败:"+res.data.message
+          reject({msg})
+          console.log(msg)
+          // wx.showToast({
+          //   title: msg,
+          //   icon: "none",
+          //   duration: 4000
+          // });
         }
       },
       fail:function(e){
-        reject(e)
-        console.log(JSON.stringify(e))
-        wx.showToast({
-          title: "获取用户失败:"+JSON.stringify(e),
-          icon: "none",
-          duration: 4000
-        });
+        let msg = '获取用户信息失败：'+e.errMsg
+        reject({msg})
+        console.log(msg)
+        // wx.showToast({
+        //   title: msg,
+        //   icon: "none",
+        //   duration: 4000
+        // });
       }
     })
   })

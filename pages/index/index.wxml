@@ -1,12 +1,15 @@
 <!--index.wxml-->
-
-<view class="container">
+<view class="error-info" wx:if='{{errorInfo}}'>
+{{errorInfo}}
+</view>
+<view class="container" wx:elif='{{!loading}}'>
   <search-input>
     <view class="folder-module my-file">
       <text class="title">个人</text>
       <view class="folder-line">
         <view class="left" bindtap="goDetail">
-          <i class="fa fa-folder" aria-hidden="true"></i> <text class="folder-name">我的文件</text>
+          <i class="fa fa-folder" aria-hidden="true"></i> 
+          <text class="folder-name">{{myfileName}}</text>
         </view>
       </view>
     </view>

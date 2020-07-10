@@ -14,7 +14,7 @@
        <view class="user">
           <view class="left">
               <view class="user-img">
-                <cover-image src='{{user.avatar}}' wx:if='{{user.avatar}}'></cover-image>
+                <image src='{{user.avatar}}' wx:if='{{user.avatar}}'></image>
                 <i class="fa fa-user" aria-hidden="true" wx:else></i> 
               </view>
               <text class="name">{{user.name}}</text>
@@ -26,7 +26,7 @@
         <view class="user" wx:for="{{permissionsList}}" wx:key="index">
           <view class="left">
               <view class="user-img" wx:if='{{item.accessType===0}}'>
-                <cover-image src='{{item.avatar}}' wx:if='{{item.avatar}}'></cover-image>
+                <image src='{{item.avatar}}' wx:if='{{item.avatar}}'></image>
                 <i class="fa fa-user" aria-hidden="true" wx:else></i> 
               </view>
               <view class="user-img" wx:else>

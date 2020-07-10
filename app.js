@@ -1,21 +1,17 @@
 //app.js
-
+import regeneratorRuntime from './runtime.js'//支持async await 
 // const {LOGIN}  = require('./utils/api.js')
 import {login,getSessionKey} from './utils/request.js';
 App({
   onLaunch: function () {
-    // if(!wx.qy){
-    //   let errorInfo= '请用企业微信客户端打开'
-    //   wx.showToast({
-    //     title: errorInfo,
-    //     icon: 'none',
-    //     duration: 4000
-    //   })
-    //   wx.reLaunch({
-    //     url: '/pages/error/index?errorInfo='+errorInfo,
-    //   })
-    //   return
-    // }
+    if(!wx.qy){
+      //放在index页面展示
+      // let errorInfo= '请用企业微信客户端打开'
+      // wx.redirectTo({
+      //   url: '/pages/error/index?errorInfo='+errorInfo,
+      // })
+      return
+    }
     // wx.qy.login({
     //   success:(res)=>{
     //     console.log(22222,res)
@@ -24,10 +20,12 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-     // 登录
-  // login()
-  //  getSessionKey()
+    
+    // 登录
+    wx.clearStorageSync()
+   this.loginFunc()
 
+  //  getSessionKey()
    
   },
   // 小程序发生脚本错误或 API 调用报错时触发。也可以使用 wx.onError 绑定监听
@@ -56,7 +54,36 @@ App({
     //   url: 'pages/...'
     // })
   },
+  async loginFunc(){
+    let self = this
+    try{
+      await login()
+      // 由于 login 是网络请求，可能会在 Page.onLoad 之后才返回
+      // 所以此处加入 callback 以防止这种情况
+      if (this.userInfoReadyCallback) {
+        this.userInfoReadyCallback()
+      }
+    }
+    catch(e){
+      wx.showModal({
+        content:'登录失败，点击重新登录！错误信息（'+e.msg+')',
+        confirmColor:"#4970D9",
+        confirmText:'确定',
+        showCancel:false,
+        success(res){
+          if (res.confirm) {
+            self.loginFunc()
+          }
+        },
+        fail(){
+        },
+        complete(){
+        }
+      })
+    }
+  },
   globalData: {
     userInfo: null,
+    loginSuccess:0,
   }
 })

@@ -61,7 +61,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom:2rpx solid #E7E7E7;
-  height:100rpx;
+  height:120rpx;
   box-sizing: border-box;
   padding:0 10rpx;
 }
@@ -71,8 +71,8 @@
   font-size:30rpx;
 }
 .module .add-user-wrapper .user .user-img{
- width:70rpx;
- height:70rpx;
+ width:90rpx;
+ height:90rpx;
  box-sizing: border-box;
  margin-right:10rpx;
  border-radius: 10rpx;
@@ -82,9 +82,11 @@
  align-items: center;
  justify-content: center;
 }
-.module .add-user-wrapper .user .user-img cover-image{
+.module .add-user-wrapper .user .user-img image{
   border:none;
   border-radius: 10rpx;
+  width:100%;
+  height:100%;
 }
 .module .add-user-wrapper .user .user-img .fa{
   font-size:38rpx;

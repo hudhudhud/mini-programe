@@ -7,10 +7,11 @@
   width:60rpx;
   height:60rpx;
   text-align: center;
-  line-height: 60rpx;
   background-color:#EEE;
-  display:inline-block;
   margin-right: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .add-folder-btn i{
  font-size:20rpx;
@@ -85,3 +86,11 @@
   display:block;
   padding:20rpx 0;
 } */
+
+
+.error-info{
+  text-align: center;
+  font-weight: bold;
+  padding-top: 80rpx;
+  font-size:35rpx;
+}
