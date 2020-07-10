@@ -12,6 +12,12 @@ App({
       // })
       return
     }
+    
+    // 正式登录
+    wx.clearStorageSync()
+    this.loginFunc()
+
+    //本地测试
     // wx.qy.login({
     //   success:(res)=>{
     //     console.log(22222,res)
@@ -20,13 +26,7 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    
-    // 登录
-    wx.clearStorageSync()
-   this.loginFunc()
-
-  //  getSessionKey()
-   
+    // getSessionKey()
   },
   // 小程序发生脚本错误或 API 调用报错时触发。也可以使用 wx.onError 绑定监听
   onError(error){
@@ -43,7 +43,7 @@ App({
       return
     }
     wx.showToast({
-      title: '异常：'+error,
+      title: '异常：'+error.substr(0,30),
       icon: 'none',
       duration: 4000
     })

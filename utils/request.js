@@ -70,17 +70,12 @@ export const  login = async function(){
           console.log('qy code..',res)
           try{
             await getSessionKey(res.code)
-            resolve(res)
+            resolve()
           }
           catch(e){
             reject(e)
           }
         } else {
-          // wx.showToast({
-          //   title: '获取code失败：' + res.errMsg,
-          //   icon: "none",
-          //   duration: 4000
-          // });
           let msg = '未获取到code：' + res.errMsg
           reject({msg})
           console.log(msg)
@@ -89,11 +84,6 @@ export const  login = async function(){
       },
       fail:(e)=>{
         wx.hideLoading()
-        // wx.showToast({
-        //   title: e.errMsg,
-        //   icon: "none",
-        //   duration: 4000
-        // });
         let msg = '获取code失败：' +e.errMsg
         reject({msg})
         console.log(msg)
@@ -104,7 +94,7 @@ export const  login = async function(){
   });
 };
 
-export const  getSessionKey = async function(code='X78SNfnIWsuLdDbFmtEYji0toY6xcEyyMJTGshzmSBc'){
+export const  getSessionKey = async function(code='P-meq2CDZdCsAEqKTpI2NYOcnA69JMhn9rGDyOuEIW0'){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{
@@ -128,14 +118,19 @@ export const  getSessionKey = async function(code='X78SNfnIWsuLdDbFmtEYji0toY6xc
           let uidEnc = encryption.encriUser(data.userid)
           wx.setStorageSync('uidEnc', uidEnc)
           wx.setStorageSync('sessionKey', data.session_key)
-          let userInfo = await getUserInfo(token,data.userid)
-          wx.setStorageSync('userInfo', {
-            uid:data.userid,
-            name:userInfo.username,
-            avatar:userInfo.avatar,
-            mobile:userInfo.mobile,
-            gender:userInfo.gender})
-          resolve()
+          try{
+            let userInfo = await getUserInfo(token,data.userid)
+            wx.setStorageSync('userInfo', {
+              uid:data.userid,
+              name:userInfo.username,
+              avatar:userInfo.avatar,
+              mobile:userInfo.mobile,
+              gender:userInfo.gender})
+            resolve()
+          }
+          catch(e){
+            reject(e)
+          }
           
           //获取姓名头像等用户信息,会弹出用户授权框，因此暂时不用，用接口获取姓名头像
           // wx.qy.getEnterpriseUserInfo({
@@ -148,26 +143,15 @@ export const  getSessionKey = async function(code='X78SNfnIWsuLdDbFmtEYji0toY6xc
           //     })
           //   }
           // })
-         
         }
         else{
-          reject({msg:res.data.message})
-          // wx.showToast({
-          //   title: res.data.message,
-          //   icon: "none",
-          //   duration: 2000
-          // });
+          let msg = '获取sessionKey失败：'+res.data.message
+          reject({msg})
         }
       },
       fail: function (e) {
         let msg = '获取sessionKey失败：'+e.errMsg
         reject({msg})
-        console.log(msg)
-        // wx.showToast({
-        //   title: "登录异常:" + JSON.stringify(e),
-        //   icon: "none",
-        //   duration: 2000
-        // });
       }
     })
   })
@@ -180,21 +164,21 @@ export const getToken=()=>{
       url: GET_TOCKEN,
       method: "POST",
       data: {
-          appid: 'workflow',//'wx32a1989aaa9c0b5a',
+          appid: 'workflow',
           appsecret: 'd4IgXxWNWrM=0MgjKu2kQE3+0fCtrU/4FWos8o68kpz/ZK3ILfA+0zo='
       },
       success: function (res) {
-        resolve(res.data.data)
+        if(res.data.errcode==0){
+          resolve(res.data.data)
+        }
+        else{
+          let msg = '获取token失败：'+res.data.message
+          reject({msg})
+        }
       },
       fail:function(e){
         let msg = '获取token失败：'+e.errMsg
         reject({msg})
-        console.log(msg)
-        // wx.showToast({
-        //   title: msg,
-        //   icon: "none",
-        //   duration: 5000
-        // });
       }
     })
   })
@@ -219,23 +203,11 @@ export const getUserInfo=(token,userid)=>{
         else{
           let msg = "获取用户信息失败:"+res.data.message
           reject({msg})
-          console.log(msg)
-          // wx.showToast({
-          //   title: msg,
-          //   icon: "none",
-          //   duration: 4000
-          // });
         }
       },
       fail:function(e){
         let msg = '获取用户信息失败：'+e.errMsg
         reject({msg})
-        console.log(msg)
-        // wx.showToast({
-        //   title: msg,
-        //   icon: "none",
-        //   duration: 4000
-        // });
       }
     })
   })
