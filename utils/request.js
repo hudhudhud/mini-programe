@@ -94,7 +94,7 @@ export const  login = async function(){
   });
 };
 
-export const  getSessionKey = async function(code='P-meq2CDZdCsAEqKTpI2NYOcnA69JMhn9rGDyOuEIW0'){
+export const  getSessionKey = async function(code='xzzk6Dk38vhcJG9VICoWZOsNFBQTraNjh4sdRT3N_ag'){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{

@@ -95,7 +95,7 @@ Page({
     })
   },
   addFile(){
-    //从聊天对话框里选择文件
+    //从聊天对话框里选择文件 企业微信不支持！！！
     wx.chooseMessageFile({
       count: 10,
       type: 'file',//除了图片和视频
@@ -103,6 +103,13 @@ Page({
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFiles
         console.log(22222222,res)
+      },
+      fail(e){
+        wx.showToast({
+          title: '失败:'+JSON.stringify(e),
+          icon: 'none',
+          duration: 4000
+        })
       }
     })
   },
