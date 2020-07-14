@@ -29,7 +29,7 @@ Component({
       extClass: 'test',
       data:{action:'del'}
     }],
-    currentSlidenItem:'',
+    currentSliderId:'',
   },
   methods: {
     goDetail(event){
@@ -134,10 +134,10 @@ Component({
       }
     },
     slideBindshow(e){
-      this.setData({currentSlidenItem:e.currentTarget.dataset.item})
+      this.setData({currentSliderId:e.currentTarget.dataset.item.id})
     },
     slideBindhide(e){
-      this.setData({currentSlidenItem:{}})
+      this.setData({currentSliderId:''})
     },
     slideButtonTap(e){
       console.log(222222,e)

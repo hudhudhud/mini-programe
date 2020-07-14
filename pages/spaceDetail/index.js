@@ -83,12 +83,23 @@ Page({
     })
   },
   addImg(){
+    let self = this 
     wx.chooseImage({
       count:9,//默认最多9张
       success (res) {
         let fileUrl = res.tempFilePaths
         let file = res.tempFiles
         console.log('imgfile....',res)
+        let imgs = res.tempFilePaths.map(it=>{
+          return {
+            id:parseInt(10**6*Math.random()),
+            name:parseInt(10**6*Math.random()),
+            url:it,
+            type:'file',
+            ext:it.substring(it.lastIndexOf('.')+1)
+          }
+        })
+        self.setData({fileList:[...self.data.fileList,...imgs]})
         //wx.uploadFile只支持单个单个上传，Promise.all
         // wx.uploadFile({
         //   url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址

@@ -1,6 +1,6 @@
 <view class="file-list">
   <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" bindtap="goDetail">
-    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSlidenItem.id==item.id}}' 
+    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
     bindshow='slideBindshow'  bindhide='slideBindhide' duration='200'>
       <view class="folder-line">
           <view class="left" wx:if='{{item.type=="folder"}}'>
@@ -8,8 +8,14 @@
             <text class="folder-name" >{{item.name}}</text>
           </view>
           <view class="left" wx:else>
-            <i class="fa fa-file-text-o" aria-hidden="true"></i>
-            <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+            <block wx:if='{{item.url}}'>
+              <image src="{{item.url}}"></image>
+              <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+            </block>
+            <block wx:else>
+              <i class="fa fa-file-text-o" aria-hidden="true"></i>
+              <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+            </block>
           </view>
           <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
               <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
