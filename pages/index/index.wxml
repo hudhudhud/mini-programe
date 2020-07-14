@@ -4,6 +4,7 @@
 </view>
 <view class="container" wx:elif='{{!loading}}'>
   <search-input>
+    <!-- <mp-loading type="circle"></mp-loading> -->
     <view class="folder-module my-file">
       <text class="title">个人</text>
       <view class="folder-line">

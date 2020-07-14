@@ -1,16 +1,21 @@
 <view class="file-list">
-  <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
-    <view class="left" wx:if='{{item.type=="folder"}}'>
-      <i class="fa fa-folder" aria-hidden="true"></i>
-      <text class="folder-name" >{{item.name}}</text>
-    </view>
-    <view class="left" wx:else>
-      <i class="fa fa-file-text-o" aria-hidden="true"></i>
-      <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
-    </view>
-    <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
-        <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
-    </view>
+  <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" bindtap="goDetail">
+    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{currentSlidenItem.id==item.id}}' 
+    bindshow='slideBindshow' duration='200'>
+      <view class="folder-line">
+          <view class="left" wx:if='{{item.type=="folder"}}'>
+            <i class="fa fa-folder" aria-hidden="true"></i>
+            <text class="folder-name" >{{item.name}}</text>
+          </view>
+          <view class="left" wx:else>
+            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+            <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+          </view>
+          <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
+              <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
+          </view>
+      </view>
+    </mp-slideview>
   </view>
 </view>
 <action-sheet actionShow="{{addActionSheetVisible}}"> 

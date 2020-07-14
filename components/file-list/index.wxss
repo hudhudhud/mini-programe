@@ -12,6 +12,8 @@
   display: block;
 }
 .file-list .folder-line{
+  width:100%;
+  box-sizing: border-box;
   padding:20rpx 0;
   border-bottom:1rpx solid #EBEBEB;
   display:flex;
@@ -22,6 +24,8 @@
   width:90%;
   display:flex;
   align-items: center;
+  padding-left:30rpx;
+  box-sizing: border-box;
 }
 .file-list .left .fa{
   width:10%;
@@ -39,6 +43,8 @@
   height:60rpx;
   text-align: center;
   line-height: 60rpx;
+  padding-right: 30rpx;
+  box-sizing: border-box;
 }
 .gray{
   color:#BABABA;

@@ -8,7 +8,7 @@ Page({
     user:{},
     loading:true,
     errorInfo:'',
-    myfileName:''
+    myfileName:'',
   },
   //事件处理函数
   goAddFloder(){
@@ -39,7 +39,8 @@ Page({
 
     let userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
-      this.setData({user: userInfo,myfileName:userInfo.uid+" "+userInfo.name})
+      let myfileName = '我的文件' //userInfo.uid+" "+userInfo.name
+      this.setData({user: userInfo,myfileName:myfileName})
       this.setData({loading:false,shareFileList:[
         {name:'测试',id:'10'},
         {name:'管理规范管理规范管理规范管理规范管理规范管理规范',id:'20'}]})
@@ -51,7 +52,8 @@ Page({
       app.userInfoReadyCallback = res => {
         // wx.hideLoading()
         userInfo = wx.getStorageSync('userInfo')
-        this.setData({user:userInfo,myfileName:userInfo.uid+" "+userInfo.name})
+        let myfileName = '我的文件' //userInfo.uid+" "+userInfo.name
+        this.setData({user:userInfo,myfileName:myfileName})
         this.setData({loading:false,shareFileList:[
           {name:'测试',id:'10'},
           {name:'管理规范管理规范管理规范管理规范管理规范管理规范',id:'20'}]})

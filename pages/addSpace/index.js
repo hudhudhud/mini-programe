@@ -2,6 +2,7 @@
 import * as request from '../../utils/request.js';
 import regeneratorRuntime from '../../runtime.js'
 import {FOLDER_CREATE} from '../../utils/api'
+const app = getApp()
 Page({
 
   /**
@@ -51,12 +52,15 @@ Page({
         self.selectUser()
       },
       fail(){
-       request.login().then(res=>{
-        self.selectUser()
-       })
-       
-      }
-    })
+        request.login().then(res=>{
+          self.selectUser()
+        })
+        .catch(e=>{
+          wx.showToast({
+            title: '登录失败！错误信息（'+e.msg+')',
+          })
+        })
+    }})
   },
   selectUser(){
     let self = this

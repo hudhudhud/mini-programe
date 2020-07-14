@@ -1,0 +1,33 @@
+/* pages/fileView/index.wxss */
+.webview{
+  width:200rpx;
+  height:200rpx;
+
+}
+.water-mark-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  pointer-events: none;
+  flex:1;
+  font-size: 28rpx;
+  color:#C2C2C7;
+  transform: rotate(-30deg);
+  opacity: 0.5;
+}
+
+.row{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.col{
+  /* transform: rotate(-45deg); */
+  height: 200rpx;
+}

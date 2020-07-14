@@ -23,6 +23,13 @@ Component({
     autoFocus:false,
     modalTip:'',
     timerId:'',
+    slideButtons: [{
+      type: 'warn',
+      text: '删除',
+      extClass: 'test',
+      data:{action:'del'}
+    }],
+    currentSlidenItem:'',
   },
   methods: {
     goDetail(event){
@@ -126,5 +133,16 @@ Component({
         }
       }
     },
+    slideBindshow(e){
+      this.setData({currentSlidenItem:e.currentTarget.dataset.item})
+    },
+    slideButtonTap(e){
+      console.log(222222,e)
+      this.setData({currentItem:e.currentTarget.dataset.item})
+      if(e.detail.data.action=='del'){
+        this.showDelToast()
+      }
+
+    }
   }
 })

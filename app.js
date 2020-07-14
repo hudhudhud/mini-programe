@@ -14,8 +14,8 @@ App({
     }
     
     // 正式登录
-    wx.clearStorageSync()
-    this.loginFunc()
+    // wx.clearStorageSync()
+    // this.loginFunc()
 
     //本地测试
     // wx.qy.login({
@@ -43,7 +43,7 @@ App({
       return
     }
     wx.showToast({
-      title: '异常：'+error.substr(0,30),
+      title: '异常：'+JSON.stringify(error).substr(0,100),
       icon: 'none',
       duration: 4000
     })

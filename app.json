@@ -1,13 +1,12 @@
 {
   "pages":[
-    
-    
     "pages/index/index",
     "pages/addSpace/index",
     "pages/spaceName/index",
     "pages/spaceDetail/index",
     "pages/spaceInfo/index",
     "pages/spaceUserList/index",
+    "pages/fileView/index",
     "pages/error/index"
   ],
   "window":{
@@ -19,6 +18,9 @@
   "networkTimeout":{
     "request":30000,
     "uploadFile":30000
+  },
+  "useExtendedLib": {
+    "weui": true
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

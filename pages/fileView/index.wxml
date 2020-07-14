@@ -1,0 +1,12 @@
+<view class="content">
+待开发..
+    <!-- <web-view src="https://www.baidu.com" bindload='bindload' binderror='binderror' bindmessage='bindmessage' class="webview">
+    </web-view> -->
+    <!-- <view class='water-mark-mask'>
+        <view class='row' wx:for="{{rows}}" wx:key="index">
+            <view class='col' wx:for="{{cols}}" wx:key="index" style="color:{{color}}">{{watermarkstr}}</view>
+        </view>
+    </view> -->
+ </view>
+
+ <!-- 每个页面只能有一个 web-view，web-view 会自动铺满整个页面，并覆盖其他组件!!!水印需要在h5页面上增加 -->

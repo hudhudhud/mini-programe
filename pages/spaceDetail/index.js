@@ -35,6 +35,10 @@ Page({
       wx.setNavigationBarTitle({
         title:options.name
       })
+      //测试空目录情况
+      if(options.name=='整理'){
+        this.setData({fileList:[]})
+      }
       this.setData({pathList:JSON.parse(options.pathList)})
       if(options.from){
         this.setData({pageFrom:options.from})
@@ -48,11 +52,18 @@ Page({
   },
   goDetail(event){
     let item = event.detail.item
-    let currPathList =  JSON.parse(JSON.stringify(this.data.pathList))
-    currPathList.push(item.name)
-    wx.navigateTo({
-      url: '../spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify(currPathList)}&from=${this.data.pageFrom}`
-    })
+    if(item.type=='file'){
+      wx.navigateTo({
+        url: '../fileView/index?id='+item.id+'&name='+item.name
+      })
+    }
+    else{
+      let currPathList =  JSON.parse(JSON.stringify(this.data.pathList))
+      currPathList.push(item.name)
+      wx.navigateTo({
+        url: '../spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify(currPathList)}&from=${this.data.pageFrom}`
+      })
+    }
   },
 
   //新增操作
