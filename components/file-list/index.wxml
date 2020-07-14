@@ -1,7 +1,7 @@
 <view class="file-list">
   <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" bindtap="goDetail">
-    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{currentSlidenItem.id==item.id}}' 
-    bindshow='slideBindshow' duration='200'>
+    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSlidenItem.id==item.id}}' 
+    bindshow='slideBindshow'  bindhide='slideBindhide' duration='200'>
       <view class="folder-line">
           <view class="left" wx:if='{{item.type=="folder"}}'>
             <i class="fa fa-folder" aria-hidden="true"></i>

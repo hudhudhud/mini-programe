@@ -69,7 +69,7 @@ Component({
     searchFileFunc(){
       console.log(222222222,this)
       setTimeout(() => {
-        let files = [{name:'123',type:'folder'}]
+        let files = [{id:555,name:'123',type:'folder'}]
         this.setData({searchResList:[{title:'共享',files:files},{title:'个人',files:files}]})
         // this.setData({searchResList:[]})
         this.setData({loading:false})

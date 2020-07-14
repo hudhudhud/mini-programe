@@ -136,6 +136,9 @@ Component({
     slideBindshow(e){
       this.setData({currentSlidenItem:e.currentTarget.dataset.item})
     },
+    slideBindhide(e){
+      this.setData({currentSlidenItem:{}})
+    },
     slideButtonTap(e){
       console.log(222222,e)
       this.setData({currentItem:e.currentTarget.dataset.item})
