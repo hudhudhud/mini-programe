@@ -1,4 +1,6 @@
-// pages/spaceDetail/index.js
+import regeneratorRuntime from '../../runtime.js'
+import {CHECK_MEDIA,CHECK_IMG} from '../../utils/api'
+import * as request  from '../../utils/request'
 Page({
 
   /**
@@ -9,7 +11,8 @@ Page({
     fileList:[
       {id:"100",name:'资料',type:'folder'},
       {id:'101',name:'整理',type:'folder'},
-      {id:'102',name:'测试',ext:'txt',type:'file'}
+      {id:'102',name:'测试',ext:'txt',type:'file'},
+      {id:'103',name:'icon',ext:'png',type:'file',url:'http://mobileproxy.h3c.com:8027/profile/upload/2020/06/02/ed9bb4b4e6c7d7cea1b1113f8efbce0a.png'}
     ],
     pathList:[],
     addActionSheetVisible:false,
@@ -49,6 +52,26 @@ Page({
 
       // const query = wx.createSelectorQuery()
     }
+    this.data.fileList.forEach(it=>{
+      if(it.url){
+        //微信内容安全校验
+        wx.request({
+          url: CHECK_MEDIA,
+          data: {
+            mediaUrl:it.url,
+            mediaType:2 //1:音频;2:图片
+          },
+          method: "POST",
+          success(res) {
+            // wx.showToast({
+            //   title: JSON.stringify(res),
+            //   icon: "none",
+            //   duration: 8000
+            // })
+          }
+        });
+      }
+    })
   },
   goDetail(event){
     let item = event.detail.item
@@ -82,14 +105,56 @@ Page({
       autoFocus:true,
     })
   },
-  addImg(){
+  async addImg(){
     let self = this 
     wx.chooseImage({
       count:9,//默认最多9张
-      success (res) {
-        let fileUrl = res.tempFilePaths
-        let file = res.tempFiles
+      async success (res) {
+        let fileUrl = res.tempFilePaths[0]
+        let file = res.tempFiles //包括{path,size}
         console.log('imgfile....',res)
+
+        //图片安全校验，暂时先检查一个
+        // try{
+        //   await new Promise((resolve,reject)=>{
+        //       wx.uploadFile({
+        //         url: CHECK_IMG, 
+        //         filePath: fileUrl,
+        //         name: 'media',//文件对应的 key，开发者在服务端可以通过这个 key 获取文件的二进制内容
+        //         success (res){
+        //           wx.showToast({
+        //             title: JSON.stringify(res),
+        //             icon: "none",
+        //             duration: 8000
+        //           })
+        //           if(res.data.errcode == 87014){
+        //             wx.showToast({
+        //               title: '内容含有违法违规内容',
+        //               icon: "none",
+        //               duration: 8000
+        //             })
+        //             reject() 
+        //           }
+        //           else{
+        //             resolve()
+        //           }
+        //         },
+        //         fail(e){
+        //           wx.showToast({
+        //             title: "文件上传异常:"+e.errMsg,
+        //             icon:'none',
+        //             duration:8000
+        //           })
+        //           reject() 
+        //         }
+        //       })
+        //   }) 
+        // }
+        // catch(e){
+        //   return
+        // }
+   
+
         let imgs = res.tempFilePaths.map(it=>{
           return {
             id:parseInt(10**6*Math.random()),

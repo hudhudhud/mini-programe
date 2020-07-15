@@ -32,12 +32,20 @@ export const post = async function(url, params, options = {}) {
         method: "POST",
         header: options.header,
         success(res) {
+          if(res.statusCode!=200){
+            wx.showToast({
+              title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
+              icon: "none",
+              duration: 4000
+            })
+            reject(res.data) 
+          }
           if (res.data.errcode === 0) {
             resolve(res.data)
           } else {
             reject(res.data);
             wx.showToast({
-              title: res.data.msg,
+              title: res.data.errmsg,
               icon: "none",
               duration: 4000
             });
@@ -55,6 +63,56 @@ export const post = async function(url, params, options = {}) {
   
         }
     });
+  })
+};
+//上传文件
+export const uploadFile = async function(url, filePath,fileKey, formData={},options = {}) {
+  let uid = wx.getStorageSync('uidEnc')
+  let userInfo = wx.getStorageSync('userInfo')
+  if(!uid||!userInfo){
+    wx.showToast({
+      title: "没有登录信息！",
+      icon: "none",
+      duration: 4000
+    });
+    return
+  }
+  return new Promise((resolve, reject) => {
+    options = { ...defaultOptions, ...options };
+    wx.uploadFile({
+      url: url, 
+      filePath: filePath,
+      name: fileKey,//文件对应的 key，开发者在服务端可以通过这个 key 获取文件的二进制内容
+      formData: formData, //其他字段
+      success (res){
+        if(res.statusCode!=200){
+          wx.showToast({
+            title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
+            icon: "none",
+            duration: 4000
+          })
+          reject(res.data) 
+        }
+        if (res.data.errcode === 0) {
+          resolve(res.data)
+        } else {
+          reject(res.data);
+          wx.showToast({
+            title: res.data.errmsg,
+            icon: "none",
+            duration: 4000
+          });
+        }
+      },
+      fail(e){
+        wx.showToast({
+          title: e.errMsg,
+          icon: "none",
+          duration: 4000
+        });
+        reject(e);
+      }
+    })
   })
 };
 

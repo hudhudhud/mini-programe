@@ -1,9 +1,15 @@
-const prod = 0
-export const comonUrl = prod ? "https://api.eos.h3c.com/wxapi/v1.0":"https://api.eos-ts.h3c.com/wxapi/v1.0"
-export const baseUrl = prod ? "https://api.eos.h3c.com/microdisk/v1.0":"https://api.eos-ts.h3c.com/microdisk/v1.0"
+const prod_common = 1
+export const comonUrl = prod_common ? "https://api.eos.h3c.com/wxapi/v1.0":"https://api.eos-ts.h3c.com/wxapi/v1.0"
+const prod_base = 0
+export const baseUrl = prod_base ? "https://api.eos.h3c.com/microdisk/v1.0":"https://api.eos-ts.h3c.com/microdisk/v1.0"
+
+//文字图片安全校验
+export const  CHECK_MSG = baseUrl + '/outside/common/validate/msgSecCheck' //检查文本
+export const  CHECK_IMG = baseUrl + '/outside/common/validate/imgSecCheck' //图片校验
+export const  CHECK_MEDIA = baseUrl + '/outside/common/validate/mediaCheckAsync' //图片/音频异步校验
 
 //登录
-export const agentId = prod ? '1000097':'1000011'
+export const agentId = prod_common ? '1000097':'1000011'
 export const GET_TOCKEN = comonUrl + '/api/common/gettoken'//获取tocken
 export const LOGIN = comonUrl + '/api/jscode2session'//登录验证
 export const GET_USERINOF = comonUrl + '/api/common/getuserinfobyuserid'//获取用户信息

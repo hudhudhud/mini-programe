@@ -39,7 +39,7 @@ Page({
 
     let userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
-      let myfileName = '我的文件' //userInfo.uid+" "+userInfo.name
+      let myfileName = userInfo.uid+" "+userInfo.name //'我的文件' //userInfo.uid+" "+userInfo.name
       this.setData({user: userInfo,myfileName:myfileName})
       this.setData({loading:false,shareFileList:[
         {name:'测试',id:'10'},
@@ -52,7 +52,7 @@ Page({
       app.userInfoReadyCallback = res => {
         // wx.hideLoading()
         userInfo = wx.getStorageSync('userInfo')
-        let myfileName = '我的文件' //userInfo.uid+" "+userInfo.name
+        let myfileName =userInfo.uid+" "+userInfo.name // '我的文件' //userInfo.uid+" "+userInfo.name
         this.setData({user:userInfo,myfileName:myfileName})
         this.setData({loading:false,shareFileList:[
           {name:'测试',id:'10'},

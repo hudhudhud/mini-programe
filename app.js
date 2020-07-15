@@ -14,8 +14,8 @@ App({
     }
     
     // 正式登录
-    // wx.clearStorageSync()
-    // this.loginFunc()
+    wx.clearStorageSync()
+    this.loginFunc()
 
     //本地测试
     // wx.qy.login({
