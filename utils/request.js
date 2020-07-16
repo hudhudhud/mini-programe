@@ -152,7 +152,7 @@ export const  login = async function(){
   });
 };
 
-export const  getSessionKey = async function(code='aC-kXDtBrWefOqB5z4if-hW-3Rq2aga5PYqqyXGstC8'){
+export const  getSessionKey = async function(code='TRM-ullWxUKYgaMeMB2aG0Qanjw_15Ttrcw368KVJxg'){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{
@@ -171,6 +171,9 @@ export const  getSessionKey = async function(code='aC-kXDtBrWefOqB5z4if-hW-3Rq2a
       },
       success: async function (res) {
         console.log('login.....',res)
+        if(res.statusCode!=200){
+          reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+        }
         if(res.data.errcode==0){
           let data = res.data.data
           let uidEnc = encryption.encriUser(data.userid)
@@ -226,6 +229,9 @@ export const getToken=()=>{
           appsecret: 'd4IgXxWNWrM=0MgjKu2kQE3+0fCtrU/4FWos8o68kpz/ZK3ILfA+0zo='
       },
       success: function (res) {
+        if(res.statusCode!=200){
+          reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+        }
         if(res.data.errcode==0){
           resolve(res.data.data)
         }
@@ -255,6 +261,9 @@ export const getUserInfo=(token,userid)=>{
         userid:userid,
       },
       success: function (res) {
+        if(res.statusCode!=200){
+          reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+        }
         if(res.data.errcode==0){
           resolve(res.data.data)
         }

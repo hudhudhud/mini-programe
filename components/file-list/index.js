@@ -30,11 +30,19 @@ Component({
       data:{action:'del'}
     }],
     currentSliderId:'',
+    checkStatus:false,
   },
   methods: {
     goDetail(event){
-      let item = event.currentTarget.dataset.item
-      this.triggerEvent('goDetail',{item})
+      //批量选择状态下，点击事件用来操作选择
+      if(this.data.checkStatus){
+        this.checkBindTap(event.currentTarget.dataset.index)
+      }
+      //去详情页
+      else{
+        let item = event.currentTarget.dataset.item
+        this.triggerEvent('goDetail',{item})
+      }
     },
     //文件操作
     showOperationActionSheet(event){
@@ -132,7 +140,7 @@ Component({
           path: `/pages/spaceDetail/index?id=${this.data.currentItem.id}&name=${this.data.currentItem.name}`
         }
       }
-    },
+    }, 
     slideBindshow(e){
       this.setData({currentSliderId:e.currentTarget.dataset.item.id})
     },
@@ -145,7 +153,57 @@ Component({
       if(e.detail.data.action=='del'){
         this.showDelToast()
       }
-
+    },
+    //选中
+    chooseMutiple(e){
+      this.setData({checkStatus:true})
+    },
+    checkBindTap(index){
+      let list = this.data.fileList
+      let currentItem = list[index]
+      currentItem.checked=currentItem.checked==undefined?true:!currentItem.checked
+      this.setData({fileList:list})
+    },
+    cancelCheckStatus(e){
+      this.setData({checkStatus:false})
+    },
+    batchDel(){
+      let list = this.data.fileList
+      let delList = list.filter(it=>it.checked)
+      if(delList.length==0){
+        return
+      }
+      let files = delList.filter(it=>it.type=='file')
+      let folders = delList.filter(it=>it.type=='folder')
+      let msg = files.length>0?`${files.length}个文件`:''
+      let msg2 =folders.length>0?`${folders.length}个文件夹(包含文件夹下所有文件)`:''
+      let resMsg = msg&&msg2?[msg,msg2].join('和'):(msg?msg:msg2)
+      let self = this
+      wx.showModal({
+        content:'确认删除'+resMsg,
+        confirmColor:"#C95E57",
+        confirmText:'删除',
+        cancelColor:'#4F79B4',
+        success(res){
+          if (res.confirm) {
+            delList.forEach(delItem=>{
+              let item = list.find(it=>it.id==delItem.id)
+              list.splice(list.indexOf(item),1)
+            })
+            self.setData({fileList:list})
+            self.triggerEvent('reSetList',{list})
+            self.setData({checkStatus:false})
+            console.log('用户点击确定')
+          }
+          else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        },
+        fail(){
+        },
+        complete(){
+        }
+      })
     }
   }
 })

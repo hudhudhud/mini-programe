@@ -4,6 +4,9 @@ import regeneratorRuntime from './runtime.js'//支持async await
 import {login,getSessionKey} from './utils/request.js';
 App({
   onLaunch: function () {
+    //获取小程序启动时的参数,返回同arguments
+    //console.log(2222222,arguments)
+    //wx.getLaunchOptionsSync()  //{path,scene,query,shareTicket,referrerInfo}
     if(!wx.qy){
       //放在index页面展示
       // let errorInfo= '请用企业微信客户端打开'
@@ -14,8 +17,8 @@ App({
     }
     
     // 正式登录
-    wx.clearStorageSync()
-    this.loginFunc()
+    // wx.clearStorageSync()
+    // this.loginFunc()
 
     //本地测试
     // wx.qy.login({
@@ -26,7 +29,11 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // getSessionKey()
+    // getSessionKey().then(res=>{
+    //   if (this.userInfoReadyCallback) {
+    //     this.userInfoReadyCallback()
+    //   }
+    // })
   },
   // 小程序发生脚本错误或 API 调用报错时触发。也可以使用 wx.onError 绑定监听
   onError(error){

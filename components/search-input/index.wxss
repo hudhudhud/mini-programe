@@ -18,7 +18,7 @@
   height:120rpx;
   box-sizing: border-box;
   background-color: #fff;
-  z-index: 9;
+  z-index: 999;
 }
 .search .just-show{
   height:80rpx;

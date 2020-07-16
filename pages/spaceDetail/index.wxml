@@ -17,7 +17,7 @@
       </view>
     </view>
     <view class="folder-module share-file" wx:if='{{fileList.length>0}}'>
-      <text class="title">文件</text>
+      <!-- <text class="title">文件</text> -->
       <!-- <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
         <view class="left" wx:if='{{item.type=="folder"}}'>
           <i class="fa fa-folder" aria-hidden="true"></i>

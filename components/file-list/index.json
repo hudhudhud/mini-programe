@@ -4,6 +4,8 @@
     "action-sheet":"../action-sheet/index",
     "mymodal": "../modal/index",
     "mp-slideview": "weui-miniprogram/slideview/slideview",
-    "mp-cell": "weui-miniprogram/cell/cell"
+    "mp-cell": "weui-miniprogram/cell/cell",
+    "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
+    "mp-checkbox": "weui-miniprogram/checkbox/checkbox"
   }
 }

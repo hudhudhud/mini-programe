@@ -1,27 +1,48 @@
-<view class="file-list">
-  <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" bindtap="goDetail">
+<view class="file-list {{checkStatus?'containCheck':''}}">
+  <text class="folder-module-title">文件</text>
+  <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
     <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
     bindshow='slideBindshow'  bindhide='slideBindhide' duration='200'>
-      <view class="folder-line">
+      <view class="folder-line" >
           <view class="left" wx:if='{{item.type=="folder"}}'>
-            <i class="fa fa-folder" aria-hidden="true"></i>
-            <text class="folder-name" >{{item.name}}</text>
+            <view class="check-wrapper" wx:if='{{checkStatus}}'>
+                <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
+                <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
+            </view>
+            <view class="content">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+                <text class="folder-name" >{{item.name}}</text>
+            </view>
           </view>
           <view class="left" wx:else>
-            <block wx:if='{{item.url}}'>
-              <image src="{{item.url}}"></image>
-              <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
-            </block>
-            <block wx:else>
-              <i class="fa fa-file-text-o" aria-hidden="true"></i>
-              <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
-            </block>
+            <view class="check-wrapper" wx:if='{{checkStatus}}'>
+              <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
+              <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
+            </view>
+            <view  class="content">
+              <block wx:if='{{item.url}}'>
+                <image src="{{item.url}}"></image>
+                <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+              </block>
+              <block wx:else>
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+              </block>
+            </view>
           </view>
-          <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
+          <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus}}'>
               <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
           </view>
       </view>
     </mp-slideview>
+  </view>
+  <view wx:if='{{checkStatus}}' class="check-operation-btns">
+    <view bindtap="cancelCheckStatus" class="btn">
+      取消
+    </view>
+    <view bindtap="batchDel" class="btn del">
+      删除
+    </view>
   </view>
 </view>
 <action-sheet actionShow="{{addActionSheetVisible}}"> 
@@ -62,10 +83,10 @@
         <view class="icon"><i class="fa fa-trash-o" aria-hidden="true"></i></view>
         <text class="title">删除</text>
       </view>
-      <!-- <view class="action-btn" bindtap='chooseMutiple'>
+      <view class="action-btn" bindtap='chooseMutiple'>
         <view class="icon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></view>
         <text class="title">选中</text>
-      </view> -->
+      </view>
   </view>
 </action-sheet>
 <mymodal 
