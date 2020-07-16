@@ -9,6 +9,7 @@
   background-color:#fff;
   /* padding:0 0 0 30rpx; */
   font-size:32rpx;
+  padding-top:80rpx;
 }
 
 /* .folder-module .title{
@@ -22,6 +23,8 @@
 } */
 
 .top-bar{
+  position: fixed;
+  top:0;
   box-sizing: border-box;
   width:100%;
   padding:10rpx 30rpx;
@@ -29,6 +32,11 @@
   justify-content: space-between;
   margin-bottom:10rpx;
   border-bottom:10rpx solid #F5F5F5;
+  z-index: 99;
+  background-color: #fff;
+}
+.top-bar.contain-search{
+  top:120rpx;
 }
 .paths{
   /* 1、scroll-view不支持flex，默认block；

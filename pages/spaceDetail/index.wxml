@@ -1,6 +1,6 @@
 <view class="container">
   <search-input sort-visible="{{true}}" parentId='{{parentFolderId}}' searchBarVisible='{{fileList.length>0}}'>
-    <view class="top-bar"> 
+    <view class="top-bar {{fileList.length>0?'contain-search':''}}"> 
       <scroll-view class="paths" scroll-x scroll-into-view='{{"pathname"+(pathList.length-1)}}' scroll-with-animation="true">
         <view class="path-item" bindtap='goIndexPage' wx:if='{{!pageFrom}}'>网盘</view>
         <view class="path-item" bindtap='goSearchPage' wx:else>搜索结果</view>
@@ -60,6 +60,6 @@ confirmText='确定'
 bind:complete="modalComplete" 
 title='{{modalTitle}}' >
 <text class="modal-tip">{{modalTip}}</text>
-<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  model:value="{{modalInputTxt}}" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
+<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}" value="{{modalInputTxt}}" bindinput='bindinputModal' maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
 </mymodal>
 </view>

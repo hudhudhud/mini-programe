@@ -129,10 +129,10 @@ Component({
 
     // 确定按钮响应事件
     confirmFunc: function (e) {
-      this.setData({
-        showStatus: false
-      })
-
+      // this.setData({
+      //   showStatus: false
+      // })
+      
       var myEventDetail = {
         confirm: true
       }

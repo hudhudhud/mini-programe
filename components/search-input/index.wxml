@@ -10,7 +10,7 @@
     <view class="search-bar" wx:else>
       <view class="search-input-bar">
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input class="search-input"  placeholder="搜索" focus="true" model:value="{{searchStr}}" bindinput="search_bindKeyInput"/>
+        <input class="search-input"  placeholder="搜索" focus="true" value="{{searchStr}}" bindinput="search_bindKeyInput"/>
       </view>
       <view class='cancel-btn' bindtap="cancelSearch"> 取消 </view>
     </view>
@@ -21,10 +21,7 @@
 
   <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>
   <view class="search-res" wx:if="{{searchStatus&&searchStr}}" scroll-y>
-    <view wx:for="{{searchResList}}" class="folder-module" wx:key='index'>
-      <!-- <text class="title">{{item.title}}</text> -->
-      <file-list dataList="{{item.files}}" bind:goDetail="goDetail"></file-list>
-    </view>
+    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail"></file-list>
     <view wx:if="{{searchResList.length==0&&!loading}}" class="no-data">
         <i class="fa fa-search" aria-hidden="true"></i>
         <text>无搜索结果</text>

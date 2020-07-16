@@ -1,47 +1,49 @@
 <view class="file-list {{checkStatus?'containCheck':''}}">
-  <text class="folder-module-title">文件</text>
-  <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
-    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
-    bindshow='slideBindshow'  bindhide='slideBindhide' duration='200'>
-      <view class="folder-line" >
-          <view class="left" wx:if='{{item.type=="folder"}}'>
-            <view class="check-wrapper" wx:if='{{checkStatus}}'>
+  <view wx:for='{{fileGroupList}}' wx:key='index' wx:for-item="filegroup">
+    <text class="folder-module-title">{{filegroup.title}}</text>
+    <view wx:for='{{filegroup.list}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
+      <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
+      bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{false}}">
+        <view class="folder-line" >
+            <view class="left" wx:if='{{item.type=="folder"}}'>
+              <view class="check-wrapper" wx:if='{{checkStatus}}'>
+                  <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
+                  <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
+              </view>
+              <view class="content">
+                  <i class="fa fa-folder" aria-hidden="true"></i>
+                  <text class="folder-name" >{{item.name}}</text>
+              </view>
+            </view>
+            <view class="left" wx:else>
+              <view class="check-wrapper" wx:if='{{checkStatus}}'>
                 <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
                 <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
+              </view>
+              <view  class="content">
+                <block wx:if='{{item.url}}'>
+                  <image src="{{item.url}}"></image>
+                  <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+                </block>
+                <block wx:else>
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+                </block>
+              </view>
             </view>
-            <view class="content">
-                <i class="fa fa-folder" aria-hidden="true"></i>
-                <text class="folder-name" >{{item.name}}</text>
+            <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus}}'>
+                <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
             </view>
-          </view>
-          <view class="left" wx:else>
-            <view class="check-wrapper" wx:if='{{checkStatus}}'>
-              <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
-              <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
-            </view>
-            <view  class="content">
-              <block wx:if='{{item.url}}'>
-                <image src="{{item.url}}"></image>
-                <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
-              </block>
-              <block wx:else>
-                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
-              </block>
-            </view>
-          </view>
-          <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus}}'>
-              <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
-          </view>
-      </view>
-    </mp-slideview>
-  </view>
-  <view wx:if='{{checkStatus}}' class="check-operation-btns">
-    <view bindtap="cancelCheckStatus" class="btn">
-      取消
+        </view>
+      </mp-slideview>
     </view>
-    <view bindtap="batchDel" class="btn del">
-      删除
+    <view wx:if='{{checkStatus}}' class="check-operation-btns">
+      <view bindtap="cancelCheckStatus" class="btn">
+        取消
+      </view>
+      <view bindtap="batchDel" class="btn del">
+        删除
+      </view>
     </view>
   </view>
 </view>
@@ -95,6 +97,6 @@ confirmText='确定'
 bind:complete="modalComplete" 
 title='{{modalTitle}}' >
 <text class="modal-tip">{{modalTip}}</text>
-<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  model:value="{{modalInputTxt}}" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
+<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  value="{{modalInputTxt}}" bindinput="bindinputModal" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
 </mymodal>
 

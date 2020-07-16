@@ -18,7 +18,7 @@
   height:120rpx;
   box-sizing: border-box;
   background-color: #fff;
-  z-index: 999;
+  z-index: 99;
 }
 .search .just-show{
   height:80rpx;
@@ -106,23 +106,6 @@
   font-size:100rpx;
   display:block;
   padding:20rpx 0;
-}
-.folder-module{
-  width:100%;
-  box-sizing: border-box;
-  background-color:#fff;
-  /* padding:0 0 0 30rpx; */
-  font-size:32rpx;
-}
-
-.folder-module .title{
-  color:#A1A1A1;
-  font-size:28rpx;
-  padding:10rpx 0;
-  display: block;
-  padding-left:30rpx;
-  width:100%;
-  box-sizing: border-box;
 }
 .gray{
   color:#BABABA;

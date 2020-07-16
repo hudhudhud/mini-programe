@@ -231,7 +231,11 @@ Page({
       self.setData({'timerId':setTimeout(fn, wait)})   
     })()
   },
+  bindinputModal(e){
+    this.setData({modalInputTxt:e.detail.value})
+  },
   modalComplete(e){
+    if(!this.data.modalInputTxt.trim())return
     console.log('modal sure...',this.data.modalInputTxt,e)
     this.setData({
       showModal: false,

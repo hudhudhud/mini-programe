@@ -53,8 +53,9 @@ Component({
       this.setData({searchStr:''})
       wx.hideLoading()
     },
-    search_bindKeyInput(){
-      if(this.data.searchStr){
+    search_bindKeyInput(e){
+      this.setData({searchStr:e.detail.value})
+      if(e.detail.value){
         this.setData({loading:true})
         wx.showLoading({
           title: '加载中',
@@ -69,8 +70,8 @@ Component({
     searchFileFunc(){
       console.log(222222222,this)
       setTimeout(() => {
-        let files = [{id:555,name:'123',type:'folder'}]
-        this.setData({searchResList:[{title:'共享',files:files},{title:'个人',files:files}]})
+        let files = [{id:555,name:'123',type:'folder'},{id:556,name:'123',type:'file',ext:'txt'}]
+        this.setData({searchResList:files})
         // this.setData({searchResList:[]})
         this.setData({loading:false})
         wx.hideLoading()

@@ -4,14 +4,16 @@ Component({
       type: Array,
       value:[],
       observer: function (newVal, oldVal) {
+        this.setFileGroupList(newVal)
         this.setData({
-          fileList: newVal
+          fileList: newVal,
         })
       }
     },
   },
   data: {
     fileList:[],
+    fileGroupList:[],
     addActionSheetVisible:false,
     showModal:false,
     modalInputTxt:'',
@@ -33,10 +35,24 @@ Component({
     checkStatus:false,
   },
   methods: {
+    setFileGroupList(newVal){
+      let fileGroupList = []
+      let fileList = newVal.filter(it=>it.type=='file')
+      let folderList = newVal.filter(it=>it.type=='folder')
+      if(folderList.length){
+        fileGroupList.push({title:'文件夹',list:folderList})
+      }
+      if(fileList.length){
+        fileGroupList.push({title:'文件',list:fileList})
+      }
+      this.setData({
+        fileGroupList:fileGroupList,
+      })
+    },
     goDetail(event){
       //批量选择状态下，点击事件用来操作选择
       if(this.data.checkStatus){
-        this.checkBindTap(event.currentTarget.dataset.index)
+        this.checkBindTap(event.currentTarget.dataset.item)
       }
       //去详情页
       else{
@@ -66,7 +82,11 @@ Component({
         autoFocus:true,
       })
     },
+    bindinputModal(e){
+      this.setData({modalInputTxt:e.detail.value})
+    },
     modalComplete(e){
+      if(!this.data.modalInputTxt.trim())return
       console.log('modal sure...',this.data.modalInputTxt,e)
       this.setData({
         showModal: false,
@@ -75,6 +95,7 @@ Component({
       if(this.data.currentAction=="addFoler"){
         list.push({name:this.data.modalInputTxt,type:'folder',id:Math.random()})
         this.setData({fileList:list})
+        this.setFileGroupList(this.data.fileList)
         wx.showToast({
           title: '添加成功',
           duration: 2000
@@ -84,6 +105,7 @@ Component({
         let item = list.find(it=>it.id==this.data.currentItem.id)
         item.name=this.data.modalInputTxt
         this.setData({fileList:list})
+        this.setFileGroupList(this.data.fileList)
         wx.showToast({
           title: '重命名成功',
           duration: 2000
@@ -105,6 +127,7 @@ Component({
             let item = list.find(it=>it.id==currentItem.id)
             list.splice(list.indexOf(item),1)
             self.setData({fileList:list})
+            self.setFileGroupList(self.data.fileList)
             self.triggerEvent('reSetList',{list})
             console.log('用户点击确定')
           } else if (res.cancel) {
@@ -158,11 +181,12 @@ Component({
     chooseMutiple(e){
       this.setData({checkStatus:true})
     },
-    checkBindTap(index){
+    checkBindTap(item){
       let list = this.data.fileList
-      let currentItem = list[index]
+      let currentItem = list.find(it=>it.id==item.id)
       currentItem.checked=currentItem.checked==undefined?true:!currentItem.checked
       this.setData({fileList:list})
+      this.setFileGroupList(this.data.fileList)
     },
     cancelCheckStatus(e){
       this.setData({checkStatus:false})
@@ -191,6 +215,7 @@ Component({
               list.splice(list.indexOf(item),1)
             })
             self.setData({fileList:list})
+            self.setFileGroupList(self.data.fileList)
             self.triggerEvent('reSetList',{list})
             self.setData({checkStatus:false})
             console.log('用户点击确定')
