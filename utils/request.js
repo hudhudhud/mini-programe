@@ -39,6 +39,7 @@ export const post = async function(url, params, options = {}) {
               duration: 4000
             })
             reject(res.data) 
+            return
           }
           if (res.data.errcode === 0) {
             resolve(res.data)
@@ -92,6 +93,7 @@ export const uploadFile = async function(url, filePath,fileKey, formData={},opti
             duration: 4000
           })
           reject(res.data) 
+          return
         }
         if (res.data.errcode === 0) {
           resolve(res.data)
@@ -173,6 +175,7 @@ export const  getSessionKey = async function(code='TRM-ullWxUKYgaMeMB2aG0Qanjw_1
         console.log('login.....',res)
         if(res.statusCode!=200){
           reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+          return
         }
         if(res.data.errcode==0){
           let data = res.data.data
@@ -231,6 +234,7 @@ export const getToken=()=>{
       success: function (res) {
         if(res.statusCode!=200){
           reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+          return
         }
         if(res.data.errcode==0){
           resolve(res.data.data)
@@ -263,6 +267,7 @@ export const getUserInfo=(token,userid)=>{
       success: function (res) {
         if(res.statusCode!=200){
           reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+          return
         }
         if(res.data.errcode==0){
           resolve(res.data.data)

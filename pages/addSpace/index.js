@@ -123,6 +123,7 @@ Page({
                 duration: 4000
               })
               reject() 
+              return
             }
             if(res.data.errcode == 87014){
               wx.showToast({
