@@ -45,6 +45,7 @@
   display:flex;
   align-items: center;
   flex-grow:1;
+  width:100%;
 }
 .file-list .left .content .fa{
   margin-right: 20rpx;
@@ -61,7 +62,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  width:90%;
+  width:80%;
   white-space: nowrap;
 }
 .file-list .right.info-btn{

@@ -8,7 +8,7 @@
       <block wx:if="{{showCancel}}">
         <button class="wx-modal_btn wx-modal_celbtn" hover-class="wx-modal_btnHover" bindtap="cancelFunc">{{cancelText}}</button>
       </block>
-      <button class="wx-modal_btn wx-modal_cfirbtn" hover-class="wx-modal_btnHover" bindtap="confirmFunc">{{confirmText}}</button>
+      <button class="wx-modal_btn wx-modal_cfirbtn" hover-class="wx-modal_btnHover" bindtap="confirmFunc"  loading="{{submiting}}">{{confirmText}}</button>
     </view>
   </view>
 </view>

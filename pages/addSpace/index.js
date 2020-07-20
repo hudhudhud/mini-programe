@@ -1,7 +1,7 @@
 // pages/addFloder/index.js
 import * as request from '../../utils/request.js';
 import regeneratorRuntime from '../../runtime.js'
-import {CHECK_MSG,FOLDER_CREATE} from '../../utils/api'
+import {FOLDER_CREATE} from '../../utils/api'
 const app = getApp()
 Page({
 
@@ -98,58 +98,20 @@ Page({
         duration: 4000
       });
       return
-    }
-    
-    //微信内容安全校验
-    try{
-      await new Promise((resolve,reject)=>{
-        wx.request({
-          url: CHECK_MSG,
-          data: {
-            content:this.data.inputName
-          },
-          method: "POST",
-          success(res) {
-            // wx.showToast({
-            //   title: JSON.stringify(res),
-            //   icon: "none",
-            //   duration: 8000
-            // })
-
-            if(res.statusCode!=200){
-              wx.showToast({
-                title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
-                icon: "none",
-                duration: 4000
-              })
-              reject() 
-              return
-            }
-            if(res.data.errcode == 87014){
-              wx.showToast({
-                title: '内容含有违法违规内容',
-                icon: "none",
-                duration: 4000
-              })
-              reject() 
-            }
-            else{
-              resolve()
-            }
-          },
-          fail(e){
-            reject(e) 
-          }
-        });
-      })
-    }
-    catch(e){
-      return
-    }
+    }    
     
     if(this.data.submiting){
       return
     }
+    
+    //微信内容安全校验
+    try{
+      await request.wxapi_checkMsg(this.data.inputName)
+    }
+    catch(e){
+      return
+    }
+
     this.setData({submiting:true})
     let resPerList = [
       ...this.data.permissionsList,

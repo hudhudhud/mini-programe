@@ -36,6 +36,7 @@ Component({
     }],
     currentSliderId:'',
     checkStatus:false,
+    submiting:false,
   },
   methods: {
     setFileGroupList(newVal){
@@ -88,12 +89,18 @@ Component({
     bindinputModal(e){
       this.setData({modalInputTxt:e.detail.value})
     },
-    modalComplete(e){
+    async modalComplete(e){
       if(!this.data.modalInputTxt.trim())return
+      if(this.data.submiting)return
+      //微信内容安全校验
+      try{
+        await request.wxapi_checkMsg(this.data.modalInputTxt)
+      }
+      catch(e){
+        return
+      }
+      this.setData({submiting:true})
       console.log('modal sure...',this.data.modalInputTxt,e)
-      this.setData({
-        showModal: false,
-      })
       let list = this.data.fileList
       if(this.data.currentAction=='rename'){
         let item = list.find(it=>it.id==this.data.currentItem.id)
@@ -106,12 +113,17 @@ Component({
         // })
         // .then(res=>{
         //   if(res.errcode==0){
-            this.setData({fileList:list})
-            this.setFileGroupList(this.data.fileList)
-            wx.showToast({
-              title: '重命名成功',
-              duration: 2000
-            })
+            setTimeout(() => {
+              this.setData({fileList:list})
+              this.setFileGroupList(this.data.fileList)
+              this.setData({ showModal: false })
+              this.setData({submiting:false})
+              wx.showToast({
+                title: '重命名成功',
+                duration: 2000
+              })
+            }, 500);
+           
         //   }
         // })
       }

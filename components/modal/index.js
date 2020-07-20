@@ -93,6 +93,16 @@ Component({
           confirmText: newVal
         })
       }
+    },
+    //提交状态
+    submiting:{
+      type: Boolean,
+      value: false,
+      observer: function (newVal, oldVal) {
+        this.setData({
+          submiting: newVal
+        })
+      }
     }
   },
 

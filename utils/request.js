@@ -5,7 +5,7 @@ export const defaultOptions = {
     "content-type": "application/json", // 默认值
   }
 };
-import { agentId, GET_TOCKEN,LOGIN,GET_USERINOF } from "./api";
+import { agentId, GET_TOCKEN,LOGIN,GET_USERINOF ,CHECK_MSG} from "./api";
 /**
  *
  * @param url 接口路径
@@ -284,3 +284,46 @@ export const getUserInfo=(token,userid)=>{
     })
   })
 }
+
+ //微信内容安全校验
+ export const wxapi_checkMsg=(content)=>{
+  return new Promise((resolve,reject)=>{
+    wx.request({
+      url: CHECK_MSG,
+      data: {
+        content:content
+      },
+      method: "POST",
+      success(res) {
+        if(res.statusCode!=200){
+          wx.showToast({
+            title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
+            icon: "none",
+            duration: 4000
+          })
+          reject() 
+          return
+        }
+        if(res.data.errcode == 87014){
+          wx.showToast({
+            title: '内容含有违法违规内容',
+            icon: "none",
+            duration: 4000
+          })
+          reject() 
+        }
+        else{
+          resolve()
+        }
+      },
+      fail(e){
+        wx.showToast({
+          title: e.errMsg,
+          icon: "none",
+          duration: 4000
+        })
+        reject() 
+      }
+    });
+  })
+ }

@@ -116,6 +116,35 @@ Page({
         let fileUrl = res.tempFilePaths[0]
         let file = res.tempFiles //包括{path,size}
         console.log('imgfile....',res)
+        
+    
+        // wx.getImageInfo({
+        //   src:fileUrl, // 单张照片的临时路径
+        //   success (res) {
+        //     console.log(1111,res)
+        //     let old = res
+        //     wx.compressImage({
+        //       src: fileUrl, // 图片路径
+        //       quality: 50, // 压缩质量
+        //       success:(res)=>{
+        //         console.log(2222222,res)
+        //         wx.getImageInfo({
+        //           src: res.tempFilePath, // 单张照片的临时路径
+        //           success (res) {
+        //             console.log(33333,res)
+        //             wx.showToast({
+        //               title: JSON.stringify(res),
+        //               icon: "none",
+        //               duration: 10000
+        //             })
+        //           }
+        //         })
+        //       }
+        //     })
+        //   }
+        // })
+       
+       
 
         //图片安全校验，暂时先检查一个
         // try{

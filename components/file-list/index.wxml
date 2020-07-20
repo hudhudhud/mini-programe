@@ -95,6 +95,7 @@
 showStatus='{{showModal}}'
 confirmText='确定' 
 bind:complete="modalComplete" 
+submiting='{{submiting}}'
 title='{{modalTitle}}' >
 <text class="modal-tip">{{modalTip}}</text>
 <input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  value="{{modalInputTxt}}" bindinput="bindinputModal" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>

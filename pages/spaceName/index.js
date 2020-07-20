@@ -20,7 +20,7 @@ Page({
   clearInput(){
     this.setData({inputName:""})
   },
-  confirmTap(){
+  async confirmTap(){
     if(!this.data.inputName.trim()){
       wx.showToast({
         title: "请输入空间名称！",
@@ -29,9 +29,19 @@ Page({
       });
       return
     }
+
     if(this.data.submiting){
       return
     }
+
+    //微信内容安全校验
+    try{
+      await request.wxapi_checkMsg(this.data.inputName)
+    }
+    catch(e){
+      return
+    }
+    
     setTimeout(() => {
       wx.navigateBack()
       this.setData({submiting:false})
