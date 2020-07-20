@@ -3,6 +3,7 @@
     "search-input":"../../components/search-input",
     "action-sheet":"../../components/action-sheet/index",
     "mymodal": "../../components/modal/index",
-    "file-list": "../../components/file-list/index"
+    "file-list": "../../components/file-list/index",
+    "mp-loading": "weui-miniprogram/loading/loading"
   }
 }

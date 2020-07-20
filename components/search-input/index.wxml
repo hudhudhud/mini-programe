@@ -21,8 +21,9 @@
 
   <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>
   <view class="search-res" wx:if="{{searchStatus&&searchStr}}" scroll-y>
-    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail"></file-list>
-    <view wx:if="{{searchResList.length==0&&!loading}}" class="no-data">
+    <mp-loading type="circle" wx:if="{{loading}}"></mp-loading>
+    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail" wx:elif="{{searchResList.length>0}}"></file-list>
+    <view wx:else class="no-data">
         <i class="fa fa-search" aria-hidden="true"></i>
         <text>无搜索结果</text>
     </view>

@@ -57,9 +57,9 @@ Component({
       this.setData({searchStr:e.detail.value})
       if(e.detail.value){
         this.setData({loading:true})
-        wx.showLoading({
-          title: '加载中',
-        })
+        // wx.showLoading({
+        //   title: '加载中',
+        // })
         this.debounce(this.searchFileFunc.bind(this),300)
       }
       else{
@@ -74,7 +74,7 @@ Component({
         this.setData({searchResList:files})
         // this.setData({searchResList:[]})
         this.setData({loading:false})
-        wx.hideLoading()
+        // wx.hideLoading()
       }, 500);
      // this.triggerEvent('search',this.searchStr)
     },

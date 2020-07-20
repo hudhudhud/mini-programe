@@ -7,13 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
+    loading:true,
     parentFolderId:'',
-    fileList:[
-      {id:"100",name:'资料',type:'folder'},
-      {id:'101',name:'整理',type:'folder'},
-      {id:'102',name:'测试',ext:'txt',type:'file'},
-      {id:'103',name:'icon',ext:'png',type:'file',url:'http://mobileproxy.h3c.com:8027/profile/upload/2020/06/02/ed9bb4b4e6c7d7cea1b1113f8efbce0a.png'}
-    ],
+    fileList:[],
     pathList:[],
     addActionSheetVisible:false,
     showModal:false,
@@ -34,6 +30,13 @@ Page({
    */
   onLoad: function (options) {
     if(options&&options.name){
+      setTimeout(() => {
+        this.setData({loading:false,fileList:[
+        {id:"100",name:'资料',type:'folder'},
+        {id:'101',name:'整理',type:'folder'},
+        {id:'102',name:'测试',ext:'txt',type:'file'},
+        {id:'103',name:'icon',ext:'png',type:'file',url:'http://mobileproxy.h3c.com:8027/profile/upload/2020/06/02/ed9bb4b4e6c7d7cea1b1113f8efbce0a.png'}]})
+      }, 400);
       this.setData({parentFolderId:options.id})
       wx.setNavigationBarTitle({
         title:options.name

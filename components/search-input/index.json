@@ -3,6 +3,7 @@
   "usingComponents": {
     "action-sheet":"../action-sheet/index",
     "mymodal": "../modal/index",
-    "file-list": "../file-list/index"
+    "file-list": "../file-list/index",
+    "mp-loading": "weui-miniprogram/loading/loading"
   }
 }

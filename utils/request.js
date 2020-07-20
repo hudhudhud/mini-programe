@@ -46,7 +46,7 @@ export const post = async function(url, params, options = {}) {
           } else {
             reject(res.data);
             wx.showToast({
-              title: res.data.errmsg,
+              title: res.data.message,
               icon: "none",
               duration: 4000
             });
@@ -100,7 +100,7 @@ export const uploadFile = async function(url, filePath,fileKey, formData={},opti
         } else {
           reject(res.data);
           wx.showToast({
-            title: res.data.errmsg,
+            title: res.data.message,
             icon: "none",
             duration: 4000
           });
@@ -154,7 +154,7 @@ export const  login = async function(){
   });
 };
 
-export const  getSessionKey = async function(code='TRM-ullWxUKYgaMeMB2aG0Qanjw_15Ttrcw368KVJxg'){
+export const  getSessionKey = async function(code='WNSVWY5lQt7ExeuTXGFoZ_mYUqt75QiSCf7vSqcOgNQ'){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{

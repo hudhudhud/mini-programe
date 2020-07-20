@@ -50,7 +50,7 @@ App({
       return
     }
     wx.showToast({
-      title: '异常：'+JSON.stringify(error).substr(0,100),
+      title: '异常：'+JSON.stringify(error).substr(0,200),
       icon: 'none',
       duration: 4000
     })

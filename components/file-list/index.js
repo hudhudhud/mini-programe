@@ -1,3 +1,6 @@
+import * as request from '../../utils/request.js';
+import regeneratorRuntime from '../../runtime.js'
+import {FOLDER_CREATE,FOLDER_RENAME,FOLDER_DEL} from '../../utils/api'
 Component({
   properties: {
     dataList: {
@@ -92,24 +95,25 @@ Component({
         showModal: false,
       })
       let list = this.data.fileList
-      if(this.data.currentAction=="addFoler"){
-        list.push({name:this.data.modalInputTxt,type:'folder',id:Math.random()})
-        this.setData({fileList:list})
-        this.setFileGroupList(this.data.fileList)
-        wx.showToast({
-          title: '添加成功',
-          duration: 2000
-        })
-      }
-      else if(this.data.currentAction=='rename'){
+      if(this.data.currentAction=='rename'){
         let item = list.find(it=>it.id==this.data.currentItem.id)
+        let oldName = item.name
         item.name=this.data.modalInputTxt
-        this.setData({fileList:list})
-        this.setFileGroupList(this.data.fileList)
-        wx.showToast({
-          title: '重命名成功',
-          duration: 2000
-        })
+        // request.post(FOLDER_RENAME,{
+        //   fileId:'1282604189758918656',
+        //   fileName:oldName,
+        //   newFileName:item.name
+        // })
+        // .then(res=>{
+        //   if(res.errcode==0){
+            this.setData({fileList:list})
+            this.setFileGroupList(this.data.fileList)
+            wx.showToast({
+              title: '重命名成功',
+              duration: 2000
+            })
+        //   }
+        // })
       }
     },
     showDelToast(e){

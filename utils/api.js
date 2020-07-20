@@ -21,3 +21,4 @@ export const FOLDER_DEL = baseUrl +'/outside/microdisk/folder/delete'//删除文
 export const FOLDER_MEMBERUPDATE = baseUrl +'/outside/microdisk/folder/member/update'//修改空间成员
 export const FOLDER_RENAME = baseUrl +'/outside/microdisk/folder/update'//文件夹重命名
 export const FOLDER_DETAIL = baseUrl +'/outside/microdisk/folder/detail'//查询文件夹详情
+export const SPACE_EXIT = baseUrl +'/outside/microdisk/folder/member/exit'//退出空间

@@ -2,9 +2,9 @@
 <view class="error-info" wx:if='{{errorInfo}}'>
 {{errorInfo}}
 </view>
-<view class="container" wx:elif='{{!loading}}'>
+<mp-loading type="circle" wx:elif="{{loading}}"></mp-loading>
+<view class="container" wx:else>
   <search-input>
-    <!-- <mp-loading type="circle"></mp-loading> -->
     <view class="folder-module my-file">
       <text class="title">个人</text>
       <view class="folder-line">
