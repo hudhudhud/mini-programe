@@ -20,17 +20,20 @@ Component({
         // 显示
         if (newVal) {
           this.setData({
-            actionShow: true,
+            actionVisible: true,
             mask: '',
             animation: 'showAction'
           })
         } else {
-          // var that = this
           this.setData({
             animation: 'hideAction',
-            mask: 'transparent',
-            actionShow: false
+            mask: 'transparent'
           })
+          setTimeout(()=>{
+            this.setData({
+              actionVisible: false
+            })
+          }, 510)
         }
       }
     },
@@ -52,7 +55,8 @@ Component({
   data: {
     mask: '',
     animation: 'showAction',
-    timerId:''
+    timerId:'',
+    actionVisible:false,
   },
 
   /**
@@ -69,7 +73,7 @@ Component({
       })
       setTimeout(function () {
         that.setData({
-          actionShow: false
+          actionVisible: false
         })
       }, 510)
       var myEventDetail = {}

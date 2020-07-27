@@ -26,7 +26,7 @@
         <view class="user" wx:for="{{permissionsList}}" wx:key="index">
           <view class="left">
               <view class="user-img" wx:if='{{item.accessType===0}}'>
-                <image src='{{item.avatar}}' wx:if='{{item.avatar}}'></image>
+                <image src='{{item.imgUrl}}' wx:if='{{item.imgUrl}}'></image>
                 <i class="fa fa-user" aria-hidden="true" wx:else></i> 
               </view>
               <view class="user-img" wx:else>
