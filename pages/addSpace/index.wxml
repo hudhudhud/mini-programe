@@ -48,3 +48,14 @@
       <text>完成</text>
   </button>
 </view>
+<action-sheet actionShow="{{actionSheetVisible}}"> 
+  <view class="active-title">权限设置</view>
+   <view wx:for='{{actionItems}}' wx:key="index" class="active-item" bindtap="actionTap" 
+   data-item="{{item}}" data-index="{{index}}" style='{{item.key==-1?"color:red":""}}'>
+    <view>
+      <text class="name">{{item.name}}</text>
+      <text wx:if='{{item.tip}}' class="tip"> ▪ {{item.tip}}</text>
+    </view>
+    <i class="fa fa-check" aria-hidden="true" wx:if='{{currentActionItem.permissionType==item.key}}'></i>
+   </view>
+</action-sheet>

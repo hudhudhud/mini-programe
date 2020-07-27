@@ -16,7 +16,15 @@ Page({
       //type:0域账号，1部门;permissionType:0只读，1编辑
       // {bizId:1,name:'123',avatar:'',accessType:0,permissionType:1},
     ],
-    operateType:'' //add,edit 用来区分是新增人员的设置权限，还是修改人员时设置权限
+    operateType:'', //add,edit 用来区分是新增人员的设置权限，还是修改人员时设置权限
+    actionSheetVisible:false,
+    currentActionItem:{},
+    actionItems:[
+      {key:8,name:'管理员',tip:'可管理空间及成员权限'},
+      {key:0,name:'仅浏览',tip:'仅浏览和下载，不能上传'},
+      {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'},
+      {key:-1,name:'移除'}
+    ]
   },
   /**
    * 生命周期函数--监听页面加载
@@ -43,6 +51,9 @@ Page({
   },
 
   setOperateRole(event){
+    this.currentActionIndex = event.currentTarget.dataset.index
+    this.setData({actionSheetVisible:true,currentActionItem:event.currentTarget.dataset.item})
+    return
     let index = event.currentTarget.dataset.index
     let self = this
     let users = self.data.permissionsList
@@ -113,6 +124,69 @@ Page({
         console.log(res.errMsg)
       }
     })
+  },
+  actionTap(event){
+    let activeItem = event.currentTarget.dataset.item
+    let users = this.data.permissionsList
+    let currentUser = users[this.currentActionIndex]
+    if(!currentUser)return
+    if(currentUser.permissionType===activeItem.key)return
+    let self = this
+    //设置为管理员
+    if(activeItem.key==8){
+      if(self.data.fileAdmin!==currentUser.bizId){
+        if(!self.data.fileAdmin){//本来没有管理员则不用弹框确认
+          self.setData({fileAdmin:currentUser.bizId})
+          currentUser.permissionType=1
+          currentUser.isAdmin=true
+          self.setData({permissionsList:users})
+          return 
+        }
+        wx.showModal({
+          content:'一个分区只有一个管理员，是否将管理员转让给 '+currentUser.accessorName,
+          confirmColor:"#4970D9",
+          confirmText:'确定',
+          cancelColor:'#4F79B4',
+          success(res){
+            if (res.confirm) {
+              users.forEach(it=>it.isAdmin=false)
+              self.setData({fileAdmin:currentUser.bizId})
+              currentUser.permissionType=1
+              currentUser.isAdmin=true
+              self.setData({permissionsList:users})
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          },
+          fail(){
+          },
+          complete(){
+          }
+        })
+      }
+    }
+    //设置其他权限
+    else{
+       //管理员设成其他权限，则清空管理员数据
+        if(self.data.fileAdmin==currentUser.bizId){
+          self.setData({fileAdmin:''})
+          currentUser.isAdmin=false
+        }
+        //浏览
+        if(activeItem.key===0){
+          currentUser.permissionType=0
+        }
+        //编辑
+        if(activeItem.key===1){
+          currentUser.permissionType=1
+        }
+        //移除
+        if(activeItem.key===-1){
+          users.splice(this.currentActionIndex,1)
+        }
+        self.setData({permissionsList:users})
+    }
   },
   async confirmTap(){
     if(!this.data.fileAdmin){

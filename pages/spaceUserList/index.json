@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "成员及权限",
-  "usingComponents": {}
+  "usingComponents": {
+    "action-sheet":"../../components/action-sheet"
+  }
 }

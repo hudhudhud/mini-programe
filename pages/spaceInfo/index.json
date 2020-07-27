@@ -1,6 +1,4 @@
 {
   "navigationBarTitleText": "空间信息",
-  "usingComponents": {
-    "action-sheet":"../../components/action-sheet/index"
-  }
+  "usingComponents": {}
 }

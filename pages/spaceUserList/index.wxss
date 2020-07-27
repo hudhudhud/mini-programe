@@ -64,3 +64,36 @@
   font-size:40rpx;
   border-radius: 0;
 }
+
+.active-item{
+  width:100%;
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: left;
+  font-size:32rpx;
+  background-color:#fff;
+  border-bottom:1rpx solid #F2F2F2;
+  padding:0 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.active-title{
+  width:100%;
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size:28rpx;
+  color:#A2A2A2;
+  background-color:#fff;
+  border-bottom:1rpx solid #F2F2F2;
+}
+.active-item .fa-check{
+  color:#7FAEEB;
+  font-size:40rpx;
+}
+.active-item .tip{
+  font-size:28rpx;
+  color:#A2A2A2;
+}

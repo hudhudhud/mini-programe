@@ -31,7 +31,7 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // getSessionKey('GLOHN0umdWCoF6rh-OquI10cuCJ0ya_24HyMur5xU30').then(res=>{
+    // getSessionKey('rYRQ5FSzh19s87rKMhyXe-v1gaUsr2tneLGyxmbynas').then(res=>{
     //   if (this.userInfoReadyCallback) {
     //     this.userInfoReadyCallback()
     //   }

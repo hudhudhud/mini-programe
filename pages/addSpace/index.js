@@ -15,6 +15,13 @@ Page({
       //{accessorSid:1,name:'123',avatar:'',accessType:0,permissionType:1})//accessType:0域账号，1部门;permissionType:0只读，1编辑
     ],
     submiting:false,
+    actionSheetVisible:false,
+    currentActionItem:{},
+    actionItems:[
+      {key:0,name:'仅浏览',tip:'仅浏览和下载，不能上传'},
+      {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'},
+      {key:-1,name:'移除'}
+    ]
   },
   bindKeyInput(e){
     this.setData({
@@ -22,6 +29,9 @@ Page({
     })
   },
   setOperateRole(event){
+    this.currentActionIndex = event.currentTarget.dataset.index
+    this.setData({actionSheetVisible:true,currentActionItem:event.currentTarget.dataset.item})
+    return
     let index = event.currentTarget.dataset.index
     let self = this
     wx.showActionSheet({
@@ -43,6 +53,23 @@ Page({
         console.log(res.errMsg)
       }
     })
+  },
+  actionTap(event){
+    let activeItem = event.currentTarget.dataset.item
+    let users = this.data.permissionsList
+    let currentUser = users[this.currentActionIndex]
+    if(!currentUser)return
+    if(currentUser.permissionType===activeItem.key)return
+    if(activeItem.key===0){//浏览
+      currentUser.permissionType=0
+    }
+    else if(activeItem.key===1){//编辑
+      currentUser.permissionType=1
+    }
+    else if(activeItem.key===-1){//移除
+      users.splice(this.currentActionIndex,1)
+    }
+    this.setData({permissionsList:users})
   },
   addUser(){
     let self = this

@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "创建空间",
-  "usingComponents": {}
+  "usingComponents": {
+    "action-sheet":"../../components/action-sheet"
+  }
 }
