@@ -31,7 +31,7 @@
             <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
         </view>
       </view>
-      <view class="add-user-btn" bindtap='addUser'>
+      <view class="add-user-btn" bindtap='addUser' wx-if='{{userIsAdmin}}'>
         <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
       </view>
     </view>
@@ -39,12 +39,12 @@
   <view class="module flex-line">
    <text>设为快速访问</text><switch checked="{{switch1Checked}}" bindchange="switch1Change"/>
   </view> 
-  <view class="module exit-btn" bindtap="showExitActionSheet" wx:if='{{permissionsList.length>1}}'>
-   <text>退出空间</text>
-  </view>
-  <view class="module del-btn" bindtap="showDelActionSheet">
+  <button wx:if='{{permissionsList.length>1}}' class="module exit-btn" bindtap="exitSpace" loading="{{submiting_exit}}"  style='width:100%'>
+   <text style='{{userIsAdmin?"":"color:#E85966"}}'>退出空间</text>
+  </button>
+  <button class="module del-btn" bindtap="showDelActionSheet" wx-if='{{userIsAdmin}}' loading="{{submiting_del}}"  style='width:100%'>
    <text>解散空间</text>
-  </view>
+  </button>
   <action-sheet actionShow="{{actionSheetVisible}}"> 
     <view class="tip">
       将同时删除空间所有文件，该操作不可恢复

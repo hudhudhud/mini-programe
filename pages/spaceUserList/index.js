@@ -19,12 +19,7 @@ Page({
     operateType:'', //add,edit 用来区分是新增人员的设置权限，还是修改人员时设置权限
     actionSheetVisible:false,
     currentActionItem:{},
-    actionItems:[
-      {key:8,name:'管理员',tip:'可管理空间及成员权限'},
-      {key:0,name:'仅浏览',tip:'仅浏览和下载，不能上传'},
-      {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'},
-      {key:-1,name:'移除'}
-    ]
+    actionItems:[]
   },
   /**
    * 生命周期函数--监听页面加载
@@ -52,7 +47,22 @@ Page({
 
   setOperateRole(event){
     this.currentActionIndex = event.currentTarget.dataset.index
-    this.setData({actionSheetVisible:true,currentActionItem:event.currentTarget.dataset.item})
+    let currentActionItem = event.currentTarget.dataset.item
+    let actionItems=[
+      {key:8,name:'管理员',tip:'可管理空间及成员权限'},
+      {key:0,name:'仅浏览',tip:'仅浏览和下载，不能上传'},
+      {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'},
+      {key:-1,name:'移除'}
+    ]
+     //管理员无法移除自己
+    if(currentActionItem.isAdmin){
+      actionItems=[
+        {key:8,name:'管理员',tip:'可管理空间及成员权限'},
+        {key:0,name:'仅浏览',tip:'仅浏览和下载，不能上传'},
+        {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'}
+      ]
+    }
+    this.setData({actionSheetVisible:true,currentActionItem,actionItems})
     return
     let index = event.currentTarget.dataset.index
     let self = this
@@ -126,6 +136,7 @@ Page({
     })
   },
   actionTap(event){
+    this.setData({actionSheetVisible:false})
     let activeItem = event.currentTarget.dataset.item
     let users = this.data.permissionsList
     let currentUser = users[this.currentActionIndex]

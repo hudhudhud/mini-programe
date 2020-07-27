@@ -50,7 +50,7 @@
 </view>
 <action-sheet actionShow="{{actionSheetVisible}}"> 
   <view class="active-title">权限设置</view>
-   <view wx:for='{{actionItems}}' wx:key="index" class="active-item" bindtap="actionTap" 
+   <view wx:for='{{actionItems}}' wx:key="index" class="active-item" catchtap="actionTap" 
    data-item="{{item}}" data-index="{{index}}" style='{{item.key==-1?"color:red":""}}'>
     <view>
       <text class="name">{{item.name}}</text>

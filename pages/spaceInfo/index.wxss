@@ -136,6 +136,7 @@
   height:100rpx;
   line-height: 100rpx;
   font-size:35rpx;
+  padding:0;
 }
 .tip,.del-btn{
   height:100rpx;
@@ -143,6 +144,7 @@
   text-align: center;
   width:100%;
   background-color:#fff;
+  padding:0;
 }
 .tip{
   font-size:30rpx;

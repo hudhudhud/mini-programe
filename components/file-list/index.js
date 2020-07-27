@@ -27,7 +27,6 @@ Component({
     isShareFolder:false,
     fileList:[],
     fileGroupList:[],
-    addActionSheetVisible:false,
     showModal:false,
     modalInputTxt:'',
     operationActionSheetVisible:false,

@@ -55,6 +55,7 @@ Page({
     })
   },
   actionTap(event){
+    this.setData({actionSheetVisible:false})
     let activeItem = event.currentTarget.dataset.item
     let users = this.data.permissionsList
     let currentUser = users[this.currentActionIndex]

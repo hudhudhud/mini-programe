@@ -9,7 +9,7 @@ Page({
   data: {
     shareFileList:[],
     user:{},
-    loading:true,
+    loading:false,
     errorInfo:'',
     myfileName:'',
     loadingMore:false,
@@ -37,6 +37,7 @@ Page({
     }
   },
   async getData(){
+    this.setData({loading:true})
     let userInfo = this.data.userInfo
     let myfileName = userInfo.uid+" "+userInfo.name //'我的文件' //userInfo.uid+" "+userInfo.name
     this.setData({userInfo: userInfo,myfileName:myfileName,hasNoMore:false})

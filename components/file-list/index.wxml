@@ -66,22 +66,6 @@
     </view>
 </block>
 </view>
-<action-sheet actionShow="{{addActionSheetVisible}}"> 
-    <view class="add-action-btns">
-      <view class="add-action-btn" bindtap='showAddFolderModal'>
-        <i class="fa fa-folder" aria-hidden="true"></i>
-        <text>新建文件夹</text>
-      </view>
-      <view class="add-action-btn" bindtap='addImg'>
-        <i class="fa fa-picture-o" aria-hidden="true"></i>
-        <text>上传照片</text>
-      </view>
-      <!-- <view class="add-action-btn" bindtap='addFile'>
-        <i class="fa fa-upload" aria-hidden="true"></i>
-        <text>上传文件</text>
-      </view> -->
-    </view>
-</action-sheet>
 <action-sheet actionShow="{{operationActionSheetVisible}}"> 
     <view class="action-item-txt">
       <scroll-view scroll-x  scroll-with-animation="true">{{currentItem.name}}</scroll-view>
