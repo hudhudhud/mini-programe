@@ -130,7 +130,7 @@ Page({
             newPermissionsList.push(item)
           }
         }
-        //先放本地缓存，后期通过接口获取
+        //跳转到设置权限页面
         //self.setData({permissionsList:permissionsList})
         wx.setStorageSync('permissionsList', {new:newPermissionsList,old:self.oldPermissionsList})
         wx.navigateTo({

@@ -18,7 +18,29 @@ Page({
     ],
     operateType:'' //add,edit 用来区分是新增人员的设置权限，还是修改人员时设置权限
   },
-  
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    let userInfo = wx.getStorageSync('userInfo')
+    this.setData({ user:userInfo}) 
+    this.fileId= options.id
+    this.fileName = options.name
+    this.setData({operateType:options.type,fileAdmin:options.admin})
+    if(options.type=='add'){
+      this.setData({permissionsList:wx.getStorageSync('permissionsList').new})
+      this.setData({oldPermissionsList:wx.getStorageSync('permissionsList').old})
+    }
+    else{
+      this.setData({permissionsList:wx.getStorageSync('permissionsList')})
+    }
+    if(userInfo.uid.toLocaleLowerCase() == options.admin.toLocaleLowerCase()){
+      this.setData({userIsAdmin:true})
+    }
+    else{
+      this.setData({userIsAdmin:false})
+    }
+  },
 
   setOperateRole(event){
     let index = event.currentTarget.dataset.index
@@ -139,29 +161,7 @@ Page({
     }
     
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    let userInfo = wx.getStorageSync('userInfo')
-    this.setData({ user:userInfo}) 
-    this.fileId= options.id
-    this.fileName = options.name
-    this.setData({operateType:options.type,fileAdmin:options.admin})
-    if(options.type=='add'){
-      this.setData({permissionsList:wx.getStorageSync('permissionsList').new})
-      this.setData({oldPermissionsList:wx.getStorageSync('permissionsList').old})
-    }
-    else{
-      this.setData({permissionsList:wx.getStorageSync('permissionsList')})
-    }
-    if(userInfo.uid.toLocaleLowerCase() == options.admin.toLocaleLowerCase()){
-      this.setData({userIsAdmin:true})
-    }
-    else{
-      this.setData({userIsAdmin:false})
-    }
-  },
+  
 
   /**
    * 生命周期函数--监听页面初次渲染完成
