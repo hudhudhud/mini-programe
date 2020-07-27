@@ -8,13 +8,15 @@ Page({
    */
   data: {
     user:'',
-    fileId:'',
     submiting:false,
-    fileAdmin:'hys3032',
+    fileAdmin:'',
+    userIsAdmin:'false',
+    oldPermissionsList:[],//原来的权限数据
     permissionsList:[
       //type:0域账号，1部门;permissionType:0只读，1编辑
-      // {accessorSid:1,name:'123',avatar:'',accessType:0,permissionType:1},
+      // {bizId:1,name:'123',avatar:'',accessType:0,permissionType:1},
     ],
+    operateType:'' //add,edit 用来区分是新增人员的设置权限，还是修改人员时设置权限
   },
   
 
@@ -23,17 +25,19 @@ Page({
     let self = this
     let users = self.data.permissionsList
     let actionList = ['管理员（可管理空间及成员权限）','仅浏览（仅浏览和下载，不能上传）', '可编辑（可上传下载，编辑文件夹）', '移除']
-    if(users[index].accessorSid==self.data.fileAdmin){
+    //管理员无法移除自己
+    if(users[index].bizId==self.data.fileAdmin){
       actionList = ['管理员（可管理空间及成员权限）','仅浏览（仅浏览和下载，不能上传）', '可编辑（可上传下载，编辑文件夹）']
     }
     wx.showActionSheet({
       itemList: actionList,
       success (res) {
         if(res.tapIndex==0){
-          if(self.data.fileAdmin!==users[index].accessorSid){
+          if(self.data.fileAdmin!==users[index].bizId){
             if(!self.data.fileAdmin){//本来没有管理员则不用弹框确认
-              self.setData({fileAdmin:users[index].accessorSid})
+              self.setData({fileAdmin:users[index].bizId})
               users[index].permissionType=1
+              users[index].isAdmin=true
               self.setData({permissionsList:users})
               return 
             }
@@ -44,8 +48,10 @@ Page({
               cancelColor:'#4F79B4',
               success(res){
                 if (res.confirm) {
-                  self.setData({fileAdmin:users[index].accessorSid})
+                  users.forEach(it=>it.isAdmin=false)
+                  self.setData({fileAdmin:users[index].bizId})
                   users[index].permissionType=1
+                  users[index].isAdmin=true
                   self.setData({permissionsList:users})
                   console.log('用户点击确定')
                 } else if (res.cancel) {
@@ -60,15 +66,20 @@ Page({
           }
         }
         else{
-            if(self.data.fileAdmin==users[index].accessorSid){
+           //管理员设成其他权限，则清空管理员数据
+            if(self.data.fileAdmin==users[index].bizId){
               self.setData({fileAdmin:''})
+              users[index].isAdmin=false
             }
+            //浏览
             if(res.tapIndex==1){
               users[index].permissionType=0
             }
+            //编辑
             if(res.tapIndex==2){
               users[index].permissionType=1
             }
+            //移除
             if(res.tapIndex==3){
               users.splice(index,1)
             }
@@ -81,13 +92,8 @@ Page({
       }
     })
   },
-  confirmTap(){
+  async confirmTap(){
     if(!this.data.fileAdmin){
-      // wx.showToast({
-      //   title: "你需要指定一个管理员",
-      //   icon: "none",
-      //   duration: 4000
-      // });
       wx.showModal({
         content:'你需要指定一个管理员',
         confirmColor:"#4970D9",
@@ -96,39 +102,64 @@ Page({
       })
       return
     }
+    if(this.data.submiting){
+      return
+    }
     this.setData({submiting:true})
-    setTimeout(() => {
-      this.setData({submiting:false})
-      wx.navigateBack()
-    }, 1000);
-   
-    // request.post(FOLDER_MEMBERUPDATE,{
-    //   fileId:this.data.fileId,
-    //   fileName:this.data.inputName,
-    //   fileAdmin:this.data.fileAdmin,
-    //   // parentId:'',共享空间根目录为空
-    //   type:1,//0私有空间的文件夹； 1共享空间的文件夹
-    //   permissionList:this.data.permissionsList
-    // }).then(res=>{
-    //   if(res.errcode==0){
-    //     wx.navigateBack()
-    //   }
-    // }).finally(e=>{
+    // setTimeout(() => {
     //   this.setData({submiting:false})
-    // })
+    //   wx.navigateBack()
+    // }, 1000);
+   
+    let permissionsList = this.data.permissionsList
+    if(this.data.operateType==='add'){
+      permissionsList.push(...this.data.oldPermissionsList)
+    }
+    console.log('submit...',permissionsList)
+    try{
+      let res = await request.post(FOLDER_MEMBERUPDATE,{
+        fileSid:this.fileId,
+        name:this.fileName,
+        fileAdmin:this.data.fileAdmin,
+        permissionList:permissionsList
+      })
+      if(res.errcode==0){
+        wx.navigateBack({
+          success(){
+            //取spaceInfo页面，刷新
+            var page = getCurrentPages().pop();
+            if (page == undefined || page == null) return
+            page.getData();
+          }
+        })
+      }
+    }
+    finally{
+      this.setData({submiting:false})
+    }
+    
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({ user:wx.getStorageSync('userInfo')}) 
-    //先放本地缓存，后期通过接口获取
-    this.setData({permissionsList:wx.getStorageSync('permissionsList')}) 
-    if(options.id){
-      this.setData({fileId:options.id})
-      // request.post(FOLDER_DETAIL,{
-      //   fileId:options.id
-      // })
+    let userInfo = wx.getStorageSync('userInfo')
+    this.setData({ user:userInfo}) 
+    this.fileId= options.id
+    this.fileName = options.name
+    this.setData({operateType:options.type,fileAdmin:options.admin})
+    if(options.type=='add'){
+      this.setData({permissionsList:wx.getStorageSync('permissionsList').new})
+      this.setData({oldPermissionsList:wx.getStorageSync('permissionsList').old})
+    }
+    else{
+      this.setData({permissionsList:wx.getStorageSync('permissionsList')})
+    }
+    if(userInfo.uid.toLocaleLowerCase() == options.admin.toLocaleLowerCase()){
+      this.setData({userIsAdmin:true})
+    }
+    else{
+      this.setData({userIsAdmin:false})
     }
   },
 

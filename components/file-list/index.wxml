@@ -1,9 +1,10 @@
 <view class="file-list {{checkStatus?'containCheck':''}}">
-  <view wx:for='{{fileGroupList}}' wx:key='index' wx:for-item="filegroup">
-    <text class="folder-module-title">{{filegroup.title}}</text>
-    <view wx:for='{{filegroup.list}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
+<block wx:if='{{!isShareFolder}}'>
+  <!-- <view wx:for='{{fileGroupList}}' wx:key='index' wx:for-item="filegroup"> -->
+    <!-- <text class="folder-module-title">{{filegroup.title}}</text> -->
+    <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
       <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
-      bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{false}}">
+      bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{!item.isWrite}}">
         <view class="folder-line" >
             <view class="left" wx:if='{{item.type=="folder"}}'>
               <view class="check-wrapper" wx:if='{{checkStatus}}'>
@@ -21,17 +22,18 @@
                 <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
               </view>
               <view  class="content">
-                <block wx:if='{{item.url}}'>
-                  <image src="{{item.url}}"></image>
-                  <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+                <block wx:if='{{item.type=="image"}}'>
+                  <!-- <image src="{{item.url}}"></image> -->
+                  <i class="fa fa-picture-o"></i>
+                  <text class="folder-name" >{{item.name}}</text>
                 </block>
                 <block wx:else>
                   <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                  <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
+                  <text class="folder-name" >{{item.name}}</text>
                 </block>
               </view>
             </view>
-            <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus}}'>
+            <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus&&item.isWrite}}'>
                 <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
             </view>
         </view>
@@ -45,7 +47,24 @@
         删除
       </view>
     </view>
-  </view>
+  <!-- </view> -->
+</block>
+<block wx:else>
+    <!-- <text class="folder-module-title">{{fileGroupList[0].title}}</text> -->
+    <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}" bindtap="goDetail">
+      <view class="folder-line" >
+          <view class="left">
+            <view class="content">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+                <text class="folder-name" >{{item.name}}</text>
+            </view>
+          </view>
+          <view catchtap="goSpaceInfo" class="info-btn right" data-item="{{item}}">
+              <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
+          </view>
+      </view>
+    </view>
+</block>
 </view>
 <action-sheet actionShow="{{addActionSheetVisible}}"> 
     <view class="add-action-btns">
@@ -65,17 +84,16 @@
 </action-sheet>
 <action-sheet actionShow="{{operationActionSheetVisible}}"> 
     <view class="action-item-txt">
-      <text wx:if='{{currentItem.type=="folder"}}'>{{currentItem.name}}</text>
-      <text wx:else>{{currentItem.name+'.'+currentItem.ext}}</text>
+      <scroll-view scroll-x  scroll-with-animation="true">{{currentItem.name}}</scroll-view>
     </view>
-    <view class="operation-btns shares">
-    <view class="action-btn">
+    <!-- <view class="operation-btns shares">
+      <view class="action-btn">
         <button class="share-btn"  data-type="modalShare" data-item='{{currentItem}}' open-type="share"  send-message-path=''>
           <i class="fa fa-share" aria-hidden="true"></i>
         </button>
         <text class="title">转发</text>
       </view>
-    </view>
+    </view> -->
     <view class="operation-btns">
       <view class="action-btn" bindtap='showRenameModal'>
         <view class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></view>
@@ -98,6 +116,6 @@ bind:complete="modalComplete"
 submiting='{{submiting}}'
 title='{{modalTitle}}' >
 <text class="modal-tip">{{modalTip}}</text>
-<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  value="{{modalInputTxt}}" bindinput="bindinputModal" maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
+<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  value="{{modalInputTxt}}" bindinput="bindinputModal" maxlength='50' cursor-spacing="60" class="modal-file-folder-input"></input>
 </mymodal>
 

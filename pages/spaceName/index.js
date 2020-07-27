@@ -33,6 +33,7 @@ Page({
     if(this.data.submiting){
       return
     }
+    this.setData({submiting:true})
 
     //微信内容安全校验
     try{
@@ -42,33 +43,37 @@ Page({
       return
     }
     
-    setTimeout(() => {
-      wx.navigateBack()
-      this.setData({submiting:false})
-    }, 1000);
-
-    // request.post(FOLDER_RENAME,{
-    //   fileId:this.data.fileId,
-    //   fileName:this.data.oldFileName,
-    //   newFileName:inputName
-    // })
-    // .then(res=>{
-    //   if(res.errcode==0){
-    //     wx.navigateBack()
-    //   }
-    // })
-    // .finally(()=>{
+    // setTimeout(() => {
+    //   wx.navigateBack()
     //   this.setData({submiting:false})
-    // })
-   
+    // }, 1000);
+
+    request.post(FOLDER_RENAME,{
+      fileSid:this.data.fileId,
+      name:this.data.oldFileName,
+      newName:this.data.inputName
+    })
+    .then(res=>{
+      if(res.errcode==0){
+        wx.navigateBack({
+          success(){
+            //取spaceInfo页面，刷新
+            var page = getCurrentPages().pop();
+            if (page == undefined || page == null) return
+            page.getData();
+          }
+        })
+      }
+    })
+    .finally(()=>{
+      this.setData({submiting:false})
+    })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if(options.id){
-      this.setData({fileId:options.id,inputName:options.name,oldFileName:options.name})
-    }
+    this.setData({fileId:options.id,inputName:options.name,oldFileName:options.name})
   },
 
   /**

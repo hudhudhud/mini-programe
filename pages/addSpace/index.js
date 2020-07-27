@@ -64,8 +64,8 @@ Page({
   },
   selectUser(){
     let self = this
-    let selectdepartIds = self.data.permissionsList.filter(it=>it.accessType==1).map(it=>it.accessorSid)
-    let selectuserIds = self.data.permissionsList.filter(it=>it.accessType==0).map(it=>it.accessorSid)
+    let selectdepartIds = self.data.permissionsList.filter(it=>it.accessType==1).map(it=>it.bizId)
+    let selectuserIds = self.data.permissionsList.filter(it=>it.accessType==0).map(it=>it.bizId)
     wx.qy.selectEnterpriseContact({
       fromDepartmentId: 0,// 必填，-1表示打开的通讯录从自己所在部门开始展示, 0表示从最上层开始
       mode: "multi",// 必填，选择模式，single表示单选，multi表示多选
@@ -78,12 +78,12 @@ Page({
         let permissionsList = []
         for (var i = 0; i < selectedDepartmentList.length; i++){
           var department = selectedDepartmentList[i];
-          permissionsList.push({accessorSid:department.id,name:department.name,accessType:1,permissionType:1})//accessType:0域账号，1部门；permissionType:0只读，1编辑
+          permissionsList.push({bizId:department.id,name:department.name,accessType:1,permissionType:1})//accessType:0域账号，1部门；permissionType:0只读，1编辑
         }
         var selectedUserList = res.result.userList; // 已选的成员列表
         for (var i = 0; i < selectedUserList.length; i++){
           var user = selectedUserList[i];
-          permissionsList.push({accessorSid:user.id,name:user.name,avatar:user.avatar,accessType:0,permissionType:1})//accessType:0域账号，1部门;permissionType:0只读，1编辑
+          permissionsList.push({bizId:user.id,name:user.name,imgUrl:user.avatar,accessType:0,permissionType:1})//accessType:0域账号，1部门;permissionType:0只读，1编辑
         }
         self.setData({permissionsList:permissionsList})
       }
@@ -116,26 +116,34 @@ Page({
     let resPerList = [
       ...this.data.permissionsList,
       //添加管理员权限数据
-      {accessorSid:this.data.user.uid,name:this.data.user.name,avatar:this.data.user.avatar,accessType:0,permissionType:1}
+      {bizId:this.data.user.uid,name:this.data.user.name,imgUrl:this.data.user.avatar,accessType:0,permissionType:1}
     ]
-    setTimeout(() => {
-      this.setData({submiting:false})
-      wx.navigateBack()
-    }, 500);
-    console.log('submit...',resPerList,this.data.inputName)
-    // request.post(FOLDER_CREATE,{
-    //   userName:this.data.user.name,
-    //   fileName:this.data.inputName.trim(),
-    //   // parentId:'',共享空间根目录为空
-    //   type:1,//0私有空间的文件夹； 1共享空间的文件夹
-    //   permissionList:resPerList
-    // }).then(res=>{
-    //   if(res.errcode==0){
-    //     wx.navigateBack()
-    //   }
-    // }).finally(()=>{
+    // setTimeout(() => {
     //   this.setData({submiting:false})
-    // })
+    //   wx.navigateBack()
+    // }, 500);
+    console.log('submit...',resPerList,this.data.inputName)
+    request.post(FOLDER_CREATE,{
+      name:this.data.inputName.trim(),
+      fileAdmin:this.data.user.uid,
+      // parentFileSid:'',共享空间根目录为空
+      type:1,//0私有空间的文件夹； 1共享空间的文件夹
+      permissionList:resPerList
+    }).then(res=>{
+      if(res.errcode==0){
+        //添加共享空间成功之后返回空间信息，以便更新列表
+        wx.navigateBack({
+          success(){
+            //取spaceInfo页面，刷新
+            var page = getCurrentPages().pop();
+            if (page == undefined || page == null) return
+            //page.refeshData(res.item);
+          }
+        })
+      }
+    }).finally(()=>{
+      this.setData({submiting:false})
+    })
   },
   /**
    * 生命周期函数--监听页面加载

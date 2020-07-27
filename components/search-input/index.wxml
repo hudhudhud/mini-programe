@@ -20,14 +20,20 @@
   </view>
 
   <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>
-  <view class="search-res" wx:if="{{searchStatus&&searchStr}}" scroll-y>
+  <scroll-view class="search-res" wx:if="{{searchStatus&&searchStr}}" scroll-y bindscrolltolower='loadMore' scroll-with-animation>
     <mp-loading type="circle" wx:if="{{loading}}"></mp-loading>
-    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail" wx:elif="{{searchResList.length>0}}"></file-list>
+    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail" wx:elif="{{searchResList.length>0}}" isShare='{{!parentFolderId}}'></file-list>
     <view wx:else class="no-data">
         <i class="fa fa-search" aria-hidden="true"></i>
         <text>无搜索结果</text>
     </view>
-  </view>
+    <mp-loading type="circle" wx:if="{{loadingMore}}"></mp-loading>
+    <view wx:if='{{hasNoMore}}' class="has-no-more">没有更多数据了..</view>
+  </scroll-view>
 </view>
-
+<action-sheet actionShow="{{sortActionSheetVisible}}"> 
+   <view wx:for='{{sortActions}}' wx:key="index" class="sort-item {{currentSortIndex==index?'active':''}}" bindtap="sortActionTap" data-item="{{item}}" data-index="{{index}}">
+    <view>{{(item.sort=="+"?"↑ ":(item.sort=="-"?"↓ ":""))+'按'+item.name+(item.sort=="+"?'升':'降')+'序'}}</view>
+   </view>
+</action-sheet>
 

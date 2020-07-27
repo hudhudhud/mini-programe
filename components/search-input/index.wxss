@@ -4,9 +4,11 @@
   box-sizing: border-box;
   /* padding:0 30rpx; */
   background-color:#fff;
+  height: 100%;
 }
 .search-input-component.hasSearchBar{
   padding-top:120rpx;
+  box-sizing: border-box;
 }
 .search{
   padding:20rpx 0;
@@ -53,6 +55,7 @@
   /* padding:0 30rpx; */
   box-sizing: border-box;
   width:100%;
+  height:calc(100vh - 120rpx);
 }
 .search .search-bar .cancel-btn{
   width:10%;
@@ -109,4 +112,16 @@
 }
 .gray{
   color:#BABABA;
+}
+.sort-item{
+  width:100%;
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size:32rpx;
+  background-color:#fff;
+  border-bottom:1rpx solid #F2F2F2;
+}
+.sort-item.active{
+  color:#7FAEEB;
 }

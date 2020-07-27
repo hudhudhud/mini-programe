@@ -7,23 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    fileAdmin:'hys3032',
+    fileAdmin:'',
     inputName:'',
-    // oldPermissionsList:[
-    //   {accessType: 0, 
-    //     accessorSid: "hys3032",
-    //     avatar: "https://wework.qpic.cn/bizmail/pcRHXOXiajsBgXicZkaNrQIdq2Yk3zFcKlYyogr5DUB4sJk1IeW8aTjg/0",
-    //     name: "胡丹",
-    //     permissionType: 1},
-    // ],
-    oldPermissionsList:[
-      {accessType: 0, 
-        accessorSid: "hys3032",
-        avatar: "https://wework.qpic.cn/bizmail/pcRHXOXiajsBgXicZkaNrQIdq2Yk3zFcKlYyogr5DUB4sJk1IeW8aTjg/0",
-        name: "胡丹",
-        permissionType: 1},
-      //  {accessorSid:1,name:'123',avatar:'',accessType:0,permissionType:1})//type:0域账号，1部门;permissionType:0只读，1编辑
-    ],
     permissionsList:[],
     actionSheetVisible:false,
     fileId:'',
@@ -115,8 +100,8 @@ Page({
   },
   selectUser(){
     let self = this
-    let selectdepartIds = self.data.permissionsList.filter(it=>it.accessType==1).map(it=>it.accessorSid)
-    let selectuserIds = self.data.permissionsList.filter(it=>it.accessType==0).map(it=>it.accessorSid)
+    let selectdepartIds = self.data.permissionsList.filter(it=>it.accessType==1).map(it=>it.bizId)
+    let selectuserIds = self.data.permissionsList.filter(it=>it.accessType==0).map(it=>it.bizId)
     wx.qy.selectEnterpriseContact({
       fromDepartmentId: 0,// 必填，-1表示打开的通讯录从自己所在部门开始展示, 0表示从最上层开始
       mode: "multi",// 必填，选择模式，single表示单选，multi表示多选
@@ -126,21 +111,31 @@ Page({
       success: function(res) {
         console.log('selectEnterpriseContact...',res)
         var selectedDepartmentList = res.result.departmentList;// 已选的部门列表
-        let permissionsList =  self.data.oldPermissionsList //老数据需要一直在，不能被删除
+        let permissionsList = self.oldPermissionsList //老数据需要一直在，不能被删除
+        let newPermissionsList=[]
         for (var i = 0; i < selectedDepartmentList.length; i++){
           var department = selectedDepartmentList[i];
-          if(!permissionsList.find(it=>it.accessorSid==department.id)){
-            permissionsList.push({accessorSid:department.id,name:department.name,accessType:1,permissionType:1})//accessType:0域账号，1部门；permissionType:0只读，1编辑
+          if(!permissionsList.find(it=>it.bizId==department.id)){
+            let item= {bizId:department.id,accessorName:department.name,accessType:1,permissionType:1}//accessType:0域账号，1部门；permissionType:0只读，1编辑
+            //permissionsList.push(item)
+            newPermissionsList.push(item)
           }
         }
         var selectedUserList = res.result.userList; // 已选的成员列表
         for (var i = 0; i < selectedUserList.length; i++){
           var user = selectedUserList[i];
-          if(!permissionsList.find(it=>it.accessorSid==user.id)){
-            permissionsList.push({accessorSid:user.id,name:user.name,avatar:user.avatar,accessType:0,permissionType:1})//accessType:0域账号，1部门;permissionType:0只读，1编辑
+          if(!permissionsList.find(it=>it.bizId==user.id)){
+            let item= {bizId:user.id,accessorName:user.name,imgUrl:user.avatar,accessType:0,permissionType:1}//accessType:0域账号，1部门;permissionType:0只读，1编辑
+            //permissionsList.push(item)
+            newPermissionsList.push(item)
           }
         }
-        self.setData({permissionsList:permissionsList})
+        //先放本地缓存，后期通过接口获取
+        //self.setData({permissionsList:permissionsList})
+        wx.setStorageSync('permissionsList', {new:newPermissionsList,old:self.oldPermissionsList})
+        wx.navigateTo({
+          url: `/pages/spaceUserList/index?id=${self.data.fileId}&name=${self.data.inputName}&admin=${self.data.fileAdmin}&type=add`,
+        })
       }
     })
   },
@@ -148,7 +143,7 @@ Page({
     //先放本地缓存，后期通过接口获取
     wx.setStorageSync('permissionsList', this.data.permissionsList)
     wx.navigateTo({
-      url: '/pages/spaceUserList/index?id='+this.data.fileId,
+      url: `/pages/spaceUserList/index?id=${this.data.fileId}&name=${this.data.inputName}&admin=${this.data.fileAdmin}&type=edit`,
     })
   },
   setUserList(){
@@ -157,16 +152,45 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: async function (options) {
     this.setData({user:wx.getStorageSync('userInfo')})
     if(options.id){
-      this.setData({fileId:options.id,inputName:options.name,permissionsList:this.data.oldPermissionsList})
-      // request.post(FOLDER_DETAIL,{
-      //   fileId:options.id
-      // })
+      this.setData({fileId:options.id,inputName:options.name})
+      this.getData()
     }
   },
-
+  
+  async getData(){
+    wx.showLoading()
+    try{
+      let {data} = await request.post(FOLDER_DETAIL,{
+        fileSid:this.data.fileId,
+        name:this.data.inputName
+      })
+      if(data){
+        let fileAdmin = data.fileAdmin.split('/')[0]
+        let adminName = data.fileAdmin.split('/')[1]
+        this.setData({fileAdmin:fileAdmin})
+        let permissionsList = []
+        data.permissionBindings.forEach(it=>{
+          let item = it 
+          if(it.bizId.toLocaleLowerCase()==fileAdmin.toLocaleLowerCase()){
+            item.isAdmin = true
+            item.accessorName = adminName
+            permissionsList.unshift(item)
+          }
+          else{
+            permissionsList.push(item)
+          }
+        })
+        this.oldPermissionsList = data.permissionBindings
+        this.setData({fileAdmin:fileAdmin,inputName:data.name,permissionsList:permissionsList})
+      }
+    }
+    finally{
+      wx.hideLoading()
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -178,7 +202,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    
   },
 
   /**

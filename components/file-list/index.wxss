@@ -133,15 +133,19 @@
  .action-item-txt{
    background-color:#F0F0F0;
    width:100%;
-   padding:30rpx 0;
+   padding:20rpx 0;
    text-align: center;
+   white-space: nowrap;
+   height:100rpx;
+   box-sizing: border-box;
  }
- .action-item-txt text{
+ .action-item-txt scroll-view{
   display: inline-block;
   width:80%;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: hidden; */
+  white-space: nowrap;
  }
 
  .check-operation-btns{
@@ -160,4 +164,7 @@
  }
  .check-operation-btns .btn.del{
   color:red;
+}
+.fa-picture-o{
+  color:#FBC545
 }

@@ -1,20 +1,30 @@
 import * as request from '../../utils/request.js';
 import regeneratorRuntime from '../../runtime.js'
-import {FOLDER_CREATE,FOLDER_RENAME,FOLDER_DEL} from '../../utils/api'
+import {FOLDER_RENAME,FOLDER_DEL} from '../../utils/api'
 Component({
   properties: {
     dataList: {
       type: Array,
       value:[],
       observer: function (newVal, oldVal) {
-        this.setFileGroupList(newVal)
+       // this.setFileGroupList(newVal)
         this.setData({
           fileList: newVal,
         })
       }
     },
+    isShare:{
+      type: Boolean,
+      value:false,
+      observer: function (newVal, oldVal) {
+        this.setData({
+          isShareFolder: newVal,
+        })
+      }
+    }
   },
   data: {
+    isShareFolder:false,
     fileList:[],
     fileGroupList:[],
     addActionSheetVisible:false,
@@ -49,6 +59,10 @@ Component({
       if(fileList.length){
         fileGroupList.push({title:'文件',list:fileList})
       }
+      //首页搜索
+      if(this.data.isShare){
+        fileGroupList=[{title:'共享',list:newVal}]
+      }
       this.setData({
         fileGroupList:fileGroupList,
       })
@@ -64,6 +78,13 @@ Component({
         this.triggerEvent('goDetail',{item})
       }
     },
+    //共享空间详情
+    goSpaceInfo(event){
+      let item = event.currentTarget.dataset.item
+      wx.navigateTo({
+        url: `../../pages/spaceInfo/index?id=${item.id}&name=${item.name}`
+      })
+    },
     //文件操作
     showOperationActionSheet(event){
       let item =event.detail.item?event.detail.item:event.currentTarget.dataset.item
@@ -77,7 +98,7 @@ Component({
     },
     showRenameModal(){
       this.setData({
-        modalInputTxt:this.data.currentItem.name,
+        modalInputTxt:this.data.currentItem.subName,
         currentAction:'rename',
         modalTitle:'重命名',
         madalPlaceholder:this.data.currentItem.type=="folder"?'文件夹名':'文件名',
@@ -106,26 +127,20 @@ Component({
         let item = list.find(it=>it.id==this.data.currentItem.id)
         let oldName = item.name
         item.name=this.data.modalInputTxt
-        // request.post(FOLDER_RENAME,{
-        //   fileId:'1282604189758918656',
-        //   fileName:oldName,
-        //   newFileName:item.name
-        // })
-        // .then(res=>{
-        //   if(res.errcode==0){
-            setTimeout(() => {
-              this.setData({fileList:list})
-              this.setFileGroupList(this.data.fileList)
-              this.setData({ showModal: false })
-              this.setData({submiting:false})
-              wx.showToast({
-                title: '重命名成功',
-                duration: 2000
-              })
-            }, 500);
-           
-        //   }
-        // })
+        request.post(FOLDER_RENAME,{
+          fileSid:this.data.currentItem.id,
+          name:oldName,
+          newName:item.name+(item.ext?'.'+item.ext:'')
+        })
+        .then(res=>{
+          if(res.errcode==0){
+            this.setData({fileList:list})
+             // this.setFileGroupList(this.data.fileList)
+          }
+        })
+        .finally(()=>{
+          this.setData({submiting:false})
+        })
       }
     },
     showDelToast(e){
@@ -137,25 +152,25 @@ Component({
         confirmColor:"#C95E57",
         confirmText:'删除',
         cancelColor:'#4F79B4',
-        success(res){
+        async success(res){
           if (res.confirm) {
-            let list = self.data.fileList
-            let item = list.find(it=>it.id==currentItem.id)
-            list.splice(list.indexOf(item),1)
-            self.setData({fileList:list})
-            self.setFileGroupList(self.data.fileList)
-            self.triggerEvent('reSetList',{list})
             console.log('用户点击确定')
-          } else if (res.cancel) {
-            console.log('用户点击取消')
+            let res = await request.post(FOLDER_DEL,{
+              fileSid:currentItem.id,
+              name:currentItem.name,
+            })
+            if(res.errcode==0){
+              let list = self.data.fileList
+              let item = list.find(it=>it.id==currentItem.id)
+              list.splice(list.indexOf(item),1)
+              self.setData({fileList:list})
+              // self.setFileGroupList(self.data.fileList)
+              self.triggerEvent('reSetList',{list})
+            }
           }
         },
-        fail(){
-
-        },
-        complete(){
-
-        }
+        fail(){ },
+        complete(){}
       })
     },
     // 防抖
@@ -202,7 +217,7 @@ Component({
       let currentItem = list.find(it=>it.id==item.id)
       currentItem.checked=currentItem.checked==undefined?true:!currentItem.checked
       this.setData({fileList:list})
-      this.setFileGroupList(this.data.fileList)
+      //this.setFileGroupList(this.data.fileList)
     },
     cancelCheckStatus(e){
       this.setData({checkStatus:false})
@@ -231,7 +246,7 @@ Component({
               list.splice(list.indexOf(item),1)
             })
             self.setData({fileList:list})
-            self.setFileGroupList(self.data.fileList)
+           // self.setFileGroupList(self.data.fileList)
             self.triggerEvent('reSetList',{list})
             self.setData({checkStatus:false})
             console.log('用户点击确定')

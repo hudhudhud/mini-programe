@@ -4,8 +4,8 @@
   background-color:#fff;
 }
 .add-folder-btn{
-  width:60rpx;
-  height:60rpx;
+  width:40rpx;
+  height:40rpx;
   text-align: center;
   background-color:#EEE;
   margin-right: 10rpx;
@@ -49,6 +49,15 @@
   display:flex;
   justify-content: space-between;
   align-items: center;
+  height:100rpx;
+  box-sizing: border-box;
+}
+.add-space-line .right{
+  display:flex;
+  font-size:30rpx;
+  white-space: nowrap;
+  padding-right:30rpx;
+  align-items: center;
 }
 .folder-module .left{
   width:90%;
@@ -87,4 +96,7 @@
   font-weight: bold;
   padding-top: 80rpx;
   font-size:35rpx;
+}
+.share-data-list{
+  height:calc(100vh - 376rpx);
 }

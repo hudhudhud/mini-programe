@@ -1,36 +1,53 @@
-<!--index.wxml-->
-<view class="error-info" wx:if='{{errorInfo}}'>
-{{errorInfo}}
-</view>
-<mp-loading type="circle" wx:elif="{{loading}}"></mp-loading>
-<view class="container" wx:else>
-  <search-input>
-    <view class="folder-module my-file">
-      <text class="title">个人</text>
-      <view class="folder-line">
-        <view class="left" bindtap="goDetail">
-          <i class="fa fa-folder" aria-hidden="true"></i> 
-          <text class="folder-name">{{myfileName}}</text>
+
+<view class="container">
+  <view class="error-info" wx:if='{{errorInfo}}'>
+  {{errorInfo}}
+  </view>
+  <mp-loading type="circle" wx:elif="{{loading}}"></mp-loading>
+  <view class="container" wx:else>
+
+    <search-input>
+      <view class="folder-module my-file">
+        <text class="title">个人</text>
+        <view class="folder-line">
+          <view class="left" bindtap="goDetail">
+            <i class="fa fa-folder" aria-hidden="true"></i> 
+            <text class="folder-name">{{myfileName}}</text>
+          </view>
         </view>
       </view>
-    </view>
-    <view class="folder-module share-file">
-      <text class="title">共享</text>
-      <view wx:for='{{shareFileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail"> 
-        <view class="left">
-          <i class="fa fa-folder" aria-hidden="true"></i>
-          <text class="folder-name">{{item.name}}</text>
+      <view class="folder-module share-file">
+        <view  class="folder-line add-space-line">
+          <text class="left">共享</text>
+          <view class="right" bindtap="goAddFloder">
+            <view class="add-folder-btn"><i class="fa fa-plus" aria-hidden="true"></i></view>
+            <text class="add-txt">创建空间</text>
+          </view>
         </view>
-        <view catchtap="goInfo" class="info-btn right" data-item="{{item}}">
-           <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
-        </view>
+        <scroll-view  
+        class='share-data-list'
+          scroll-y 
+          refresher-enabled="{{true}}" 
+          refresher-threshold='{{100}}'
+          refresher-triggered="{{refresherTriggered}}"
+          bindrefresherrefresh='onRefresh' 
+          scroll-with-animation
+          bindscrolltolower='loadMore' >
+          <view wx:for='{{shareFileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail"> 
+            <view class="left">
+              <i class="fa fa-folder" aria-hidden="true"></i>
+              <text class="folder-name">{{item.name}}</text>
+            </view>
+            <view catchtap="goInfo" class="info-btn right" data-item="{{item}}">
+              <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
+            </view>
+          </view>
+          <!-- 内容高度不够时，撑起触发下拉刷新内容 -->
+          <view style="width:2rpx;height:2rpx;bottom:-2rpx;position:absolute;" />
+          <mp-loading type="circle" wx:if="{{loadingMore}}"></mp-loading>
+          <view wx:if='{{hasNoMore}}' class="has-no-more">没有更多数据了..</view>
+        </scroll-view>
       </view>
-      <view  class="folder-line">
-        <view class="left" bindtap="goAddFloder">
-          <view class="add-folder-btn"><i class="fa fa-plus" aria-hidden="true"></i></view>
-          <text class="folder-name">创建空间</text>
-        </view>
-      </view>
-    </view>
-  </search-input>
+    </search-input>
+  </view>
 </view>

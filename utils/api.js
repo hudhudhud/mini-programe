@@ -22,3 +22,5 @@ export const FOLDER_MEMBERUPDATE = baseUrl +'/outside/microdisk/folder/member/up
 export const FOLDER_RENAME = baseUrl +'/outside/microdisk/folder/update'//文件夹重命名
 export const FOLDER_DETAIL = baseUrl +'/outside/microdisk/folder/detail'//查询文件夹详情
 export const SPACE_EXIT = baseUrl +'/outside/microdisk/folder/member/exit'//退出空间
+export const SCREEN_LOG = baseUrl +'/outside/microdisk/screen/log'//截屏日志
+export const FILE_UPLOAD = baseUrl +'/outside/microdisk/file/upload'//文件上传

@@ -1,4 +1,6 @@
 {
+  "enablePullDownRefresh":false,
+  "onReachBottomDistance":50,
   "usingComponents": {
     "search-input":"../../components/search-input",
     "action-sheet":"../../components/action-sheet/index",

@@ -1,28 +1,36 @@
+import {SCREEN_LOG} from '../../utils/api'
+import * as request from '../../utils/request'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    // color: 'rgba(0,0,0,0.03)',
     color: 'rgba(0,0,0,0.5)',
     rows: [],
     cols: [],
-    watermarkstr:''
+    watermarkstr:'',
+    id:'',
+    fileName:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-   this.watermark()
-    // console.log(333333,options.fileId)
+  //  this.watermark()
+    if(options.name){
+      wx.setNavigationBarTitle({
+        title:options.name
+      })
+    }
+
+    //'用户截屏'
     wx.onUserCaptureScreen(function (res) {
-        wx.showToast({
-          title: '用户截屏了...',
-          icon: 'none',
-          duration: 4000
-        })
+      request.post(SCREEN_LOG,{
+        fileId:options.id,
+        fileName:options.name
+      })
     })
   },
  

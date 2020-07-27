@@ -84,7 +84,11 @@ export const uploadFile = async function(url, filePath,fileKey, formData={},opti
       url: url, 
       filePath: filePath,
       name: fileKey,//文件对应的 key，开发者在服务端可以通过这个 key 获取文件的二进制内容
-      formData: formData, //其他字段
+      formData: {
+        uid,
+        userName:userInfo.name,
+        ...formData,
+      }, //其他字段
       success (res){
         if(res.statusCode!=200){
           wx.showToast({
@@ -154,7 +158,7 @@ export const  login = async function(){
   });
 };
 
-export const  getSessionKey = async function(code='WNSVWY5lQt7ExeuTXGFoZ_mYUqt75QiSCf7vSqcOgNQ'){
+export const  getSessionKey = async function(code){
   //发起网络请求
   let {token} = await getToken()
   return new Promise((resolve,reject)=>{
@@ -179,13 +183,16 @@ export const  getSessionKey = async function(code='WNSVWY5lQt7ExeuTXGFoZ_mYUqt75
         }
         if(res.data.errcode==0){
           let data = res.data.data
-          let uidEnc = encryption.encriUser(data.userid)
+          // dnYPCnkuF3NmJZYljA7oYxNQBFjEq9x/Im3hupSkkZw=
+          // vX2kHNcjQpzXWWnkE9UoqrdKZe2iq40QTA9KFlTLthc=  hys3032
+          let uid = 'c00157' //data.userid
+          let uidEnc = encryption.encriUser(uid)
           wx.setStorageSync('uidEnc', uidEnc)
           wx.setStorageSync('sessionKey', data.session_key)
           try{
-            let userInfo = await getUserInfo(token,data.userid)
+            let userInfo = await getUserInfo(token,uid)
             wx.setStorageSync('userInfo', {
-              uid:data.userid,
+              uid:uid,
               name:userInfo.username,
               avatar:userInfo.avatar,
               mobile:userInfo.mobile,

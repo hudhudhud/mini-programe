@@ -22,3 +22,8 @@ page{
 .gray{
   color:#BABABA;
 }
+.has-no-more{
+  text-align: center;
+  line-height: 2;
+  font-size:28rpx;
+}

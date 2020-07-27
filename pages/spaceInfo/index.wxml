@@ -19,13 +19,13 @@
       <view class="users">
         <view class="user" wx:for="{{permissionsList}}" wx:key="index" wx:if='{{index<6}}'>
             <view class="user-img" wx:if='{{item.accessType===0}}'>
-              <image src='{{item.avatar}}' wx:if='{{item.avatar}}'></image>
+              <image src='{{item.imgUrl}}' wx:if='{{item.imgUrl}}'></image>
               <i class="fa fa-user" aria-hidden="true" wx:else></i> 
             </view>
             <view class="user-img" wx:else>
               <i class="fa fa-folder" aria-hidden="true"></i>
             </view>
-            <text class="name">{{item.name}}</text>
+            <text class="name">{{item.accessorName?item.accessorName:item.bizId}}</text>
         </view>
         <view class="more" wx:if='{{permissionsList.length>6}}'>
             <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>

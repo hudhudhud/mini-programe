@@ -1,6 +1,5 @@
 <view class="container">
-  <mp-loading type="circle" wx:if="{{loading}}"></mp-loading>
-  <search-input sort-visible="{{true}}" parentId='{{parentFolderId}}' searchBarVisible='{{fileList.length>0}}' wx:else>
+  <search-input sort-visible="{{true}}" parentId='{{parentFolderId}}' searchBarVisible='{{fileList.length>0}}' bind:sortData='sortData'>
     <view class="top-bar {{fileList.length>0?'contain-search':''}}"> 
       <scroll-view class="paths" scroll-x scroll-into-view='{{"pathname"+(pathList.length-1)}}' scroll-with-animation="true">
         <view class="path-item" bindtap='goIndexPage' wx:if='{{!pageFrom}}'>网盘</view>
@@ -17,23 +16,24 @@
         <i class="fa fa-plus" aria-hidden="true"></i>
       </view>
     </view>
-    <view class="folder-module share-file" wx:if='{{fileList.length>0}}'>
-      <!-- <text class="title">文件</text> -->
-      <!-- <view wx:for='{{fileList}}' class="folder-line" wx:key='index' data-item="{{item}}" bindtap="goDetail">
-        <view class="left" wx:if='{{item.type=="folder"}}'>
-          <i class="fa fa-folder" aria-hidden="true"></i>
-          <text class="folder-name" >{{item.name}}</text>
-        </view>
-        <view class="left" wx:else>
-          <i class="fa fa-file-text-o" aria-hidden="true"></i>
-          <text class="folder-name" >{{item.name+'.'+item.ext}}</text>
-        </view>
-        <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}">
-           <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
-        </view>
-      </view> -->
-      <file-list dataList="{{fileList}}" bind:goDetail="goDetail" bind:reSetList="reSetList"></file-list>
+    <view wx:if="{{loading}}" style='margin-top:80rpx'>
+      <mp-loading type="circle" ></mp-loading>
     </view>
+    <scroll-view  class="data-list" wx:elif='{{fileList.length>0}}'
+      scroll-y 
+      bindscrolltolower='loadMore' 
+      scroll-with-animation
+      refresher-enabled='{{true}}'
+      bindrefresherrefresh='onRefresh' 
+      refresher-triggered="{{refresherTriggered}}" 
+      refresher-threshold='{{100}}'
+      >
+      <file-list dataList="{{fileList}}" bind:goDetail="goDetail" bind:reSetList="reSetList"></file-list>
+       <!-- 内容高度不够时，撑起触发下拉刷新内容 -->
+      <view style="width:2rpx;height:2rpx;bottom:-2rpx;position:absolute;" />
+      <mp-loading type="circle" wx:if="{{loadingMore}}"></mp-loading>
+      <view wx:if='{{hasNoMore}}' class="has-no-more">没有更多数据了..</view>
+    </scroll-view>
     <view wx:else class="empty-folder">
       <i class="fa fa-folder-open-o" aria-hidden="true"></i>
       <text>此文件夹为空</text>
@@ -58,9 +58,12 @@
   <mymodal 
 showStatus='{{showModal}}'
 confirmText='确定' 
+submiting='{{submiting}}'
 bind:complete="modalComplete" 
 title='{{modalTitle}}' >
 <text class="modal-tip">{{modalTip}}</text>
-<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}" value="{{modalInputTxt}}" bindinput='bindinputModal' maxlength='500' cursor-spacing="60" class="modal-file-folder-input"></input>
+<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}" value="{{modalInputTxt}}" bindinput='bindinputModal' maxlength='50' cursor-spacing="60" class="modal-file-folder-input"></input>
 </mymodal>
 </view>
+
+<!-- <canvas id="compress" class="compress-canvas" type="2d" style="width:{{cWidth}}px; height:{{cHeight}}px"></canvas> -->

@@ -2,7 +2,7 @@
 <view class="container">
   <view class="module">
       <text class="title">空间名称</text>
-      <input class="input"  placeholder="请输入空间名称" focus="true" value="{{inputName}}" bindinput="bindKeyInput"/>
+      <input class="input"  placeholder="请输入空间名称" focus="true" value="{{inputName}}" bindinput="bindKeyInput" maxlength='50'/>
   </view>
   <view class="module">
     <text class="title">成员及权限</text>
