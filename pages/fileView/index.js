@@ -18,11 +18,19 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // /pages/fileView/index?id=123&name=123&share=1 
+    //隐藏当前页面的转发按钮
+    wx.hideShareMenu({
+      menus: ['shareAppMessage', 'shareTimeline']
+    })
   //  this.watermark()
     if(options.name){
       wx.setNavigationBarTitle({
-        title:options.name
+        title:decodeURI(options.name)
       })
+    }
+    if(options.share){
+      //从推送里进，刷权限接口
     }
 
     //'用户截屏'

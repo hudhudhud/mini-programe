@@ -19,8 +19,8 @@ App({
     this.checkVersion()
 
     // 正式登录
-    // wx.clearStorageSync()
-    // this.loginFunc()
+    wx.clearStorageSync()
+    this.loginFunc()
 
     //本地测试
     // wx.qy.login({
@@ -31,7 +31,7 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // getSessionKey('trT-gUUL-mxyG7YwDr7Epq2R5suK375ZV3RkxCNQyGw').then(res=>{
+    // getSessionKey('YGklZPA9y8ymJNLzZ6z75KzD7U8ZOT14w7R9yPR0h14').then(res=>{
     //   if (this.userInfoReadyCallback) {
     //     this.userInfoReadyCallback()
     //   }
@@ -120,6 +120,54 @@ App({
         icon:'none',
         duration:4000
       })
+    })
+  },
+  selectEnterpriseContact(callback,options){
+    let self = this
+    wx.qy.checkSession({
+      success: (res) => {
+        console.log('checkSession',res)
+        self.selectUser(callback,options)
+      },
+      fail(){
+        login().then(res=>{
+          self.selectUser(callback,options)
+        })
+        .catch(e=>{
+          wx.showToast({
+            title: '登录失败！错误信息（'+e.msg+')',
+          })
+        })
+      }
+    })
+  },
+  selectUser(callback,options){
+    let initOptions = {
+      fromDepartmentId: 0,// 必填，-1表示打开的通讯录从自己所在部门开始展示, 0表示从最上层开始
+      mode: "multi",// 必填，选择模式，single表示单选，multi表示多选
+      type: ["user","department"],// 必填，选择限制类型，指定department、user中的一个或者多个
+      selectedDepartmentIds: [],// 非必填，已选部门ID列表。用于多次选人时可重入
+      selectedUserIds: [],// 非必填，已选用户ID列表。用于多次选人时可重入
+    }
+    if(options){
+      Object.assign(initOptions,options)
+    }
+    wx.qy.selectEnterpriseContact({
+      ...initOptions,
+      success: function(res) {
+        console.log('selectEnterpriseContact...',res)
+        var selectedUserList = res.result.userList; // 已选的成员列表
+        var selectedDepartmentList = res.result.departmentList;// 已选的部门列表
+        callback(selectedUserList,selectedDepartmentList)
+      },
+      fail(e){
+        if(e.errMsg!="qy.selectEnterpriseContact:fail cancel")
+          wx.showToast({
+            title: e.errMsg,
+            icon:'none',
+            duration:4000,
+          })
+        }
     })
   },
   globalData: {

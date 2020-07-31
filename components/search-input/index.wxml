@@ -1,5 +1,6 @@
 <!--index.wxml-->
 <view class="search-input-component {{searchBarVisible?'hasSearchBar':''}}">
+  <!-- 搜索栏 -->
   <view class="search {{sortVisible?'sort':''}}" wx:if='{{searchBarVisible}}'>
     <view class="search-bar" wx:if='{{!searchStatus}}' >
       <view class="just-show" bindtap="goSearch">
@@ -15,25 +16,29 @@
       <view class='cancel-btn' bindtap="cancelSearch"> 取消 </view>
     </view>
   </view>
-  <view wx:if="{{!searchStatus|| (searchStatus&&!searchStr)}}" scroll-y>
-    <slot />
-  </view>
-
+  <!-- 默认列表区 自定义 搜索后，该滚动区滚动失效！！，暂时去掉-->
+  <!-- <view  hidden="{{searchStatus&&searchStr}}"> -->
+  <!-- wx:if="{{!searchStatus|| (searchStatus&&!searchStr)}}" -->
+    <!-- <slot /> -->
+  <!-- </view> -->
+  <!-- 搜索结果区 统一-->
   <view class="pop-fix" wx:if='{{searchStatus&&!searchStr}}'></view>
   <scroll-view class="search-res" wx:if="{{searchStatus&&searchStr}}" scroll-y bindscrolltolower='loadMore' scroll-with-animation>
     <mp-loading type="circle" wx:if="{{loading}}"></mp-loading>
-    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail" wx:elif="{{searchResList.length>0}}" isShare='{{!parentFolderId}}'></file-list>
+    <file-list dataList="{{searchResList}}" bind:goDetail="goDetail" wx:elif="{{searchResList.length>0}}" isShare='{{parentType==1}}'></file-list>
     <view wx:else class="no-data">
         <i class="fa fa-search" aria-hidden="true"></i>
         <text>无搜索结果</text>
     </view>
     <mp-loading type="circle" wx:if="{{loadingMore}}"></mp-loading>
-    <view wx:if='{{hasNoMore}}' class="has-no-more">没有更多数据了..</view>
+    <view wx:elif='{{hasNoMore&&searchResList.length&&pageNo>1}}' class="has-no-more">没有更多数据了..</view>
   </scroll-view>
 </view>
 <action-sheet actionShow="{{sortActionSheetVisible}}"> 
-   <view wx:for='{{sortActions}}' wx:key="index" class="sort-item {{currentSortIndex==index?'active':''}}" bindtap="sortActionTap" data-item="{{item}}" data-index="{{index}}">
-    <view>{{(item.sort=="+"?"↑ ":(item.sort=="-"?"↓ ":""))+'按'+item.name+(item.sort=="+"?'升':'降')+'序'}}</view>
+   <view class="active-title">排序方式</view>
+   <view wx:for='{{sortActions}}' wx:key="index" class="active-item {{currentSortIndex==index?'active':''}}" bindtap="sortActionTap" data-item="{{item}}" data-index="{{index}}">
+      <view>{{(item.sort=="+"?"↑ ":(item.sort=="-"?"↓ ":""))+'按'+item.name+(item.sort=="+"?'升':'降')+'序'}}</view>
+      <i class="fa fa-check" aria-hidden="true" wx:if='{{currentSortIndex==index}}'></i>
    </view>
 </action-sheet>
 

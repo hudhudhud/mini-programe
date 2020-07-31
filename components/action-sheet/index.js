@@ -6,6 +6,9 @@ var animation = wx.createAnimation({
 })
 
 Component({
+  // options: {
+  //   styleIsolation: 'apply-shared'
+  // },
   /**
    * 组件的属性列表
    */
@@ -22,7 +25,8 @@ Component({
           this.setData({
             actionVisible: true,
             mask: '',
-            animation: 'showAction'
+            animation: 'showAction',
+            actionShow:true
           })
         } else {
           this.setData({
@@ -31,7 +35,8 @@ Component({
           })
           setTimeout(()=>{
             this.setData({
-              actionVisible: false
+              actionVisible: false,//用来解决直接设置Prop（actionShow），取消动画会失效问题
+              actionShow:false
             })
           }, 510)
         }
@@ -56,7 +61,7 @@ Component({
     mask: '',
     animation: 'showAction',
     timerId:'',
-    actionVisible:false,
+    actionVisible:false,//用来解决直接设置Prop（actionShow），取消动画会失效问题
   },
 
   /**
@@ -73,12 +78,21 @@ Component({
       })
       setTimeout(function () {
         that.setData({
-          actionVisible: false
+          actionVisible: false,
+          actionShow:false
         })
       }, 510)
       var myEventDetail = {}
       var myEventOption = {}
       this.triggerEvent('actionHide', myEventDetail, myEventOption)
+    },
+    // 防抖
+    debounce(fn, wait) {    
+      let self=this 
+      return (function() {        
+        if(self.data.timerId !== null) clearTimeout(self.data.timerId);   
+        self.setData({'timerId':setTimeout(fn, wait)})   
+      })()
     },
   }
 })

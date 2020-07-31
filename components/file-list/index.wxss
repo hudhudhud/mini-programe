@@ -87,8 +87,9 @@
   box-sizing: border-box;
 }
 .modal-tip{
-  line-height:3;
-  font-size:30rpx
+  line-height:2;
+  font-size:30rpx;
+  margin-bottom:15rpx;
 }
 .operation-btns{
   display:flex;
@@ -167,4 +168,28 @@
 }
 .fa-picture-o{
   color:#FBC545
+}
+
+.input-content{
+  width:100%;
+  height:80rpx;
+  border:1px solid #E6E6E6;
+  display: flex;
+  align-items: center;
+  background-color:#fff;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.input-content input{
+  padding:0 10rpx;
+  width:92%;
+  height:100%;
+  border:none;
+  box-sizing: border-box;
+}
+.input-content .fa.fa-times-circle-o{
+  width:8%;
+  color:#CECECE;
+  text-align: center;
 }

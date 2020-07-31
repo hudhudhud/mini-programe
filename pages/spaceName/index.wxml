@@ -1,10 +1,15 @@
 <!--pages/spaceName/index.wxml-->
 <view class="container">
-  <view class="input-content">
-    <input placeholder="请输入空间名称" focus="true" value="{{inputName}}"  bindinput="bindKeyInput" maxlength='50'/>
-    <i class="fa fa-times-circle-o" aria-hidden="true" bindtap='clearInput' wx:if='{{inputName}}'></i>
-  </view>
-  <button class="confirm-btn" bindtap="confirmTap"  loading="{{submiting}}" disabled="{{!inputName}}" style='width:100%'>
-      <text>确定</text>
-  </button>
+  <block  wx:if='{{userIsAdmin}}'>
+    <view class="input-content">
+      <input placeholder="请输入空间名称" focus="true" value="{{inputName}}"  bindinput="bindKeyInput" maxlength='15'/>
+      <i class="fa fa-times-circle-o" aria-hidden="true" bindtap='clearInput' wx:if='{{inputName}}'></i>
+    </view>
+    <button class="confirm-btn" bindtap="confirmTap"  loading="{{submiting}}" disabled="{{!inputName}}" style='width:100%'>
+        <text>确定</text>
+    </button>
+  </block>
+  <block wx:else>
+    <text class="input-content show-txt">{{inputName}}</text>
+  </block>
 </view>

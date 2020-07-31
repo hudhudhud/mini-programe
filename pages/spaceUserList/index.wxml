@@ -23,6 +23,7 @@
             <i class="fa fa-folder" aria-hidden="true"></i>
           </view>
           <text class="name">{{item.accessorName?item.accessorName:item.bizId}}</text>
+          <text wx:if="{{item.isSuper}}" class="name-tip">(超管)</text>
       </view>
       <!-- 管理员可以修改别人权限 -->
       <view class="right operate" bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}" wx:if='{{userIsAdmin}}'>
@@ -43,7 +44,7 @@
    data-item="{{item}}" data-index="{{index}}" style='{{item.key==-1?"color:red":""}}'>
     <view>
       <text class="name">{{item.name}}</text>
-      <text wx:if='{{item.tip}}' class="tip"> ▪ {{item.tip}}</text>
+      <text wx:if='{{item.tip}}' class="tip"> . {{item.tip}}</text>
     </view>
     <!-- 管理员选中 -->
     <i class="fa fa-check" aria-hidden="true" wx:if='{{currentActionItem.isAdmin && item.key===8}}'></i>

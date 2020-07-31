@@ -19,7 +19,7 @@ Page({
     operateType:'', //add,edit 用来区分是新增人员的设置权限，还是修改人员时设置权限
     actionSheetVisible:false,
     currentActionItem:{},
-    actionItems:[]
+    actionItems:[],
   },
   /**
    * 生命周期函数--监听页面加载
@@ -43,8 +43,18 @@ Page({
     else{
       this.setData({userIsAdmin:false})
     }
+    //超级管理员只能设置管理员和可编辑
+    let appAdmin =  wx.getStorageSync('appAdmin')
+    if(appAdmin){
+      let permissionsList = this.data.permissionsList
+      permissionsList.forEach(it=>{
+        if(it.bizId.toLocaleLowerCase()==appAdmin.toLocaleLowerCase()){
+          it.isSuper= true
+        }
+      })
+      this.setData({permissionsList})
+    }
   },
-
   setOperateRole(event){
     this.currentActionIndex = event.currentTarget.dataset.index
     let currentActionItem = event.currentTarget.dataset.item
@@ -62,7 +72,16 @@ Page({
         {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'}
       ]
     }
+    //超级管理员只能设置管理员和可编辑
+    if(currentActionItem.isSuper){
+      actionItems=[
+        {key:8,name:'管理员',tip:'可管理空间及成员权限'},
+        {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'}
+      ]
+    }
+    // this.debounce(()=>{
     this.setData({actionSheetVisible:true,currentActionItem,actionItems})
+    // },200)
     return
     let index = event.currentTarget.dataset.index
     let self = this
@@ -246,8 +265,15 @@ Page({
     }
     
   },
-  
 
+  // 防抖
+  debounce(fn, wait) {    
+    let self=this 
+    return (function() {        
+      if(self.timerId !== null) clearTimeout(self.timerId);   
+      self.timerId=setTimeout(fn, wait)
+    })()
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

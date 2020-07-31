@@ -1,7 +1,7 @@
 
 .wx-modal_mask{
   width: 100%;  
-  height: 100%;  
+  height: 100%; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,14 +24,15 @@
 .wx-modal_dialog .wx-modal_title{
   color: #000;
   font-size: 36rpx;
-  padding-top: 20rpx;
+  padding-top: 10rpx;
+  /* padding-bottom: 10rpx; */
   text-align: center;
 }
 .wx-modal_dialog .wx-modal_content{
   font-size: 15px;
   text-align: center;
   padding: 35rpx 58rpx;
-  padding-top:10rpx;
+  padding-top:8rpx;
   border-bottom: 1rpx solid #D2D3D5;
 }
 .wx-modal_dialog .wx-modal_prompt{

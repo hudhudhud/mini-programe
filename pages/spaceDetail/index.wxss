@@ -106,8 +106,9 @@
   box-sizing: border-box;
 }
 .modal-tip{
-  line-height:3;
-  font-size:30rpx
+  line-height:2;
+  font-size:30rpx;
+  padding-bottom:20rpx;
 }
 
 .fa-picture-o{
@@ -135,4 +136,8 @@
   position:absolute; 
   /* left:-1000px;
   top:-1000px; */
+}
+
+.input-content{
+  height:80rpx;
 }

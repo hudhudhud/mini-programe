@@ -1,6 +1,7 @@
 import * as request from '../../utils/request.js';
 import regeneratorRuntime from '../../runtime.js'
-import {FOLDER_RENAME,FOLDER_DEL} from '../../utils/api'
+import {FOLDER_RENAME,FOLDER_DEL,FILE_DEL,FILE_SHARE} from '../../utils/api'
+const app = getApp()
 Component({
   properties: {
     dataList: {
@@ -36,7 +37,6 @@ Component({
     currentItem:null,
     autoFocus:false,
     modalTip:'',
-    timerId:'',
     slideButtons: [{
       type: 'warn',
       text: '删除',
@@ -46,6 +46,7 @@ Component({
     currentSliderId:'',
     checkStatus:false,
     submiting:false,
+    nameMaxLength:15,
   },
   methods: {
     setFileGroupList(newVal){
@@ -95,20 +96,33 @@ Component({
         })
       },200)
     },
+    //显示重命名弹框
     showRenameModal(){
+      let isFolder = this.data.currentItem.type=="folder"
       this.setData({
         modalInputTxt:this.data.currentItem.subName,
         currentAction:'rename',
         modalTitle:'重命名',
-        madalPlaceholder:this.data.currentItem.type=="folder"?'文件夹名':'文件名',
-        modalTip:this.data.currentItem.type=="folder"?'请输入文件夹名':'请输入文件名',
+        madalPlaceholder:isFolder?'文件夹名':'文件名',
+        modalTip:isFolder?'请输入文件夹名':'请输入文件名',
         showModal:true,
         autoFocus:true,
+        nameMaxLength:isFolder?15:50
       })
     },
+    //文件名输入正则控制
     bindinputModal(e){
-      this.setData({modalInputTxt:e.detail.value})
+      let val = e.detail.value
+      let reg = /[\/\\:*?"<>|]+/gim
+      if(reg.test(val)){
+        val=val.replace(reg,'')
+      }
+      this.setData({modalInputTxt:val})
     },
+    clearInput(){
+      this.setData({modalInputTxt:''})
+    },
+    //重命名确认
     async modalComplete(e){
       if(!this.data.modalInputTxt.trim())return
       if(this.data.submiting)return
@@ -119,29 +133,28 @@ Component({
       catch(e){
         return
       }
-      this.setData({submiting:true})
-      console.log('modal sure...',this.data.modalInputTxt,e)
       let list = this.data.fileList
       if(this.data.currentAction=='rename'){
         let item = list.find(it=>it.id==this.data.currentItem.id)
         let oldName = item.name
-        item.name=this.data.modalInputTxt
-        request.post(FOLDER_RENAME,{
-          fileSid:this.data.currentItem.id,
-          name:oldName,
-          newName:item.name+(item.ext?'.'+item.ext:'')
-        })
-        .then(res=>{
-          if(res.errcode==0){
-            this.setData({fileList:list})
-             // this.setFileGroupList(this.data.fileList)
-          }
-        })
-        .finally(()=>{
+        item.subName= this.data.modalInputTxt
+        item.name= item.subName+(item.ext?'.'+item.ext:'')
+        try{
+          this.setData({submiting:true})
+          await request.post(FOLDER_RENAME,{
+            fileSid:this.data.currentItem.id,
+            name:oldName,
+            newName:item.name
+          })
+          this.setData({fileList:list,showModal:false})
+          this.triggerEvent('reSetList',{list})
+        }
+        finally{
           this.setData({submiting:false})
-        })
+        }
       }
     },
+    //显示删除确认弹框
     showDelToast(e){
       let self = this
       let currentItem = self.data.currentItem
@@ -154,10 +167,26 @@ Component({
         async success(res){
           if (res.confirm) {
             console.log('用户点击确定')
-            let res = await request.post(FOLDER_DEL,{
-              fileSid:currentItem.id,
-              name:currentItem.name,
-            })
+            let res;
+            if(currentItem.type=="folder"){
+              wx.showToast({
+                title: '该功能待开发..',
+                icon:'none',
+                duration:4000
+              })
+              return
+              res = await request.post(FOLDER_DEL,{
+                fileSid:currentItem.id,
+                name:currentItem.name,
+                space:0,
+              })
+            }
+            else {
+              res = await request.post(FILE_DEL,{
+                fileSid:currentItem.id,
+                name:currentItem.name,
+              })
+            }
             if(res.errcode==0){
               let list = self.data.fileList
               let item = list.find(it=>it.id==currentItem.id)
@@ -172,28 +201,7 @@ Component({
         complete(){}
       })
     },
-    // 防抖
-    debounce(fn, wait) {    
-      let self=this 
-      return (function() {        
-        if(self.data.timerId !== null) clearTimeout(self.data.timerId);   
-        self.setData({'timerId':setTimeout(fn, wait)})   
-      })()
-    },
-      /**
-     * 用户点击右上角分享或button 分享
-      */
-    // from	String	转发事件来源。
-    // target	Object	如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined	1.2.4
-    // webViewUrl	String	页面中包含web-view组件时，返回当前web-view的url
-    onShareAppMessage: function (e) {
-      if(e.from=='button'){
-        return {
-          title: this.data.currentItem.name,
-          path: `/pages/spaceDetail/index?id=${this.data.currentItem.id}&name=${this.data.currentItem.name}`
-        }
-      }
-    }, 
+    //左移删除
     slideBindshow(e){
       this.setData({currentSliderId:e.currentTarget.dataset.item.id})
     },
@@ -207,20 +215,7 @@ Component({
         this.showDelToast()
       }
     },
-    //选中
-    chooseMutiple(e){
-      this.setData({checkStatus:true})
-    },
-    checkBindTap(item){
-      let list = this.data.fileList
-      let currentItem = list.find(it=>it.id==item.id)
-      currentItem.checked=currentItem.checked==undefined?true:!currentItem.checked
-      this.setData({fileList:list})
-      //this.setFileGroupList(this.data.fileList)
-    },
-    cancelCheckStatus(e){
-      this.setData({checkStatus:false})
-    },
+    //批量删除
     batchDel(){
       let list = this.data.fileList
       let delList = list.filter(it=>it.checked)
@@ -259,6 +254,72 @@ Component({
         complete(){
         }
       })
-    }
+    },
+    //选中
+    chooseMutiple(e){
+      this.setData({checkStatus:true})
+    },
+    checkBindTap(item){
+      let list = this.data.fileList
+      let currentItem = list.find(it=>it.id==item.id)
+      currentItem.checked=currentItem.checked==undefined?true:!currentItem.checked
+      this.setData({fileList:list})
+      //this.setFileGroupList(this.data.fileList)
+    },
+    cancelCheckStatus(e){
+      this.setData({checkStatus:false})
+    },
+    //分享
+    shareFile(){
+      app.selectEnterpriseContact((userList,deptList)=>{
+        console.log('shareFile...',userList,deptList)
+        let list = []
+        if(userList.length){
+          userList.forEach(it=>{
+            list.push({bizId:it.id,accessType:0})
+          })
+        }
+        if(deptList.length){
+          deptList.forEach(it=>{
+            list.push({bizId:it.id,accessType:1})
+          })
+        }
+        wx.showToast({
+          title: '该功能待开发..',
+          icon:'none',
+          duration:4000
+        })
+        return 
+        if(list.length){
+          request.post(FILE_SHARE,{
+            fileSid:this.data.currentItem.fileSid,
+            name:this.data.currentItem.name,
+            user:list
+          })
+        }
+      })
+    },
+     /**
+     * 用户点击右上角分享或button 分享
+      */
+    // from	String	转发事件来源。
+    // target	Object	如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined	1.2.4
+    // webViewUrl	String	页面中包含web-view组件时，返回当前web-view的url
+    onShareAppMessage: function (e) {
+      // if(e.from=='button'){
+      //   return {
+      //     title: this.data.currentItem.name,
+      //     path: `/pages/spaceDetail/index?id=${this.data.currentItem.id}&name=${this.data.currentItem.name}`
+      //   }
+      // }
+    }, 
+    // 防抖
+    debounce(fn, wait) {    
+      let self=this 
+      return (function() {        
+        if(self.timerId !== null) clearTimeout(self.timerId);   
+        self.timerId=setTimeout(fn, wait)  
+      })()
+    },
   }
 })

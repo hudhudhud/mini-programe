@@ -36,13 +36,14 @@
       </view>
     </view>
   </view>
-  <view class="module flex-line">
+  <!-- <view class="module flex-line">
    <text>设为快速访问</text><switch checked="{{switch1Checked}}" bindchange="switch1Change"/>
-  </view> 
+  </view>  -->
   <button wx:if='{{permissionsList.length>1}}' class="module exit-btn" bindtap="exitSpace" loading="{{submiting_exit}}"  style='width:100%'>
    <text style='{{userIsAdmin?"":"color:#E85966"}}'>退出空间</text>
   </button>
-  <button class="module del-btn" bindtap="showDelActionSheet" wx-if='{{userIsAdmin}}' loading="{{submiting_del}}"  style='width:100%'>
+  <!-- 管理员或超管可以删除空间 -->
+  <button class="module del-btn" bindtap="showDelActionSheet" wx-if='{{userIsAdmin||userIsAppAdmin}}' loading="{{submiting_del}}"  style='width:100%'>
    <text>解散空间</text>
   </button>
   <action-sheet actionShow="{{actionSheetVisible}}"> 

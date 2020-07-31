@@ -4,27 +4,7 @@
   background-color:#F2F2F2;
   padding-top:20rpx;
 }
-.input-content{
-  width:100%;
-  height:100rpx;
-  border:1px solid #E6E6E6;
-  display: flex;
-  align-items: center;
-  background-color:#fff;
-  font-size: 30rpx;
-}
-input{
-  padding:0 10rpx;
-  width:92%;
-  height:100%;
-  border:none;
-  box-sizing: border-box;
-}
-.fa.fa-times-circle-o{
-  width:8%;
-  color:#CECECE;
-  text-align: center;
-}
+
 .confirm-btn{
   position:fixed;
   width:100%;
@@ -35,4 +15,7 @@ input{
   bottom:0;
   font-size:40rpx;
   border-radius: 0;
+}
+.show-txt{
+  word-break: break-all;
 }

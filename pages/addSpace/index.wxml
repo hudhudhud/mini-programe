@@ -2,7 +2,10 @@
 <view class="container">
   <view class="module">
       <text class="title">空间名称</text>
-      <input class="input"  placeholder="请输入空间名称" focus="true" value="{{inputName}}" bindinput="bindKeyInput" maxlength='50'/>
+      <view class="input-content">
+        <input class="input"  placeholder="请输入空间名称" focus="true" value="{{inputName}}" bindinput="bindKeyInput" maxlength='15'/>
+        <i class="fa fa-times-circle-o" aria-hidden="true" bindtap='clearInput' wx:if='{{inputName}}'></i>
+      </view>
   </view>
   <view class="module">
     <text class="title">成员及权限</text>
@@ -54,7 +57,7 @@
    data-item="{{item}}" data-index="{{index}}" style='{{item.key==-1?"color:red":""}}'>
     <view>
       <text class="name">{{item.name}}</text>
-      <text wx:if='{{item.tip}}' class="tip"> ▪ {{item.tip}}</text>
+      <text wx:if='{{item.tip}}' class="tip"> . {{item.tip}}</text>
     </view>
     <i class="fa fa-check" aria-hidden="true" wx:if='{{currentActionItem.permissionType==item.key}}'></i>
    </view>

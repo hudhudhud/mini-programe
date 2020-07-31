@@ -185,7 +185,7 @@ export const  getSessionKey = async function(code){
           let data = res.data.data
           // dnYPCnkuF3NmJZYljA7oYxNQBFjEq9x/Im3hupSkkZw=
           // vX2kHNcjQpzXWWnkE9UoqrdKZe2iq40QTA9KFlTLthc=  hys3032
-          let uid = 'f04176'// 'c00157' //data.userid
+          let uid = data.userid //'q11385' // 'f04176'// 'c00157' //data.userid
           let uidEnc = encryption.encriUser(uid)
           wx.setStorageSync('uidEnc', uidEnc)
           wx.setStorageSync('sessionKey', data.session_key)

@@ -1,12 +1,29 @@
 <view class="file-list {{checkStatus?'containCheck':''}}">
-<block wx:if='{{!isShareFolder}}'>
+<!-- 非首页 搜索 -->
+<block>
+<!-- <block wx:if='{{!isShareFolder}}'> -->
   <!-- <view wx:for='{{fileGroupList}}' wx:key='index' wx:for-item="filegroup"> -->
     <!-- <text class="folder-module-title">{{filegroup.title}}</text> -->
     <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
       <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
-      bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{!item.isWrite}}">
-        <view class="folder-line" >
+      bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{!item.isWrite||item.space==1}}">
+       <!-- 共享文件夹 -->
+        <view class="folder-line" wx:if="{{item.space==1}}">
+          <view class="left">
+            <view class="content">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+                <text class="folder-name" >{{item.name}}</text>
+            </view>
+          </view>
+          <view catchtap="goSpaceInfo" class="info-btn right" data-item="{{item}}">
+              <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
+          </view>
+        </view>
+        <!-- 非共享文件夹 -->
+        <view class="folder-line" wx:else>
+            <!-- 文件夹类型 -->
             <view class="left" wx:if='{{item.type=="folder"}}'>
+             <!-- 选中区 状态 开启-->
               <view class="check-wrapper" wx:if='{{checkStatus}}'>
                   <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
                   <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
@@ -16,27 +33,32 @@
                   <text class="folder-name" >{{item.name}}</text>
               </view>
             </view>
+            <!-- 文件类型 -->
             <view class="left" wx:else>
+              <!-- 选中区 状态 开启-->
               <view class="check-wrapper" wx:if='{{checkStatus}}'>
                 <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
                 <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
               </view>
               <view  class="content">
+                <!-- 图片类型 -->
                 <block wx:if='{{item.type=="image"}}'>
-                  <!-- <image src="{{item.url}}"></image> -->
                   <i class="fa fa-picture-o"></i>
                   <text class="folder-name" >{{item.name}}</text>
                 </block>
+                <!-- 其他文件类型 -->
                 <block wx:else>
                   <i class="fa fa-file-text-o" aria-hidden="true"></i>
                   <text class="folder-name" >{{item.name}}</text>
                 </block>
               </view>
             </view>
-            <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus&&item.isWrite}}'>
+            <!-- 文件操作按钮 区 -->
+            <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus&&(item.isRead||item.isWrite)}}'>
                 <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
             </view>
         </view>
+       
       </mp-slideview>
     </view>
     <view wx:if='{{checkStatus}}' class="check-operation-btns">
@@ -49,8 +71,8 @@
     </view>
   <!-- </view> -->
 </block>
-<block wx:else>
-    <!-- <text class="folder-module-title">{{fileGroupList[0].title}}</text> -->
+<!-- 首页搜索 为共享文件夹 区 -->
+<!-- <block wx:else>
     <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}" bindtap="goDetail">
       <view class="folder-line" >
           <view class="left">
@@ -64,8 +86,9 @@
           </view>
       </view>
     </view>
-</block>
+</block> -->
 </view>
+<!-- 操作 action-sheet -->
 <action-sheet actionShow="{{operationActionSheetVisible}}"> 
     <view class="action-item-txt">
       <scroll-view scroll-x  scroll-with-animation="true">{{currentItem.name}}</scroll-view>
@@ -78,7 +101,14 @@
         <text class="title">转发</text>
       </view>
     </view> -->
-    <view class="operation-btns">
+    <!-- 只读权限preview、文件 有分享功能 -->
+    <view class="operation-btns shares" wx:if="{{currentItem.type!=='folder'&&(currentItem.isRead||currentItem.isWrite)}}">
+      <view class="action-btn" bindtap='shareFile'>
+        <view class="icon"><i class="fa fa-share" aria-hidden="true"></i></view>
+        <text class="title">分享</text>
+      </view>
+    </view>
+    <view class="operation-btns" wx:if="{{currentItem.isWrite}}">
       <view class="action-btn" bindtap='showRenameModal'>
         <view class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></view>
         <text class="title">重命名</text>
@@ -87,19 +117,23 @@
         <view class="icon"><i class="fa fa-trash-o" aria-hidden="true"></i></view>
         <text class="title">删除</text>
       </view>
-      <view class="action-btn" bindtap='chooseMutiple'>
+      <!-- <view class="action-btn" bindtap='chooseMutiple'>
         <view class="icon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></view>
         <text class="title">选中</text>
-      </view>
+      </view> -->
   </view>
 </action-sheet>
+<!-- 重命名 modal -->
 <mymodal 
 showStatus='{{showModal}}'
 confirmText='确定' 
 bind:complete="modalComplete" 
 submiting='{{submiting}}'
 title='{{modalTitle}}' >
-<text class="modal-tip">{{modalTip}}</text>
-<input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  value="{{modalInputTxt}}" bindinput="bindinputModal" maxlength='50' cursor-spacing="60" class="modal-file-folder-input"></input>
+<view class="modal-tip">{{modalTip}}</view>
+<view class="input-content">
+  <input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}"  value="{{modalInputTxt}}" bindinput="bindinputModal" maxlength='{{nameMaxLength}}' cursor-spacing="60" class="modal-file-folder-input"></input>
+  <i class="fa fa-times-circle-o" aria-hidden="true" bindtap='clearInput' wx:if='{{modalInputTxt}}'></i>
+</view>
 </mymodal>
 

@@ -11,11 +11,15 @@ Page({
     fileId:'',
     oldFileName:'',
     submiting:false,
+    userIsAdmin:"false",
   },
   bindKeyInput(e){
-    this.setData({
-      inputName:e.detail.value
-    })
+    let val = e.detail.value
+    let reg = /[\/\\:*?"<>|]+/gim
+    if(reg.test(val)){
+      val=val.replace(reg,'')
+    }
+    this.setData({inputName:val})
   },
   clearInput(){
     this.setData({inputName:""})
@@ -55,6 +59,7 @@ Page({
     })
     .then(res=>{
       if(res.errcode==0){
+        wx.setStorageSync('renameFile',{id:this.data.fileId,name:this.data.inputName})
         wx.navigateBack({
           success(){
             //取spaceInfo页面，刷新
@@ -73,7 +78,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({fileId:options.id,inputName:options.name,oldFileName:options.name})
+    this.setData({fileId:options.id,inputName:options.name,oldFileName:options.name,userIsAdmin:options.userIsAdmin=="true"?true:false})
   },
 
   /**
