@@ -17,7 +17,7 @@
         </view>
       </scroll-view>
       <!-- 新建 按钮 -->
-      <view class="add-btn" bindtap='showAddAction' wx:if="{{canAdd}}"> 
+      <view class="add-btn" bindtap='showAddAction'> 
         <i class="fa fa-file-text" aria-hidden="true"></i>
         <i class="fa fa-plus" aria-hidden="true"></i>
       </view>

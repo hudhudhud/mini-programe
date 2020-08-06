@@ -54,8 +54,12 @@ Page({
         wx.setStorageSync('appAdmin', data.admin)
       }
   },
-  async getData(){
-    this.setData({loading:true,pageNo:1,hasNoMore:false,shareFileList:[]})
+  async getData(hideLoading){
+    //下拉刷新时该值为true,不需要loading
+    if(!hideLoading){
+      this.setData({loading:true})
+    }
+    this.setData({pageNo:1,hasNoMore:false})
     this.pageSize=20
     let res = await this.loadMore()
     return res
@@ -74,6 +78,9 @@ Page({
           pageNo:this.data.pageNo,
           pageSize:this.pageSize,
         })
+        if(this.data.pageNo==1){
+          this.setData({shareFileList:[]})
+        }
         this.totalNumber = res.data.totalNumber
         let newList = res.data.list
         if(Array.isArray(newList)&&newList.length){
@@ -142,9 +149,11 @@ Page({
     if (this._freshing) return
     this._freshing = true
     try{
+      // wx.showLoading()
       this.getAppAdmin()
       this.getMyFolder()
-      await this.getData()
+      //下拉刷新不需要loading
+      await this.getData(true)
     }
     finally{
       this.setData({refresherTriggered: false})

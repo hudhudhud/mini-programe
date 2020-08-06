@@ -25,7 +25,7 @@ Page({
     hasNoMore:false,
     refresherTriggered:false,
     submiting:false,
-    canAdd:true,//没有写权限 或者 大于20层之后不允许继续创建子文件
+    // canAdd:true,//没有写权限 或者 大于20层之后不允许继续创建子文件
     pageNo:1,
     searchStatus:false,
   },
@@ -72,7 +72,7 @@ Page({
     this.getData()
 
     //没有写权限 或者 大于20层之后不允许继续创建子文件
-    this.getParentFolderDetail()
+    //this.getParentFolderDetail()
     
     /*微信内容安全校验 start 
       this.data.fileList.forEach(it=>{
@@ -96,9 +96,13 @@ Page({
       })
     */
   },
-  async getData(){
+  async getData(hideLoading){
     console.log('getdata.....')
-    this.setData({loading:true,pageNo:1,hasNoMore:false})//,fileList:[]
+    //下拉刷新时该值为true,不需要loading
+    if(!hideLoading){
+      this.setData({loading:true})
+    }
+    this.setData({pageNo:1,hasNoMore:false})//,fileList:[]
     this.pageSize=20
     let res = await this.loadMore()
     return res
@@ -152,20 +156,20 @@ Page({
     }
   },
   //获取父文件详情信息  --没有写权限 或者 大于20层之后不允许继续创建子文件
-  async getParentFolderDetail(){
-    let {data} = await request.post(FOLDER_DETAIL,{
-      fileSid:this.data.parentFolderId,
-      name:this.parentFolderName
-    })
-    if(data){
-      if(Array.isArray(data.permissions)&&data.permissions.indexOf('WRITE')>-1&&data.level<20){
-        this.setData({canAdd:true})
-      }
-      else{
-        this.setData({canAdd:false})
-      }
-    }
-  },
+  // async getParentFolderDetail(){
+  //   let {data} = await request.post(FOLDER_DETAIL,{
+  //     fileSid:this.data.parentFolderId,
+  //     name:this.parentFolderName
+  //   })
+  //   if(data){
+  //     if(Array.isArray(data.permissions)&&data.permissions.indexOf('WRITE')>-1){//&&data.level<20
+  //       this.setData({canAdd:true})
+  //     }
+  //     else{
+  //       this.setData({canAdd:false})
+  //     }
+  //   }
+  // },
   //处理文件列表对象
   dealFileItem(it){
     it.id=it.fileSid
@@ -204,7 +208,8 @@ Page({
     if (this._freshing) return
     this._freshing = true
     try{
-      await this.getData()
+      //下拉刷新不需要loading
+      await this.getData(true)
     }
     finally{
       this.setData({refresherTriggered: false})
