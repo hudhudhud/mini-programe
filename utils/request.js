@@ -192,7 +192,7 @@ export const  getSessionKey = async function(code){
           try{
             let userInfo = await getUserInfo(token,uid)
             wx.setStorageSync('userInfo', {
-              uid:uid,
+              uid:uid.toLocaleLowerCase(),
               name:userInfo.username,
               avatar:userInfo.avatar,
               mobile:userInfo.mobile,

@@ -51,7 +51,7 @@ Page({
         else{
           this.setData({userIsAppAdmin:false})
         }
-        wx.setStorageSync('appAdmin', data.admin)
+        wx.setStorageSync('appAdmin', data.admin.toLocaleLowerCase())
       }
   },
   async getData(hideLoading){

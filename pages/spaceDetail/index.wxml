@@ -6,13 +6,17 @@
     <!-- 顶部path区 -->
     <view class="top-bar {{fileList.length>0?'contain-search':''}}"> 
       <!-- path 滚动区 -->
-      <scroll-view class="paths" scroll-x scroll-into-view='{{"pathname"+(pathList.length-1)}}' scroll-with-animation="true">
-        <view class="path-item" bindtap='goIndexPage' wx:if='{{!pageFrom}}'>网盘</view>
-        <view class="path-item" bindtap='goSearchPage' wx:else>搜索结果</view>
+      <scroll-view class="paths" scroll-x scroll-into-view='{{"pathname"+(pathList.length-1)}}' scroll-with-animation="true" >
+        <!-- 从推送进 -->
+        <view class="path-item" wx:if='{{pageFrom=="msg"}}'></view> 
+        <!-- 从搜索进 -->
+        <view class="path-item" bindtap='goSearchPage' wx:elif="{{pageFrom=='search'}}">搜索结果</view>
+        <!-- 从首页进 -->
+        <view class="path-item" bindtap='goIndexPage' wx:else>网盘</view>
         <!-- 小程序节点 id 的设置目前要求是字母开头，且只能包含字母、数字、中划线、下划线、英文冒号和英文句点。 -->
         <view wx:for="{{pathList}}" wx:key='index' class="path-item {{index==pathList.length-1?'current':''}}"
         bindtap='goSomePage'  data-index="{{index}}" id='{{"pathname"+index}}'>
-          <i class="fa fa-angle-right" aria-hidden="true" ></i>
+          <i class="fa fa-angle-right" aria-hidden="true" wx:if="{{index!==0||pageFrom!=='msg'}}"></i>
           <text>{{item}}</text>
         </view>
       </scroll-view>
@@ -35,7 +39,7 @@
       refresher-triggered="{{refresherTriggered}}" 
       refresher-threshold='{{200}}'
       >
-      <file-list dataList="{{fileList}}" bind:goDetail="goDetail" bind:reSetList="reSetList"></file-list>
+      <file-list dataList="{{fileList}}" bind:goDetail="goDetail" bind:reSetList="reSetList" ></file-list>
       <!-- 内容高度不够时，撑起触发下拉刷新内容 -->
       <view style="width:2rpx;height:2rpx;bottom:-2rpx;position:absolute;" />
       <mp-loading type="circle" wx:if="{{loadingMore}}"></mp-loading>
@@ -57,10 +61,10 @@
           <i class="fa fa-picture-o" aria-hidden="true"></i>
           <text>上传照片</text>
         </view>
-        <!-- <view class="add-action-btn" bindtap='addFile'>
+        <view class="add-action-btn" bindtap='addFile'>
           <i class="fa fa-upload" aria-hidden="true"></i>
           <text>上传文件</text>
-        </view> -->
+        </view>
       </view>
   </action-sheet>
   <!-- 新建文件夹 modal -->

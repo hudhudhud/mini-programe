@@ -38,7 +38,7 @@ Component({
               actionVisible: false,//用来解决直接设置Prop（actionShow），取消动画会失效问题
               actionShow:false
             })
-          }, 510)
+          }, 200)
         }
       }
     },
@@ -81,7 +81,7 @@ Component({
           actionVisible: false,
           actionShow:false
         })
-      }, 510)
+      }, 200)
       var myEventDetail = {}
       var myEventOption = {}
       this.triggerEvent('actionHide', myEventDetail, myEventOption)

@@ -1,6 +1,6 @@
 import * as request from '../../utils/request.js';
 import regeneratorRuntime from '../../runtime.js'
-import {FOLDER_RENAME,FOLDER_DEL,FILE_DEL,FILE_SHARE} from '../../utils/api'
+import {FOLDER_RENAME,FILE_RENAME,FOLDER_DEL,FILE_DEL,FILE_SHARE} from '../../utils/api'
 const app = getApp()
 Component({
   properties: {
@@ -14,18 +14,18 @@ Component({
         })
       }
     },
-    isShare:{
-      type: Boolean,
+    //判断来源，move:移动文件，如果是移动文件则隐藏所有操作按钮
+    from:{
+      type: String,
       value:false,
       observer: function (newVal, oldVal) {
         this.setData({
-          isShareFolder: newVal,
+          from: newVal,
         })
       }
-    }
+    },
   },
   data: {
-    isShareFolder:false,
     fileList:[],
     fileGroupList:[],
     showModal:false,
@@ -47,6 +47,8 @@ Component({
     checkStatus:false,
     submiting:false,
     nameMaxLength:15,
+    userIsAdmin:false,
+    userIsAppAdmin:false,
   },
   methods: {
     setFileGroupList(newVal){
@@ -75,7 +77,11 @@ Component({
       //去详情页
       else{
         let item = event.currentTarget.dataset.item
-        this.triggerEvent('goDetail',{item})
+        if(this.data.from=='move'){
+          this.triggerEvent('goMove',{item})
+        }else{
+          this.triggerEvent('goDetail',{item})
+        }
       }
     },
     //共享空间详情
@@ -88,11 +94,24 @@ Component({
     //文件操作
     showOperationActionSheet(event){
       let item =event.detail.item?event.detail.item:event.currentTarget.dataset.item
+      let admin = item.fileAdmin?item.fileAdmin.split('/')[0].toLocaleLowerCase():''
+      let userId = wx.getStorageSync('userInfo').uid
+      let appAdmin = wx.getStorageSync('appAdmin')
       console.log('showOperationActionSheet...',event)
+      //判断没有任何权限的情况
+      if(!item.isWrite&&!item.isRead){
+        wx.showToast({
+          title: '您没有操作权限',
+          icon:'none'
+        })
+        return
+      }
       this.debounce(()=>{
         this.setData({
           currentItem:item,
-          operationActionSheetVisible:true 
+          operationActionSheetVisible:true ,
+          userIsAdmin:admin === userId,
+          userIsAppAdmin:appAdmin === userId
         })
       },200)
     },
@@ -113,7 +132,7 @@ Component({
     //文件名输入正则控制
     bindinputModal(e){
       let val = e.detail.value
-      let reg = /[\/\\:*?"<>|]+/gim
+      let reg = app.globalData.fileNameRegex
       if(reg.test(val)){
         val=val.replace(reg,'')
       }
@@ -141,11 +160,22 @@ Component({
         item.name= item.subName+(item.ext?'.'+item.ext:'')
         try{
           this.setData({submiting:true})
-          await request.post(FOLDER_RENAME,{
-            fileSid:this.data.currentItem.id,
-            name:oldName,
-            newName:item.name
-          })
+          if(this.data.currentItem.type=='folder'){
+            await request.post(FOLDER_RENAME,{
+              fileSid:item.id,
+              name:oldName,
+              newName:item.name
+            })
+          }
+          else{
+            await request.post(FILE_RENAME,{
+              fileSid:item.id,
+              name:oldName,
+              newName:item.name,
+              parentFileSid:item.parentFileSid,
+              parentFileName:item.parentFileName,
+            })
+          }
           this.setData({fileList:list,showModal:false})
           this.triggerEvent('reSetList',{list})
         }
@@ -169,22 +199,26 @@ Component({
             console.log('用户点击确定')
             let res;
             if(currentItem.type=="folder"){
-              wx.showToast({
-                title: '该功能待开发..',
-                icon:'none',
-                duration:4000
-              })
-              return
+              // wx.showToast({
+              //   title: '该功能待开发..',
+              //   icon:'none',
+              //   duration:4000
+              // })
+              // return
               res = await request.post(FOLDER_DEL,{
                 fileSid:currentItem.id,
                 name:currentItem.name,
                 space:0,
+                parentFileSid:currentItem.parentFileSid,
+                parentFileName:currentItem.parentFileName,
               })
             }
             else {
               res = await request.post(FILE_DEL,{
                 fileSid:currentItem.id,
                 name:currentItem.name,
+                parentFileSid:currentItem.parentFileSid,
+                parentFileName:currentItem.parentFileName,
               })
             }
             if(res.errcode==0){
@@ -271,7 +305,7 @@ Component({
     },
     //分享
     shareFile(){
-      app.selectEnterpriseContact((userList,deptList)=>{
+      app.selectEnterpriseContact(async (userList,deptList)=>{
         console.log('shareFile...',userList,deptList)
         let list = []
         if(userList.length){
@@ -291,12 +325,25 @@ Component({
         })
         return 
         if(list.length){
-          request.post(FILE_SHARE,{
+          await request.post(FILE_SHARE,{
             fileSid:this.data.currentItem.fileSid,
             name:this.data.currentItem.name,
             user:list
           })
+          wx.showToast({
+            title: '分享成功！',
+            icon:'success'
+          })
         }
+      })
+    },
+    goMoveFile(e){
+      console.log('goMoveFile....')
+      let currentItem = this.data.currentItem
+      //从跟目录开始移动
+      wx.navigateTo({
+        url: `../../pages/fileMove/index?id=&name=&targetId=${currentItem.id}&targetName=${currentItem.name}
+        &targetParentFileSid=${currentItem.parentFileSid}`
       })
     },
      /**
@@ -309,7 +356,7 @@ Component({
       // if(e.from=='button'){
       //   return {
       //     title: this.data.currentItem.name,
-      //     path: `/pages/spaceDetail/index?id=${this.data.currentItem.id}&name=${this.data.currentItem.name}`
+      //     path: `/pages/`
       //   }
       // }
     }, 

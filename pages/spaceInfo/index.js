@@ -29,7 +29,7 @@ Page({
     }
     //登录人是否为超级管理员
     let appAdmin =  wx.getStorageSync('appAdmin')
-    if(appAdmin&&this.userInfo.uid.toLocaleLowerCase()==appAdmin.toLocaleLowerCase()){
+    if(appAdmin&&this.userInfo.uid==appAdmin){
       this.setData({userIsAppAdmin:true})
     }
     else{
@@ -172,12 +172,12 @@ Page({
     this.setData({actionSheetVisible:true})
   },
   async delSpace(){
-    wx.showToast({
-      title: '该功能待开发..',
-      icon:'none',
-      duration:4000
-    })
-    return
+    // wx.showToast({
+    //   title: '该功能待开发..',
+    //   icon:'none',
+    //   duration:4000
+    // })
+    // return
     console.log('删除空间！')
     let self = this
     this.setData({submiting_del:true})

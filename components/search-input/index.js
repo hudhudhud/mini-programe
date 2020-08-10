@@ -1,6 +1,7 @@
 import regeneratorRuntime from '../../runtime.js'
 import * as request from '../../utils/request.js';
 import {FOLDER_TREE} from '../../utils/api.js';
+const app = getApp()
 Component({
   options: {
     virtualHost: true,
@@ -23,12 +24,23 @@ Component({
         })
       }
     },
-    parentType:{
+    //移动时该参数为 move
+    from:{
       type: String,
-      value:'0',
+      value:'',
       observer: function (newVal, oldVal) {
         this.setData({
-          parentType: newVal
+          from: newVal
+        })
+      }
+    },
+    //被移动文件对象
+    targetMoveItem:{
+      type: Object,
+      value:{},
+      observer: function (newVal, oldVal) {
+        this.setData({
+          targetMoveItem: newVal
         })
       }
     },
@@ -41,7 +53,6 @@ Component({
     searchResList:[],
     sortActionItems:['按名称降序','按大小降序','按时间降序'],
     parentFolderId:'',
-    parentType:'',
     addActionSheetVisible:false,
     showModal:false,
     modalInputTxt:'',
@@ -96,17 +107,6 @@ Component({
       this.triggerEvent('search',{searchStatus:true})
     },
     searchFileFunc(){
-      // let {data} = await request.post(FOLDER_TREE,{
-      //   parentFileSid:this.data.parentFolderId,
-      //   type:this.data.parentType,//0:私有空间的文件夹;1:共享空间的文件夹
-      //   name:this.data.searchStr
-      // })
-      // if(Array.isArray(data)){
-      //   data.forEach(it=>{
-      //     this.dealFileItem(it)
-      //   })
-      //   this.setData({loading:false,searchResList:data})
-      // }
       this.setData({pageNo:1,hasNoMore:false,searchResList:[]})
       this.pageSize=20
       this.loadMore()
@@ -122,18 +122,18 @@ Component({
           }
           let res= await request.post(FOLDER_TREE,{
             parentFileSid:this.data.parentFolderId,//--首页搜索的时候是undefined，其余都有值
-            type:this.data.parentType,//0:私有空间的文件夹;1:共享空间的文件夹,--首页搜索的时候type是1，其余都是undefined
             name:this.data.searchStr,
             sort:this.sortDesc,
             pageNo:this.data.pageNo,
             pageSize:this.pageSize,
+            fileType:this.data.from==='move'?'folder':'',
           })
           this.totalNumber = res.data.totalNumber
           let newList = res.data.list
           if(Array.isArray(newList)&&newList.length){
             //是否有操作权限
             newList.forEach(it=>{
-              this.dealFileItem(it)
+              app.dealFileItem(it)
             })
             if(this.data.pageNo==1){
               this.setData({searchResList:newList})
@@ -158,39 +158,6 @@ Component({
         this.setData({loading:false,loadingMore:false})
       }
     },
-    //处理文件列表对象
-    dealFileItem(it){
-      it.id=it.fileSid
-      it.subName = it.name
-      if(it.fileType=='FOLDER'){
-        it.type="folder"
-      }
-      if(it.fileType!=='FOLDER'&&it.name&&it.name.indexOf('.')>-1){
-        it.ext = it.name.split('.')[1]
-        it.subName = it.name.split('.')[0]
-        it.type=this.fileDetailType(it.ext)
-      }
-      //是否有操作权限
-      if(Array.isArray(it.permissions)){
-        it.isWrite = it.permissions.indexOf('WRITE')>-1
-        it.isRead = it.permissions.indexOf('PREVIEW')>-1
-      }
-      return it
-    },
-    fileDetailType(ext){
-      ext = ext.toLocaleLowerCase()
-      let type = {
-        'jpg':"image",
-        'gif':"image",
-        'png':"image",
-        'txt':'txt',
-        'xls':'excel',
-        'xlsx':'excel',
-        'doc':'doc',
-        'docx':'doc',
-      }
-      return type[ext]?type[ext]:'txt'
-    },
     //去文件列表详情
     goDetail(event){
       let item = event.detail.item
@@ -200,6 +167,15 @@ Component({
       })
       // let item = event.detail.item
       // this.triggerEvent('goDetail',{item})
+    },
+    //去移动页面详情
+    goMove(event){
+      let item = event.detail.item
+      let target =this.data.targetMoveItem
+      wx.navigateTo({
+        url: `../../pages/fileMove/index?id=${item.id}&name=${item.name}&targetId=${target.id}&targetName=${target.name}
+        &targetParentFileSid=${target.parentFileSid}`
+      })
     },
     //去空间详情
     goInfo(event){

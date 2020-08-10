@@ -31,7 +31,8 @@
             <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
         </view>
       </view>
-      <view class="add-user-btn" bindtap='addUser' wx-if='{{userIsAdmin}}'>
+        <!-- 管理员或超管可以添加成员 -->
+      <view class="add-user-btn" bindtap='addUser' wx-if='{{userIsAdmin||userIsAppAdmin}}'>
         <i class="fa fa-plus" aria-hidden="true"></i><text class="folder-name">添加成员</text>
       </view>
     </view>
@@ -48,7 +49,7 @@
   </button>
   <action-sheet actionShow="{{actionSheetVisible}}"> 
     <view class="tip">
-      将同时删除空间所有文件，该操作不可恢复
+      将同时删除空间所有文件
     </view>
     <view class="del-btn" catchtap="delSpace">
         确定删除

@@ -19,8 +19,8 @@ App({
     this.checkVersion()
 
     // 正式登录
-    wx.clearStorageSync()
-    this.loginFunc()
+    // wx.clearStorageSync()
+    // this.loginFunc()
 
     //本地测试
     // wx.qy.login({
@@ -31,7 +31,7 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // getSessionKey('YGklZPA9y8ymJNLzZ6z75KzD7U8ZOT14w7R9yPR0h14').then(res=>{
+    // getSessionKey('-1D0MdR6G8sM80nkQwp_M173-H8TivBqRb2cCtuUeqI').then(res=>{
     //   if (this.userInfoReadyCallback) {
     //     this.userInfoReadyCallback()
     //   }
@@ -170,8 +170,43 @@ App({
         }
     })
   },
+   //处理文件列表对象
+  dealFileItem(it){
+    it.id=it.fileSid
+    it.subName = it.name
+    if(it.fileType=='FOLDER'){
+      it.type="folder"
+    }
+    if(it.fileType!=='FOLDER'&&it.name&&it.name.indexOf('.')>-1){
+      let ary = it.name.split('.')
+      it.ext = ary.pop()
+      it.subName = ary.join('.')
+      it.type=this.fileDetailType(it.ext)
+    }
+    //是否有操作权限
+    if(Array.isArray(it.permissions)){
+      it.isWrite = it.permissions.indexOf('WRITE')>-1
+      it.isRead = it.permissions.indexOf('PREVIEW')>-1
+    }
+    return it
+  },
+  fileDetailType(ext){
+    ext = ext.toLocaleLowerCase()
+    let type = {
+      'jpg':"image",
+      'gif':"image",
+      'png':"image",
+      'txt':'txt',
+      'xls':'excel',
+      'xlsx':'excel',
+      'doc':'doc',
+      'docx':'doc',
+    }
+    return type[ext]?type[ext]:'txt'
+  },
   globalData: {
     userInfo: null,
     loginSuccess:0,
+    fileNameRegex:/[\/\\:*?"<>|，,.]+/gim
   }
 })

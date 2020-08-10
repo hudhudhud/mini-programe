@@ -4,7 +4,7 @@
   {{errorInfo}}
   </view>
   <view class="container" wx:else>
-    <search-input parentType="1" bind:search="search">
+    <search-input bind:search="search">
     </search-input>
     <view wx:if="{{!searchStatus}}">
       <mp-loading type="circle" wx:if="{{loading}}"></mp-loading>

@@ -1,0 +1,63 @@
+
+<view hidden="{{!actionVisible}}" class="wx-actionsheet_mask wx-actionsheet_{{mask}}" >
+  <view class="wx-actionsheet_main wx-actionsheet_animated wx-actionsheet_{{animation}}">
+    <view class="container">
+      <search-input sort-visible="{{true}}" parentId='{{parentFolderId}}' searchBarVisible='{{fileList.length>0}}' bind:sortData='sortData'
+      bind:search="search">
+      </search-input>
+      <view wx:if="{{!searchStatus}}">
+        <!-- 顶部path区 -->
+        <view class="top-bar {{fileList.length>0?'contain-search':''}}"> 
+          <!-- 新建 按钮 -->
+          <view class="left-btn">
+            <view class='pre-btn' bindtap="goPreMove" hidden="{{!preFileSid}}"><i class="fa fa-chevron-left" aria-hidden="true"></i> 上一级</view>
+            <view class="close-btn" bindtap="exitMove">关闭</view>
+          </view>
+          <view class="add-btn" bindtap='showAddFolderModal'> 
+            <i class="fa fa-file-text" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </view>
+        </view>
+        <!-- 数据列表 滚动区 -->
+        <view wx:if="{{loading}}" style='margin-top:80rpx'>
+          <mp-loading type="circle" ></mp-loading>
+        </view>
+        <scroll-view  class="data-list" wx:elif='{{fileList.length>0}}'
+          scroll-y 
+          bindscrolltolower='loadMore' 
+          scroll-with-animation
+          refresher-enabled='{{true}}'
+          bindrefresherrefresh='onRefresh' 
+          refresher-triggered="{{refresherTriggered}}" 
+          refresher-threshold='{{200}}'
+          >
+          <file-list dataList="{{fileList}}" bind:goDetail="goDetail" bind:reSetList="reSetList" from='move'></file-list>
+          <!-- 内容高度不够时，撑起触发下拉刷新内容 -->
+          <view style="width:2rpx;height:2rpx;bottom:-2rpx;position:absolute;" />
+          <mp-loading type="circle" wx:if="{{loadingMore}}"></mp-loading>
+          <view wx:elif='{{hasNoMore&&fileList.length&&pageNo>1}}' class="has-no-more">没有更多数据了..</view>
+        </scroll-view>
+        <view wx:else class="empty-folder">
+          <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+          <text>此文件夹为空</text>
+        </view>
+      </view>
+      <button class="confirm-btn" bindtap="confirmMove"  loading="{{move_submiting}}" disabled="{{isOldPath}}" style='width:100%'>
+        <text>移动到此处</text>
+      </button>
+      <!-- 新建文件夹 modal -->
+      <mymodal 
+        showStatus='{{showModal}}'
+        confirmText='确定' 
+        submiting='{{submiting}}'
+        bind:complete="modalComplete" 
+        title='{{modalTitle}}' >
+        <text class="modal-tip">{{modalTip}}</text>
+        <view class="input-content">
+          <input type='text' placeholder="{{madalPlaceholder}}" focus="{{autoFocus}}" value="{{modalInputTxt}}" bindinput='bindinputModal' maxlength='15' cursor-spacing="60" class="modal-file-folder-input"></input>
+          <i class="fa fa-times-circle-o" aria-hidden="true" bindtap='clearInput' wx:if='{{modalInputTxt}}'></i>
+        </view>
+      </mymodal>
+    </view>
+  </view>
+</view>

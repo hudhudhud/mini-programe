@@ -1,92 +1,72 @@
 <view class="file-list {{checkStatus?'containCheck':''}}">
 <!-- 非首页 搜索 -->
 <block>
-<!-- <block wx:if='{{!isShareFolder}}'> -->
-  <!-- <view wx:for='{{fileGroupList}}' wx:key='index' wx:for-item="filegroup"> -->
-    <!-- <text class="folder-module-title">{{filegroup.title}}</text> -->
-    <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
-      <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
-      bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{!item.isWrite||item.space==1}}">
-       <!-- 共享文件夹 -->
-        <view class="folder-line" wx:if="{{item.space==1}}">
-          <view class="left">
-            <view class="content">
-                <i class="fa fa-folder" aria-hidden="true"></i>
-                <text class="folder-name" >{{item.name}}</text>
-            </view>
-          </view>
-          <view catchtap="goSpaceInfo" class="info-btn right" data-item="{{item}}">
-              <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
+  <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}"  bindtap="goDetail" >
+    <mp-slideview buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}" show='{{item.id&&currentSliderId==item.id}}' 
+    bindshow='slideBindshow'  bindhide='slideBindhide' duration='200' disable="{{!item.isWrite||item.space==1||from==='move'}}">
+      <!-- 共享文件夹 -->
+      <view class="folder-line" wx:if="{{item.space==1}}">
+        <view class="left">
+          <view class="content">
+              <i class="fa fa-folder" aria-hidden="true"></i>
+              <text class="folder-name" >{{item.name}}</text>
           </view>
         </view>
-        <!-- 非共享文件夹 -->
-        <view class="folder-line" wx:else>
-            <!-- 文件夹类型 -->
-            <view class="left" wx:if='{{item.type=="folder"}}'>
-             <!-- 选中区 状态 开启-->
-              <view class="check-wrapper" wx:if='{{checkStatus}}'>
-                  <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
-                  <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
-              </view>
-              <view class="content">
-                  <i class="fa fa-folder" aria-hidden="true"></i>
-                  <text class="folder-name" >{{item.name}}</text>
-              </view>
-            </view>
-            <!-- 文件类型 -->
-            <view class="left" wx:else>
-              <!-- 选中区 状态 开启-->
-              <view class="check-wrapper" wx:if='{{checkStatus}}'>
+        <view catchtap="goSpaceInfo" class="info-btn right" data-item="{{item}}" wx:if='{{from!="move"}}'> 
+            <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
+        </view>
+      </view>
+      <!-- 非共享文件夹 -->
+      <view class="folder-line" wx:else>
+          <!-- 文件夹类型 -->
+          <view class="left" wx:if='{{item.type=="folder"}}'>
+            <!-- 选中区 状态 开启-->
+            <view class="check-wrapper" wx:if='{{checkStatus}}'>
                 <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
                 <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
-              </view>
-              <view  class="content">
-                <!-- 图片类型 -->
-                <block wx:if='{{item.type=="image"}}'>
-                  <i class="fa fa-picture-o"></i>
-                  <text class="folder-name" >{{item.name}}</text>
-                </block>
-                <!-- 其他文件类型 -->
-                <block wx:else>
-                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                  <text class="folder-name" >{{item.name}}</text>
-                </block>
-              </view>
             </view>
-            <!-- 文件操作按钮 区 -->
-            <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus&&(item.isRead||item.isWrite)}}'>
-                <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
-            </view>
-        </view>
-       
-      </mp-slideview>
-    </view>
-    <view wx:if='{{checkStatus}}' class="check-operation-btns">
-      <view bindtap="cancelCheckStatus" class="btn">
-        取消
-      </view>
-      <view bindtap="batchDel" class="btn del">
-        删除
-      </view>
-    </view>
-  <!-- </view> -->
-</block>
-<!-- 首页搜索 为共享文件夹 区 -->
-<!-- <block wx:else>
-    <view wx:for='{{fileList}}'  wx:key='index' data-item="{{item}}" data-index="{{index}}" bindtap="goDetail">
-      <view class="folder-line" >
-          <view class="left">
             <view class="content">
                 <i class="fa fa-folder" aria-hidden="true"></i>
                 <text class="folder-name" >{{item.name}}</text>
             </view>
           </view>
-          <view catchtap="goSpaceInfo" class="info-btn right" data-item="{{item}}">
-              <i class="fa fa-exclamation-circle gray" aria-hidden="true" ></i>
+          <!-- 文件类型 -->
+          <view class="left" wx:else>
+            <!-- 选中区 状态 开启-->
+            <view class="check-wrapper" wx:if='{{checkStatus}}'>
+              <i class="fa fa-circle-thin" aria-hidden="true" wx:if='{{!item.checked}}'></i>
+              <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
+            </view>
+            <view  class="content">
+              <!-- 图片类型 -->
+              <block wx:if='{{item.type=="image"}}'>
+                <i class="fa fa-picture-o"></i>
+                <text class="folder-name" >{{item.name}}</text>
+              </block>
+              <!-- 其他文件类型 -->
+              <block wx:else>
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                <text class="folder-name" >{{item.name}}</text>
+              </block>
+            </view>
+          </view>
+          <!-- 文件操作按钮 区 -->
+          <view catchtap="showOperationActionSheet" class="info-btn right" data-item="{{item}}" wx:if='{{!checkStatus&&(item.isRead||item.isWrite)&&from!="move"}}'>
+              <i class="fa fa-ellipsis-h gray" aria-hidden="true"></i>
           </view>
       </view>
+      
+    </mp-slideview>
+  </view>
+  <view wx:if='{{checkStatus}}' class="check-operation-btns">
+    <view bindtap="cancelCheckStatus" class="btn">
+      取消
     </view>
-</block> -->
+    <view bindtap="batchDel" class="btn del">
+      删除
+    </view>
+  </view>
+</block>
 </view>
 <!-- 操作 action-sheet -->
 <action-sheet actionShow="{{operationActionSheetVisible}}"> 
@@ -121,6 +101,10 @@
         <view class="icon"><i class="fa fa-check-circle-o" aria-hidden="true"></i></view>
         <text class="title">选中</text>
       </view> -->
+      <view class="action-btn" bindtap='goMoveFile' wx:if='{{userIsAdmin||userIsAppAdmin}}'>
+        <view class="icon"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></view>
+        <text class="title">移动</text>
+      </view>
   </view>
 </action-sheet>
 <!-- 重命名 modal -->
@@ -137,3 +121,4 @@ title='{{modalTitle}}' >
 </view>
 </mymodal>
 
+<!-- <pop-up actionShow="{{operationMovePopVisible}}" options="{{moveOptions}}" bind:cancelMove="cancelMove"></pop-up> -->

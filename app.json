@@ -7,7 +7,8 @@
     "pages/spaceInfo/index",
     "pages/spaceUserList/index",
     "pages/fileView/index",
-    "pages/error/index"
+    "pages/error/index",
+    "pages/fileMove/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

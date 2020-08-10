@@ -37,7 +37,7 @@ Page({
     else{
       this.setData({permissionsList:wx.getStorageSync('permissionsList')})
     }
-    if(userInfo.uid.toLocaleLowerCase() == options.admin.toLocaleLowerCase()){
+    if(userInfo.uid == options.admin.toLocaleLowerCase()){
       this.setData({userIsAdmin:true})
     }
     else{
@@ -73,12 +73,12 @@ Page({
       ]
     }
     //超级管理员只能设置管理员和可编辑
-    if(currentActionItem.isSuper){
-      actionItems=[
-        {key:8,name:'管理员',tip:'可管理空间及成员权限'},
-        {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'}
-      ]
-    }
+    // if(currentActionItem.isSuper){
+    //   actionItems=[
+    //     {key:8,name:'管理员',tip:'可管理空间及成员权限'},
+    //     {key:1,name:'可编辑',tip:'仅可上传下载，编辑文件夹'}
+    //   ]
+    // }
     // this.debounce(()=>{
     this.setData({actionSheetVisible:true,currentActionItem,actionItems})
     // },200)

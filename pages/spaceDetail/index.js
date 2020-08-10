@@ -1,6 +1,7 @@
 import regeneratorRuntime from '../../runtime.js'
-import {CHECK_MEDIA,FOLDER_CREATE,CHECK_IMG,FOLDER_TREE,FILE_UPLOAD,FOLDER_DETAIL} from '../../utils/api'
+import {CHECK_MEDIA,FOLDER_CREATE,CHECK_IMG,FOLDER_TREE,FILE_UPLOAD,FOLDER_DETAIL,FILE_SENDUPLOADMSG} from '../../utils/api'
 import * as request from '../../utils/request.js';
+const app = getApp()
 Page({
 
   /**
@@ -20,7 +21,7 @@ Page({
     currentItem:null,
     autoFocus:false,
     modalTip:'',
-    pageFrom:'',//区分文件页面来源：空或搜索页面search
+    pageFrom:'',//区分文件页面来源：空或搜索状态search或推送msg
     loadingMore:false,
     hasNoMore:false,
     refresherTriggered:false,
@@ -42,9 +43,17 @@ Page({
     // this.parentFolderId = options.id
     // this.parentFolderType = options.type
     this.parentFolderName= options.name
+    //pathList只能放在页面路径里，不然返回上一层无法监听到，数据会出错
+    this.setData({parentFolderId:options.id,pathList:options.pathList?JSON.parse(options.pathList):[]})
+    
+    // //移动时，用来记录返回上一级的面包屑
+    // if(options.pathList){
+    //   let pathList = JSON.parse(options.pathList)
+    //   pathList.pop()
+    //   wx.setStorageSync('breadCrumbs', pathList)
+    // }
 
-    this.setData({parentFolderId:options.id,pathList:JSON.parse(options.pathList)})
-    //区分搜索状态下的路径显示，从搜索结果开始
+    //区分搜索或推送进来状态下的路径显示，从搜索结果开始或空开始
     if(options.from){
       this.setData({pageFrom:options.from})
     }
@@ -127,7 +136,7 @@ Page({
         if(Array.isArray(newList)&&newList.length){
           //是否有操作权限
           newList.forEach(it=>{
-            this.dealFileItem(it)
+            app.dealFileItem(it)
           })
           if(this.data.pageNo==1){
             this.setData({fileList:newList})
@@ -170,39 +179,7 @@ Page({
   //     }
   //   }
   // },
-  //处理文件列表对象
-  dealFileItem(it){
-    it.id=it.fileSid
-    it.subName = it.name
-    if(it.fileType=='FOLDER'){
-      it.type="folder"
-    }
-    if(it.fileType!=='FOLDER'&&it.name&&it.name.indexOf('.')>-1){
-      it.ext = it.name.split('.')[1]
-      it.subName = it.name.split('.')[0]
-      it.type=this.fileDetailType(it.ext)
-    }
-    //是否有操作权限
-    if(Array.isArray(it.permissions)){
-      it.isWrite = it.permissions.indexOf('WRITE')>-1
-      it.isRead = it.permissions.indexOf('PREVIEW')>-1
-    }
-    return it
-  },
-  fileDetailType(ext){
-    ext = ext.toLocaleLowerCase()
-    let type = {
-      'jpg':"image",
-      'gif':"image",
-      'png':"image",
-      'txt':'txt',
-      'xls':'excel',
-      'xlsx':'excel',
-      'doc':'doc',
-      'docx':'doc',
-    }
-    return type[ext]?type[ext]:'txt'
-  },
+ 
  //下拉刷新
   async onRefresh(){
     if (this._freshing) return
@@ -256,7 +233,7 @@ Page({
   },
   bindinputModal(e){
     let val = e.detail.value
-    let reg = /[\/\\:*?"<>|]+/gim
+    let reg = app.globalData.fileNameRegex
     if(reg.test(val)){
       val=val.replace(reg,'')
     }
@@ -280,7 +257,7 @@ Page({
         })
         //追加数据，不直接刷新
         if(res.data){
-          this.dealFileItem(res.data)
+          app.dealFileItem(res.data)
           list.push({...res.data,type:'folder',isWrite:true,isRead:true})
           this.setData({fileList:list})
         }
@@ -298,32 +275,18 @@ Page({
   async addImg(){
     let self = this 
     wx.chooseImage({
-      count:1,//默认最多1张
+      // count:1,//默认最多1张
       async success (res) {
-        // let fileUrl = res.tempFilePaths[0]
-        // let file = res.tempFiles //包括{path,size}
-        console.log('imgfile....',res)
-
        // self.imgCheck(fileUrl)
-
-        // let imgs = res.tempFilePaths.map(it=>{
-        //   return {
-        //     id:parseInt(10**6*Math.random()),
-        //     name:parseInt(10**6*Math.random()),
-        //     url:it,
-        //     type:'file',
-        //     ext:it.substring(it.lastIndexOf('.')+1)
-        //   }
-        // })
-        // self.setData({fileList:[...self.data.fileList,...imgs]})
         //wx.uploadFile只支持单个单个上传，Promise.all
         let params = {
           uid : wx.getStorageSync('uidEnc'),
           userName:wx.getStorageSync('userInfo').name,
           parentFileSid:self.data.parentFolderId
         }
+        let successFileNames = []
         let promiseAry = res.tempFilePaths.map(it=>{
-          console.log(3333333,params,it)
+          console.log('path..',it)
           return new Promise((resolve,reject)=>{
             wx.uploadFile({
               url: FILE_UPLOAD, //仅为示例，非真实的接口地址
@@ -331,8 +294,6 @@ Page({
               name: 'files',//文件对应的 key，开发者在服务端可以通过这个 key 获取文件的二进制内容
               formData: params,
               success (res){
-                // const data = res.data
-                console.log(222222222,res)
                 let data = JSON.parse(res.data)
                 if(data.errcode==0){
                   resolve(data)
@@ -352,16 +313,23 @@ Page({
           let res = await Promise.all(promiseAry)
           console.log(33333333,res)
           //不刷新页面，追加数据
-          let items = res[0].data
-          if(Array.isArray(items)){
-            self.dealFileItem(items[0])
-            items[0].isWrite=true
-            items[0].isRead=true
-            self.setData({fileList:[...self.data.fileList,...items]})
-          }
-          else{
-            self.getData()
-          }
+          res.forEach(it=>{
+            let items = it.data 
+            if(Array.isArray(items)){
+              successFileNames.push(items[0].name)
+              app.dealFileItem(items[0])
+              items[0].isWrite=true
+              items[0].isRead=true
+              self.setData({fileList:[...self.data.fileList,...items]})
+            }
+          })
+          console.log('successFileNames...',successFileNames.join(','),self.data.parentFolderId)
+          wx.showToast({
+            title: '上传成功！',
+            icon:'success'
+          })
+          //发推送消息
+          self.sendUploadMsg(successFileNames)
         }
         catch(e){
           console.log('上传失败:'+e)
@@ -377,8 +345,16 @@ Page({
       }
     })
   },
+  //发上传文件推送消息
+  sendUploadMsg(successFileNames){
+    request.post(FILE_SENDUPLOADMSG,{
+      parentFileSid:this.data.parentFolderId,
+      name:successFileNames.join(',')
+    })
+  },
   addFile(){
     //从聊天对话框里选择文件 企业微信不支持！！！
+    console.log(333333333,wx.chooseMessageFile)
     wx.chooseMessageFile({
       count: 10,
       type: 'file',//除了图片和视频
@@ -386,6 +362,11 @@ Page({
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFiles
         console.log(22222222,res)
+        wx.showToast({
+          title:"上传成功:"+tempFilePaths[0].name,
+          icon: 'none',
+          duration: 4000
+        })
       },
       fail(e){
         wx.showToast({
@@ -535,6 +516,20 @@ Page({
   },
   search(e){
     this.setData({searchStatus:e.detail.searchStatus})
+  },
+  removeMoveFile(fileId){
+    let list = this.data.fileList
+    let index = -1
+    for(let i in list){
+      if(list[i].fileSid===fileId){
+        index = i
+        break;
+      }
+    }
+    if(index>-1){
+      list.splice(index,1)
+      this.setData({fileList:list})
+    }
   },
   // 防抖
   debounce(fn, wait) {    

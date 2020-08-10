@@ -1,0 +1,187 @@
+
+.wx-actionsheet_mask{
+  width: 100%;
+  height: 100%;
+  position: fixed;  
+  top: 0;  
+  left: 0;  
+  z-index: 1000;  
+  background: rgba(0,0,0,.5);  
+  overflow: hidden;  
+}
+.wx-actionsheet_transparent{
+  background: rgba(0,0,0,0);
+}
+.wx-actionsheet_main{
+  width: 100%;
+  position: absolute;
+  height:100%;
+  top: 100%;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.wx-actionsheet_animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+
+@keyframes showAction {
+from{
+   transform: translate3d(0, 0, 0);
+ }
+  to {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+.wx-actionsheet_showAction {
+  animation-name: showAction;
+  animation-duration: 0.5s;
+}
+@keyframes hideAction {
+from{
+   transform: translate3d(0, -100%, 0);
+ }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.wx-actionsheet_hideAction {
+  animation-name: hideAction;
+  animation-duration: 0.5s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@import '/font-awesome/fontawesome.wxss';
+.container{
+  box-sizing: border-box;
+  height:100%;
+  width:100%;
+  background-color:#fff;
+}
+.data-list{
+  width:100%;
+  box-sizing: border-box;
+  background-color:#fff;
+  /* padding:0 0 0 30rpx; */
+  font-size:32rpx;
+  /* height:500rpx; */
+  /* margin-top:80rpx; */
+  /* height:100vh; */
+  height:calc(100vh - 200rpx);
+}
+
+/* .folder-module .title{
+  color:#A1A1A1;
+  font-size:28rpx;
+  padding:10rpx 0;
+  display: block;
+  padding-left:30rpx;
+  width:100%;
+  box-sizing: border-box;
+} */
+
+.top-bar{
+  position: fixed;
+  top:0;
+  box-sizing: border-box;
+  width:100%;
+  padding:10rpx 30rpx;
+  display:flex;
+  justify-content: space-between;
+  margin-bottom:10rpx;
+  border-bottom:10rpx solid #F5F5F5;
+  z-index: 99;
+  background-color: #fff;
+}
+.top-bar.contain-search{
+  top:120rpx;
+}
+.left-btn{
+  display:flex;
+  font-size:32rpx;
+  color:#BABABA;
+  margin-right:20rpx;
+}
+.pre-btn{
+  margin-right:20rpx;
+}
+.add-btn{
+  width:10%;
+  text-align: right;
+  color:#BABABA;
+  font-size:32rpx;
+}
+.add-btn .fa-file-text{
+  margin-right:5rpx;
+}
+
+.modal-file-folder-input{
+  width:100%;
+  height:80rpx;
+  border:2rpx solid #BABABA;
+  text-align:left;
+  padding:0 10rpx;
+  box-sizing: border-box;
+}
+.modal-tip{
+  line-height:2;
+  font-size:30rpx;
+  padding-bottom:20rpx;
+}
+
+.fa-picture-o{
+  color:#FBC545
+}
+.empty-folder{
+  font-size:35rpx;
+  display: flex;
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color:#B1B1B1;
+  padding-top:100rpx;
+}
+.empty-folder .fa-folder-open-o{
+  font-size:120rpx;
+  color:#E3F0FA;
+  margin-bottom:20rpx;
+}
+
+
+.compress-canvas{
+  position:absolute; 
+  /* left:-1000px;
+  top:-1000px; */
+}
+
+.input-content{
+  height:80rpx;
+}
+
+
+.confirm-btn{
+  position:fixed;
+  width:100%;
+  height:80rpx;
+  background-color:#3476D1;
+  color:#fff;
+  text-align: center;
+  bottom:0;
+  font-size:36rpx;
+  border-radius: 0;
+}

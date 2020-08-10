@@ -1,6 +1,7 @@
 import * as request from '../../utils/request.js';
 import regeneratorRuntime from '../../runtime.js'
 import {FOLDER_RENAME} from '../../utils/api'
+const app = getApp()
 Page({
 
   /**
@@ -12,10 +13,11 @@ Page({
     oldFileName:'',
     submiting:false,
     userIsAdmin:"false",
+    userIsAppAdmin:false,
   },
   bindKeyInput(e){
     let val = e.detail.value
-    let reg = /[\/\\:*?"<>|]+/gim
+    let reg = app.globalData.fileNameRegex
     if(reg.test(val)){
       val=val.replace(reg,'')
     }
@@ -79,6 +81,16 @@ Page({
    */
   onLoad: function (options) {
     this.setData({fileId:options.id,inputName:options.name,oldFileName:options.name,userIsAdmin:options.userIsAdmin=="true"?true:false})
+    
+     //登录人是否为超级管理员
+     let appAdmin =  wx.getStorageSync('appAdmin')
+     let userInfo =  wx.getStorageSync('userInfo')
+     if(appAdmin&&userInfo.uid==appAdmin){
+       this.setData({userIsAppAdmin:true})
+     }
+     else{
+       this.setData({userIsAppAdmin:false})
+     }
   },
 
   /**

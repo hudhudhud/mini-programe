@@ -25,7 +25,7 @@ Page({
   },
   bindKeyInput(e){
     let val = e.detail.value
-    let reg = /[\/\\:*?"<>|]+/gim
+    let reg = app.globalData.fileNameRegex
     if(reg.test(val)){
       val=val.replace(reg,'')
     }
@@ -140,8 +140,11 @@ Page({
         permissionList:resPerList
       })
       //添加共享空间成功之后返回空间信息，以便更新列表
+      let self = this
       wx.navigateBack({
         success(){
+          //防止还没跳转又点击了提交
+          self.setData({submiting:false})
           //取spaceInfo页面，刷新
           var page = getCurrentPages().pop();
           if (page == undefined || page == null) return
@@ -154,8 +157,11 @@ Page({
         }
       })
   }
-  finally{
+  catch(e){
     this.setData({submiting:false})
+  }
+  finally{
+    // this.setData({submiting:false})
   }
 
     // request.post(FOLDER_CREATE,{
