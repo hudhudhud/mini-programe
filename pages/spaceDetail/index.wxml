@@ -61,7 +61,7 @@
           <i class="fa fa-picture-o" aria-hidden="true"></i>
           <text>上传照片</text>
         </view>
-        <view class="add-action-btn" bindtap='addFile'>
+        <view class="add-action-btn" bindtap='addFile' wx:if="{{userInfo.uid==='hys3032'}}">
           <i class="fa fa-upload" aria-hidden="true"></i>
           <text>上传文件</text>
         </view>

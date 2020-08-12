@@ -29,6 +29,7 @@ Page({
     // canAdd:true,//没有写权限 或者 大于20层之后不允许继续创建子文件
     pageNo:1,
     searchStatus:false,
+    userInfo:'',
   },
 
   /**
@@ -37,48 +38,36 @@ Page({
   onLoad:async function (options) {
     if(options.name){
       wx.setNavigationBarTitle({
-        title:options.name
+        title:decodeURIComponent(options.name)
       })
     }    
     // this.parentFolderId = options.id
     // this.parentFolderType = options.type
-    this.parentFolderName= options.name
+    this.parentFolderName= decodeURIComponent(options.name)
     //pathList只能放在页面路径里，不然返回上一层无法监听到，数据会出错
     this.setData({parentFolderId:options.id,pathList:options.pathList?JSON.parse(options.pathList):[]})
     
-    // //移动时，用来记录返回上一级的面包屑
-    // if(options.pathList){
-    //   let pathList = JSON.parse(options.pathList)
-    //   pathList.pop()
-    //   wx.setStorageSync('breadCrumbs', pathList)
-    // }
 
     //区分搜索或推送进来状态下的路径显示，从搜索结果开始或空开始
-    if(options.from){
-      this.setData({pageFrom:options.from})
+    console.log(111111111,options)
+    if(options.from&&options.from.trim()){
+      this.setData({pageFrom:options.from.trim()})
     }
     else{
       this.setData({pageFrom:''})
     }
-    
-    //测试空页面
-    // if(options.name=='整理'){
-    //   setTimeout(() => {
-    //     this.setData({loading:false,fileList:[]})
-    //   },400)
-    //   return
-    // }
-    // if(!options.id){
-    //   setTimeout(() => {
-    //       this.setData({loading:false,fileList:[
-    //       {id:"100",name:'资料',type:'folder',isWrite:true},
-    //       {id:'101',name:'整理',type:'folder',isWrite:true},
-    //       {id:'102',name:'测试.txt',ext:'txt',type:'file',isWrite:true},
-    //       {id:'103',name:'icon.png',ext:'png',type:'file',isWrite:true}]})
-    //   }, 400);
-    //   return
-    // }
-    this.getData()
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo) {
+      this.setData({userInfo})
+      this.getData()
+    }
+    else{
+      app.userInfoReadyCallback = res => {
+        userInfo = wx.getStorageSync('userInfo')
+        this.setData({userInfo})
+        this.getData()
+      }
+    }
 
     //没有写权限 或者 大于20层之后不允许继续创建子文件
     //this.getParentFolderDetail()

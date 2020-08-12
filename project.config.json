@@ -73,6 +73,20 @@
 					"pathName": "pages/index/index",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "预览-推送",
+					"pathName": "pages/fileView/index",
+					"query": "id=1291620234859515906&name=12.jpg&share=1",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "列表-推送",
+					"pathName": "pages/spaceDetail/index",
+					"query": "id=1290578119480184832&name=测试12&from=msg ",
+					"scene": null
 				}
 			]
 		}

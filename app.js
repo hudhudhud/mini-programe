@@ -19,8 +19,8 @@ App({
     this.checkVersion()
 
     // 正式登录
-    // wx.clearStorageSync()
-    // this.loginFunc()
+    wx.clearStorageSync()
+    this.loginFunc()
 
     //本地测试
     // wx.qy.login({
@@ -31,7 +31,7 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // getSessionKey('-1D0MdR6G8sM80nkQwp_M173-H8TivBqRb2cCtuUeqI').then(res=>{
+    // getSessionKey('Xmga5Pe_unBn9Jwm02aBLii9STX-r8rwD5heKY8SZZk').then(res=>{
     //   if (this.userInfoReadyCallback) {
     //     this.userInfoReadyCallback()
     //   }

@@ -5,7 +5,7 @@ export const defaultOptions = {
     "content-type": "application/json", // 默认值
   }
 };
-import { agentId, GET_TOCKEN,LOGIN,GET_USERINOF ,CHECK_MSG} from "./api";
+import { agentId, GET_TOCKEN,GET_TOCKEN_BASE,LOGIN,GET_USERINOF ,CHECK_MSG} from "./api";
 /**
  *
  * @param url 接口路径
@@ -14,6 +14,11 @@ import { agentId, GET_TOCKEN,LOGIN,GET_USERINOF ,CHECK_MSG} from "./api";
  * @returns {Promise<*>}
  */
 export const post = async function(url, params, options = {}) {
+  let token= wx.getStorageSync('token')
+  if(!token){
+    await getToken_Base()
+    token=wx.getStorageSync('token')
+  }
   let uid = wx.getStorageSync('uidEnc')
   let userInfo = wx.getStorageSync('userInfo')
   if(!uid||!userInfo){
@@ -28,13 +33,13 @@ export const post = async function(url, params, options = {}) {
     options = { ...defaultOptions, ...options };
     wx.request({
         url: url,
-        data: Object.assign({},params,{uid,userName:userInfo.name}),
+        data: Object.assign({},params,{uid,userName:userInfo.name,appId:'workflow',token}),
         method: "POST",
         header: options.header,
         success(res) {
           if(res.statusCode!=200){
             wx.showToast({
-              title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
+              title: res.statusCode+":"+JSON.stringify(res.data),
               icon: "none",
               duration: 4000
             })
@@ -43,7 +48,26 @@ export const post = async function(url, params, options = {}) {
           }
           if (res.data.errcode === 0) {
             resolve(res.data)
-          } else {
+          }
+          else if(res.data.errcode === 10001){//token失效重新获取
+            reject(res.data);
+            wx.showModal({
+              content:res.data.message+"，点击重新获取！",
+              confirmColor:"#4970D9",
+              confirmText:'确定',
+              showCancel:false,
+              success(res){
+                if (res.confirm) {
+                  getToken_Base()
+                }
+              },
+              fail(){
+              },
+              complete(){
+              }
+            })
+          }
+          else {
             reject(res.data);
             wx.showToast({
               title: res.data.message,
@@ -92,7 +116,7 @@ export const uploadFile = async function(url, filePath,fileKey, formData={},opti
       success (res){
         if(res.statusCode!=200){
           wx.showToast({
-            title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
+            title: res.statusCode+":"+JSON.stringify(res.data),
             icon: "none",
             duration: 4000
           })
@@ -178,7 +202,7 @@ export const  getSessionKey = async function(code){
       success: async function (res) {
         console.log('login.....',res)
         if(res.statusCode!=200){
-          reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+          reject({msg:res.statusCode+":"+JSON.stringify(res.data)})
           return
         }
         if(res.data.errcode==0){
@@ -240,7 +264,7 @@ export const getToken=()=>{
       },
       success: function (res) {
         if(res.statusCode!=200){
-          reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+          reject({msg:res.statusCode+":"+JSON.stringify(res.data)}) 
           return
         }
         if(res.data.errcode==0){
@@ -258,7 +282,37 @@ export const getToken=()=>{
     })
   })
 }
-
+//业务接口获取tocken
+export const getToken_Base=()=>{
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: GET_TOCKEN_BASE,
+      method: "POST",
+      data: {
+          appid: 'workflow',
+          appsecret: 'd4IgXxWNWrM=0MgjKu2kQE3+0fCtrU/4FWos8o68kpz/ZK3ILfA+0zo='
+      },
+      success: function (res) {
+        if(res.statusCode!=200){
+          reject({msg:res.statusCode+":"+JSON.stringify(res.data)}) 
+          return
+        }
+        if(res.data.errcode==0){
+          resolve(res.data.data)
+          wx.setStorageSync('token', res.data.data.token)
+        }
+        else{
+          let msg = '获取token失败：'+res.data.message
+          reject({msg})
+        }
+      },
+      fail:function(e){
+        let msg = '获取token失败：'+e.errMsg
+        reject({msg})
+      }
+    })
+  })
+}
 export const getUserInfo=(token,userid)=>{
   return new Promise((resolve, reject) => {
     wx.request({
@@ -273,7 +327,7 @@ export const getUserInfo=(token,userid)=>{
       },
       success: function (res) {
         if(res.statusCode!=200){
-          reject({msg:res.statusCode+":"+res.data.error+`(${res.data.path})`}) 
+          reject({msg:res.statusCode+":"+JSON.stringify(res.data)}) 
           return
         }
         if(res.data.errcode==0){
@@ -298,13 +352,15 @@ export const getUserInfo=(token,userid)=>{
     wx.request({
       url: CHECK_MSG,
       data: {
-        content:content
+        content:content,
+        token:wx.getStorageSync('token'),
+        appId:'workflow'
       },
       method: "POST",
       success(res) {
         if(res.statusCode!=200){
           wx.showToast({
-            title: res.statusCode+":"+res.data.error+`(${res.data.path})`,
+            title: res.statusCode+":"+JSON.stringify(res.data),
             icon: "none",
             duration: 4000
           })

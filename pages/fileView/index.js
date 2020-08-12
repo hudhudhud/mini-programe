@@ -1,5 +1,7 @@
-import {SCREEN_LOG} from '../../utils/api'
+import {SCREEN_LOG,FOLDER_DETAIL,FILE_PREVIEW_PERMISSION} from '../../utils/api'
 import * as request from '../../utils/request'
+import regeneratorRuntime from '../../runtime.js'
+const app = getApp()
 Page({
 
   /**
@@ -11,13 +13,15 @@ Page({
     cols: [],
     watermarkstr:'',
     id:'',
-    fileName:''
+    fileName:'',
+    userInfo:{},
+    showFileDetail:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+   onLoad:function (options) {
     // /pages/fileView/index?id=123&name=123&share=1 
     //隐藏当前页面的转发按钮
     wx.hideShareMenu({
@@ -26,22 +30,67 @@ Page({
   //  this.watermark()
     if(options.name){
       wx.setNavigationBarTitle({
-        title:decodeURI(options.name)
+        title:decodeURIComponent(options.name)
       })
     }
-    if(options.share){
-      //从推送里进，刷权限接口
-    }
-
     //'用户截屏'
     wx.onUserCaptureScreen(function (res) {
       request.post(SCREEN_LOG,{
         fileId:options.id,
-        fileName:options.name
+        fileName:decodeURIComponent(options.name)
       })
     })
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo) {
+      this.setData({userInfo})
+      this.initData(options)
+    }
+    else{
+      app.userInfoReadyCallback = res => {
+        let userInfo = wx.getStorageSync('userInfo')
+        this.setData({userInfo})
+        this.initData(options)
+      }
+    }
   },
- 
+  async initData(options){
+    wx.showLoading()
+    //从推送里进，刷权限接口,成功才允许打开页面！！
+    if(options.share){
+      try{
+        await request.post(FILE_PREVIEW_PERMISSION,{
+          fileSid:options.id,
+          name:decodeURIComponent(options.name)
+        })
+      }
+      catch(e){
+        console.log('更新权限失败:'+e)
+        wx.showToast({
+          title: '更新权限失败'+e,
+          icon:'none',
+          duration:5000,
+        })
+        return
+      }
+      finally{
+        wx.hideLoading()
+      }
+    }
+
+    try{
+      //为了看文件被分享之后是否赋权
+      let res = await request.post(FOLDER_DETAIL,{
+        fileSid:options.id,
+        name:decodeURIComponent(options.name)
+      })
+      this.setData({showFileDetail:JSON.stringify(res.data.permissionBindings.map(it=>{return {bizId:it.bizId,name:it.accessorName}}))})
+
+      //后续增加获取预览地址接口
+    }
+    finally{
+      wx.hideLoading()
+    }
+  },
   bindload(e){
     // wx.hideLoading()
     console.log('bindload...',e)

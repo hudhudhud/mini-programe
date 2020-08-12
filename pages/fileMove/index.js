@@ -245,12 +245,14 @@ Page({
                       title: '已完成',
                       icon:'success'
                     })
-                    //从列表中移除该文件
-                    let page = getCurrentPages().pop()
-                    console.log(33333333,page,getCurrentPages())
-                    if(page&&page.removeMoveFile){
-                      page.removeMoveFile(self.targetId)
-                    }
+                    //从列表中移除该文件,真机上getCurrentPages()层数没有变化，放在setTimeout里才有效
+                    setTimeout(() => {
+                      let page = getCurrentPages().pop()
+                      console.log(33333333,page,getCurrentPages())
+                      if(page&&page.removeMoveFile){
+                        page.removeMoveFile(self.targetId)
+                      }
+                    }, 500);
                 })
             }
           }

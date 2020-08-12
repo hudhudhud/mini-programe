@@ -10,3 +10,7 @@
  </view>
 
  <!-- 每个页面只能有一个 web-view，web-view 会自动铺满整个页面，并覆盖其他组件!!!水印需要在h5页面上增加 -->
+
+ <text wx:if='{{userInfo.uid=="hys3032"||userInfo.uid=="yys3339"}}'>
+ {{showFileDetail}}
+ </text>

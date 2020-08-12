@@ -173,7 +173,7 @@ Component({
               name:oldName,
               newName:item.name,
               parentFileSid:item.parentFileSid,
-              parentFileName:item.parentFileName,
+              parentFileName:encodeURIComponent(item.parentFileName),
             })
           }
           this.setData({fileList:list,showModal:false})
@@ -210,7 +210,7 @@ Component({
                 name:currentItem.name,
                 space:0,
                 parentFileSid:currentItem.parentFileSid,
-                parentFileName:currentItem.parentFileName,
+                parentFileName:encodeURIComponent(currentItem.parentFileName),
               })
             }
             else {
@@ -218,7 +218,7 @@ Component({
                 fileSid:currentItem.id,
                 name:currentItem.name,
                 parentFileSid:currentItem.parentFileSid,
-                parentFileName:currentItem.parentFileName,
+                parentFileName:encodeURIComponent(currentItem.parentFileName),
               })
             }
             if(res.errcode==0){
@@ -318,12 +318,12 @@ Component({
             list.push({bizId:it.id,accessType:1})
           })
         }
-        wx.showToast({
-          title: '该功能待开发..',
-          icon:'none',
-          duration:4000
-        })
-        return 
+        // wx.showToast({
+        //   title: '该功能待开发..',
+        //   icon:'none',
+        //   duration:4000
+        // })
+        // return 
         if(list.length){
           await request.post(FILE_SHARE,{
             fileSid:this.data.currentItem.fileSid,
