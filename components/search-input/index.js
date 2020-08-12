@@ -161,10 +161,17 @@ Component({
     //去文件列表详情
     goDetail(event){
       let item = event.detail.item
-      let currPathList =  [item.name]
-      wx.navigateTo({
-        url: '../../pages/spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify(currPathList)}&from=search`
-      })
+      if(item.type!=='folder'){
+        wx.navigateTo({
+          url: '../../pages/fileView/index?id='+item.id+'&name='+item.name
+        })
+      }
+      else{
+        let currPathList =  [item.name]
+        wx.navigateTo({
+          url: '../../pages/spaceDetail/index?id='+item.id+'&name='+item.name+`&pathList=${JSON.stringify(currPathList)}&from=search`
+        })
+      }
       // let item = event.detail.item
       // this.triggerEvent('goDetail',{item})
     },

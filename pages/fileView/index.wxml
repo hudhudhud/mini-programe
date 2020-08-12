@@ -1,5 +1,5 @@
 <view class="content">
-待开发..
+预览页面待开发..
     <!-- <web-view src="https://www.baidu.com" bindload='bindload' binderror='binderror' bindmessage='bindmessage' class="webview">
     </web-view> -->
     <!-- <view class='water-mark-mask'>
