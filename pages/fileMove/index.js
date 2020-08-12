@@ -138,8 +138,7 @@ Page({
     }
     else{
       wx.navigateTo({
-        url: `../fileMove/index?id=${item.id}&name=${item.name}
-        &targetId=${this.targetId}&targetName=${this.targetName}&targetParentFileSid=${this.targetParentFileSid}`
+        url: `../fileMove/index?id=${item.id}&name=${item.name}&targetId=${this.targetId}&targetName=${this.targetName}&targetParentFileSid=${this.targetParentFileSid}`
       })
     }
   },
@@ -216,7 +215,9 @@ Page({
   },
   //确认移动
   async confirmMove(){
-    
+    if(this.data.move_submiting){
+      return
+    }
     console.log({
       name:this.targetName,
       fileSid:this.targetId,
@@ -257,7 +258,7 @@ Page({
             }
           }
           finally{
-            self.setData({move_submiting:true})
+            self.setData({move_submiting:false})
           }
         }
       },

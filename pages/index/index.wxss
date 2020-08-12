@@ -109,7 +109,7 @@
   padding-right:30rpx;
   font-size:30rpx;
   color:#A1A1A1;
-  width:100%;
+  width:250rpx;
   height:50rpx;
   box-sizing: border-box;
 }
@@ -121,4 +121,17 @@
   text-align: center;
   font-size:40rpx;
   color:#D8D9DE;
+}
+.admin-btns{
+  display:flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  height:64rpx;
+}
+.switch-admin{
+  display:flex;
+  font-size:30rpx;
+  color:#A1A1A1;
+  align-items: center;
+  /* flex-shrink: 0; */
 }

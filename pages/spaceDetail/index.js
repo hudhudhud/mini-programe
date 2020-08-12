@@ -271,7 +271,9 @@ Page({
         let params = {
           uid : wx.getStorageSync('uidEnc'),
           userName:wx.getStorageSync('userInfo').name,
-          parentFileSid:self.data.parentFolderId
+          parentFileSid:self.data.parentFolderId,
+          token:wx.getStorageSync('token'),
+          appId:'workflow'
         }
         let successFileNames = []
         let promiseAry = res.tempFilePaths.map(it=>{
@@ -312,7 +314,7 @@ Page({
               self.setData({fileList:[...self.data.fileList,...items]})
             }
           })
-          console.log('successFileNames...',successFileNames.join(','),self.data.parentFolderId)
+          // console.log('successFileNames...',successFileNames.join(','),self.data.parentFolderId)
           wx.showToast({
             title: '上传成功！',
             icon:'success'
@@ -321,7 +323,7 @@ Page({
           self.sendUploadMsg(successFileNames)
         }
         catch(e){
-          console.log('上传失败:'+e)
+          console.log('上传失败111111:'+e)
           wx.showToast({
             title: '上传失败：'+e,
             icon:'none',
@@ -329,7 +331,7 @@ Page({
           })
         }
         finally{
-          wx.hideLoading()
+          // wx.hideLoading()//会把toast也hide??? catch里就没弹出错误信息
         }
       }
     })

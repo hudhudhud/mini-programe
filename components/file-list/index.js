@@ -342,8 +342,7 @@ Component({
       let currentItem = this.data.currentItem
       //从跟目录开始移动
       wx.navigateTo({
-        url: `../../pages/fileMove/index?id=&name=&targetId=${currentItem.id}&targetName=${currentItem.name}
-        &targetParentFileSid=${currentItem.parentFileSid}`
+        url: `../../pages/fileMove/index?id=&name=&targetId=${currentItem.id}&targetName=${currentItem.name}&targetParentFileSid=${currentItem.parentFileSid}`
       })
     },
      /**

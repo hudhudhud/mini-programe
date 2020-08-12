@@ -31,7 +31,7 @@ App({
     //     console.log(3333,JSON.stringify(e))
     //   }
     // })
-    // getSessionKey('Xmga5Pe_unBn9Jwm02aBLii9STX-r8rwD5heKY8SZZk').then(res=>{
+    // getSessionKey('Ct0EhyV6q5_NsUe_W0I1v6bSx8TBpMUWs51OTCRaF7o').then(res=>{
     //   if (this.userInfoReadyCallback) {
     //     this.userInfoReadyCallback()
     //   }
@@ -201,6 +201,7 @@ App({
       'xlsx':'excel',
       'doc':'doc',
       'docx':'doc',
+      'pdf':'pdf'
     }
     return type[ext]?type[ext]:'txt'
   },

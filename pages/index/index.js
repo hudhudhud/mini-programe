@@ -17,6 +17,7 @@ Page({
     userIsAppAdmin:false,
     pageNo:1,
     searchStatus:false,
+    adminSwitchStatus:false,
   },
   onLoad:async function(option){
     if(!wx.qy){
@@ -46,12 +47,13 @@ Page({
       let {data} = await request.post(SYS_ADMIN)
       if(data.admin){
         if(this.userInfo.uid.toLocaleLowerCase()==data.admin.toLocaleLowerCase()){
-          this.setData({userIsAppAdmin:true})
+          this.setData({userIsAppAdmin:true,adminSwitchStatus:data.adminGlobalVisibly==1?true:false})//0:不可见,1:可见,默认1
         }
         else{
           this.setData({userIsAppAdmin:false})
         }
         wx.setStorageSync('appAdmin', data.admin.toLocaleLowerCase())
+        this.appAdmin = data.admin.toLocaleLowerCase()
       }
   },
   async getData(hideLoading){
@@ -160,27 +162,6 @@ Page({
       this._freshing = false
     }
   },
-  editAppAdmin(){
-    let callback = (userList)=>{
-     if(userList.length){
-       let admin = encryption.encriUser(userList[0].id)
-       request.post(SYS_ADMIN_UPDATE,{
-        admin
-       })
-       .then(res=>{
-         if(res.errcode==0){
-           wx.showToast({
-             title: '修改成功！',
-             icon:'success',
-             duration:4000
-           })
-           this.getAppAdmin()
-         }
-       })
-     }
-    }
-    app.selectEnterpriseContact(callback,{mode:'single',type: ["user"]})
-  },
   async refreshDetail(renameFile){
     let {data} = await request.post(FOLDER_DETAIL,{
       fileSid:renameFile.id,
@@ -231,5 +212,45 @@ Page({
       list.splice(index,1)
     }
     this.setData({shareFileList:list})
+  },
+   //修改管理员
+  editAppAdmin(){
+    let callback = (userList)=>{
+     if(userList.length){
+       let admin = encryption.encriUser(userList[0].id)
+       request.post(SYS_ADMIN_UPDATE,{
+        admin,
+        adminGlobalVisibly:this.data.adminSwitchStatus?1:0
+       })
+       .then(res=>{
+         if(res.errcode==0){
+            wx.showToast({
+              title: '修改成功！',
+              icon:'success',
+              duration:4000
+            })
+            this.getAppAdmin()
+            this.getData()
+         }
+       })
+     }
+    }
+    app.selectEnterpriseContact(callback,{mode:'single',type: ["user"]})
+  },
+  //修改管理员可见私有文件状态
+  adminSwitchChange(e){
+    console.log(11111111,e.detail.value)
+    let admin = encryption.encriUser(this.appAdmin)
+    request.post(SYS_ADMIN_UPDATE,{
+      admin,
+      adminGlobalVisibly:e.detail.value?1:0
+    })
+    .then(res=>{
+      if(res.errcode==0){
+        this.setData({adminSwitchStatus:e.detail.value})
+        this.getAppAdmin()
+        this.getData()
+      }
+    })
   }
 })

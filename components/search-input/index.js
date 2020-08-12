@@ -173,8 +173,7 @@ Component({
       let item = event.detail.item
       let target =this.data.targetMoveItem
       wx.navigateTo({
-        url: `../../pages/fileMove/index?id=${item.id}&name=${item.name}&targetId=${target.id}&targetName=${target.name}
-        &targetParentFileSid=${target.parentFileSid}`
+        url: `../../pages/fileMove/index?id=${item.id}&name=${item.name}&targetId=${target.id}&targetName=${target.name}&targetParentFileSid=${target.parentFileSid}`
       })
     },
     //去空间详情

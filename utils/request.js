@@ -51,21 +51,22 @@ export const post = async function(url, params, options = {}) {
           }
           else if(res.data.errcode === 10001){//token失效重新获取
             reject(res.data);
-            wx.showModal({
-              content:res.data.message+"，点击重新获取！",
-              confirmColor:"#4970D9",
-              confirmText:'确定',
-              showCancel:false,
-              success(res){
-                if (res.confirm) {
+            // //请求多次会弹出多次？？，导致要点击多次才能关闭，先去掉
+            // wx.showModal({
+            //   content:res.data.message+"，点击重新获取！",
+            //   confirmColor:"#4970D9",
+            //   confirmText:'确定',
+            //   showCancel:false,
+            //   success(res){
+            //     if (res.confirm) {
                   getToken_Base()
-                }
-              },
-              fail(){
-              },
-              complete(){
-              }
-            })
+                // }
+              // },
+              // fail(){
+              // },
+              // complete(){
+              // }
+            // })
           }
           else {
             reject(res.data);

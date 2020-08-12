@@ -19,9 +19,15 @@
         scroll-with-animation
         bindscrolltolower='loadMore' >
             <!-- 超级管理员修改按钮 -->
-            <view  class="edit-admin-btn" wx:if='{{userIsAppAdmin}}' bindtap="editAppAdmin">
-              <i class="fa fa-pencil" aria-hidden="true"></i>
-              <text>修改管理员</text>
+            <view wx:if='{{userIsAppAdmin}}'  class="admin-btns">
+              <view  class="edit-admin-btn" bindtap="editAppAdmin">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <text>修改管理员</text>
+              </view>
+              <view class="switch-admin">
+                <text>可见状态：</text>
+                <switch checked="{{adminSwitchStatus==1?true:false}}" bindchange="adminSwitchChange"/>
+              </view>
             </view>
             <!-- 个人 -->
             <view class="folder-module my-file">

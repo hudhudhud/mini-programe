@@ -38,16 +38,14 @@
               <i class="fa fa-check-circle checked" aria-hidden="true" wx:else></i>
             </view>
             <view  class="content">
-              <!-- 图片类型 -->
-              <block wx:if='{{item.type=="image"}}'>
-                <i class="fa fa-picture-o"></i>
+                <!-- 文件类型 -->
+                <i wx:if='{{item.type=="image"}}' class="fa fa-picture-o" ></i>
+                <i wx:elif='{{item.type=="doc"}}' class="fa fa-file-word-o"></i>
+                <i wx:elif='{{item.type=="excel"}}' class="fa fa-file-excel-o"></i>
+                <i wx:elif='{{item.type=="pdf"}}' class="fa fa-file-pdf-o"></i>
+                <i wx:elif='{{item.type=="txt"}}' class="fa fa-file-text-o"></i>
+                <i wx:else class="fa fa-file-o"></i>
                 <text class="folder-name" >{{item.name}}</text>
-              </block>
-              <!-- 其他文件类型 -->
-              <block wx:else>
-                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                <text class="folder-name" >{{item.name}}</text>
-              </block>
             </view>
           </view>
           <!-- 文件操作按钮 区 -->
