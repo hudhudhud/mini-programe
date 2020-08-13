@@ -5,14 +5,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-    errorInfo:''
+    errorInfo:'',
+    tip:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({errorInfo:options.errorInfo})
+    this.setData({errorInfo:options.errorInfo,tip:options.tip})
   },
 
   /**
@@ -57,10 +58,4 @@ Page({
 
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

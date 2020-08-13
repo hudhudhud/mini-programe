@@ -173,7 +173,7 @@ Component({
               name:oldName,
               newName:item.name,
               parentFileSid:item.parentFileSid,
-              parentFileName:encodeURIComponent(item.parentFileName),
+              parentFileName:item.parentFileName,
             })
           }
           this.setData({fileList:list,showModal:false})
@@ -210,7 +210,7 @@ Component({
                 name:currentItem.name,
                 space:0,
                 parentFileSid:currentItem.parentFileSid,
-                parentFileName:encodeURIComponent(currentItem.parentFileName),
+                parentFileName:currentItem.parentFileName,
               })
             }
             else {
@@ -218,7 +218,7 @@ Component({
                 fileSid:currentItem.id,
                 name:currentItem.name,
                 parentFileSid:currentItem.parentFileSid,
-                parentFileName:encodeURIComponent(currentItem.parentFileName),
+                parentFileName:currentItem.parentFileName,
               })
             }
             if(res.errcode==0){
@@ -345,20 +345,6 @@ Component({
         url: `../../pages/fileMove/index?id=&name=&targetId=${currentItem.id}&targetName=${currentItem.name}&targetParentFileSid=${currentItem.parentFileSid}`
       })
     },
-     /**
-     * 用户点击右上角分享或button 分享
-      */
-    // from	String	转发事件来源。
-    // target	Object	如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined	1.2.4
-    // webViewUrl	String	页面中包含web-view组件时，返回当前web-view的url
-    onShareAppMessage: function (e) {
-      // if(e.from=='button'){
-      //   return {
-      //     title: this.data.currentItem.name,
-      //     path: `/pages/`
-      //   }
-      // }
-    }, 
     // 防抖
     debounce(fn, wait) {    
       let self=this 

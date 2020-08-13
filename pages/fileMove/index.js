@@ -8,6 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    parentFolderId:'',
+    parentFolderName:'',
     loading:false,
     fileList:[],
     showModal:false,
@@ -46,6 +48,7 @@ Page({
     this.targetName = options.targetName
     this.setData({
       parentFolderId:options.id,
+      parentFolderName:options.name,
       isOldPath:this.targetParentFileSid==options.id,
       targetMoveItem:{id:this.targetId,name:this.targetName,parentFileSid:this.targetParentFileSid}})
    
@@ -238,7 +241,8 @@ Page({
             let res = await request.post(FILE_MOVE,{
               name:self.targetName,
               fileSid:self.targetId,
-              parentFileSid:self.data.parentFolderId
+              parentFileSid:self.data.parentFolderId,
+              parentFileName:self.data.parentFolderName,
             })
             if(res.errcode==0){
                 self.exitMove(()=>{

@@ -562,4 +562,15 @@ Page({
    */
   onReachBottom: function () {
   },
+  //只有定义了此事件处理函数，右上角菜单才会显示“转发”按钮
+  // onShareAppMessage(e) {
+  //   console.log('onShareAppMessage.....',e)
+  //   let item  = e.target.dataset.item
+  //   // if(res.from=='button'){
+  //     return {
+  //       title: item.name,
+  //       path: `/pages/fileView/index?id=${item.id}&name=${item.name}`
+  //     }
+  //   // }
+  // }, 
 })

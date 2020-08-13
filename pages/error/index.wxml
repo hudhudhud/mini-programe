@@ -2,3 +2,6 @@
 <view class="error-info">
 {{errorInfo}}
 </view>
+<view class="tip">
+{{tip}}
+</view>

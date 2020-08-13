@@ -71,16 +71,14 @@
     <view class="action-item-txt">
       <scroll-view scroll-x  scroll-with-animation="true">{{currentItem.name}}</scroll-view>
     </view>
-    <!-- <view class="operation-btns shares">
-      <view class="action-btn">
-        <button class="share-btn"  data-type="modalShare" data-item='{{currentItem}}' open-type="share"  send-message-path=''>
+    <view class="operation-btns shares" wx:if="{{currentItem.type!=='folder'&&(currentItem.isRead||currentItem.isWrite)}}">
+      <!-- 只读权限preview、文件 有分享功能 -->
+      <!-- <view class="action-btn">
+        <button class="share-btn"  data-type="modalShare" data-item='{{currentItem}}' open-type="share" >
           <i class="fa fa-share" aria-hidden="true"></i>
         </button>
         <text class="title">转发</text>
-      </view>
-    </view> -->
-    <!-- 只读权限preview、文件 有分享功能 -->
-    <view class="operation-btns shares" wx:if="{{currentItem.type!=='folder'&&(currentItem.isRead||currentItem.isWrite)}}">
+      </view> -->
       <view class="action-btn" bindtap='shareFile'>
         <view class="icon"><i class="fa fa-share" aria-hidden="true"></i></view>
         <text class="title">分享</text>

@@ -5,3 +5,8 @@
   padding-top: 80rpx;
   font-size:35rpx;
 }
+.tip{
+  text-align: center;
+  padding-top: 80rpx;
+  font-size:28rpx;
+}
