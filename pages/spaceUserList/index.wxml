@@ -25,8 +25,8 @@
           <text class="name">{{item.accessorName?item.accessorName:item.bizId}}</text>
           <text wx:if="{{item.isSuper}}" class="name-tip">(超管)</text>
       </view>
-      <!-- 管理员可以修改别人权限 -->
-      <view class="right operate" bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}" wx:if='{{userIsAdmin}}'>
+      <!-- 管理员或超管可以修改别人权限 -->
+      <view class="right operate" bindtap="setOperateRole" data-item="{{item}}" data-index="{{index}}" wx:if='{{userIsAdmin||userIsAppAdmin}}'>
         <text class="name" class="role">{{item.isAdmin?'管理员':item.permissionType==1?'可编辑':'仅浏览'}}</text> <i class="fa fa-caret-down" aria-hidden="true"></i>
       </view> 
       <view class="right operate" wx:else>

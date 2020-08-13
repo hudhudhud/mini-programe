@@ -20,6 +20,7 @@ Page({
     actionSheetVisible:false,
     currentActionItem:{},
     actionItems:[],
+    userIsAppAdmin:false,
   },
   /**
    * 生命周期函数--监听页面加载
@@ -53,6 +54,15 @@ Page({
         }
       })
       this.setData({permissionsList})
+
+    //登录人是否为超级管理员
+     let userInfo =  wx.getStorageSync('userInfo')
+     if(appAdmin&&userInfo.uid==appAdmin){
+       this.setData({userIsAppAdmin:true})
+     }
+     else{
+       this.setData({userIsAppAdmin:false})
+     }
     }
   },
   setOperateRole(event){
